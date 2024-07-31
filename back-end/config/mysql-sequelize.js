@@ -5,7 +5,7 @@ const sequelize = new Sequelize(
   'root',
   'OUqxqvORWkLBFQJQvhAUuKlcIGuJsqfa',
   {
-    host: 'mysql://root:OUqxqvORWkLBFQJQvhAUuKlcIGuJsqfa@roundhouse.proxy.rlwy.net:56699/railway',
+    host: 'roundhouse.proxy.rlwy.net:56699',
     dialect: "mysql",
     timezone: "+00:00",
   }

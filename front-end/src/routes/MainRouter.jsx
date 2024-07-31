@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import Game from "../pages/game/Game";
 import GameRouter from "./GameRouer";
 import Error404 from "../pages/error/Error404";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
@@ -14,7 +14,7 @@ function MainRouter() {
       <BrowserRouter basename="/">
         <Routes>
           {GameRouter}
-          <Route path="*" element={<Error404 />} />
+          <Route path="*" element={<Game />} />
         </Routes>
       </BrowserRouter>
     </TonConnectUIProvider>

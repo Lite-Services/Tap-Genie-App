@@ -3,6 +3,7 @@ import Game from "../pages/game/Game";
 import GameRouter from "./GameRouer";
 import Error404 from "../pages/error/Error404";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
+import GameLayout from "../pages/layout/GameLayout";
 function MainRouter() {
   return (
     <TonConnectUIProvider
@@ -14,7 +15,7 @@ function MainRouter() {
       <BrowserRouter basename="/">
         <Routes>
           {GameRouter}
-          <Route path="*" element={<Game />} />
+          <Route path="*" element={<GameLayout />} />
         </Routes>
       </BrowserRouter>
     </TonConnectUIProvider>

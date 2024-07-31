@@ -1,11 +1,11 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = new Sequelize(
-  process.env.MYSQL_DB,
-  process.env.MYSQL_USER,
-  process.env.MYSQL_PASSWORD,
+  'railway',
+  'root',
+  'OUqxqvORWkLBFQJQvhAUuKlcIGuJsqfa',
   {
-    host: process.env.MYSQL_HOST,
+    host: 'mysql://root:OUqxqvORWkLBFQJQvhAUuKlcIGuJsqfa@roundhouse.proxy.rlwy.net:56699/railway',
     dialect: "mysql",
     timezone: "+00:00",
   }

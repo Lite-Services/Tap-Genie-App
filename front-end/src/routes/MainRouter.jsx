@@ -7,7 +7,7 @@ function MainRouter() {
     <TonConnectUIProvider
       manifestUrl="https://app.taptap.bot/manifest.json"
       actionsConfiguration={{
-        twaReturnUrl: "https://t.me/taptapcore_bot",
+        twaReturnUrl: "https://t.me/snowtapcoin_bot",
       }}
     >
       <BrowserRouter basename="/">

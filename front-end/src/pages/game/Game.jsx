@@ -37,12 +37,19 @@ function Game() {
         })
         .catch((err) => {
           console.error("API Error:", err); // Log the error
+          console.error('Error response:', err.response);
+    console.error('Error message:', err.message);
+    console.error('Error config:', err.config);
+    console.error('Error code:', err.code);
+    setError(true);
+    setIsLoading(false);
           if (!unmounted) {
             if (err.response?.status === 403) {
               setIsTg(false);
             } else {
               setError(true);
             }
+            
             setIsLoading(false);
           }
         });

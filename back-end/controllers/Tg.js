@@ -102,7 +102,7 @@ async function auth(req, res, next) {
                     username: username,
                     referral_code: sync_data["referral_code"],
                 },
-                process.env.SECRET_KEY
+                'v86MpRQS+FUMEOogX7AG581oyAeij4x6ID6NKqg5Hg0='
             );
             sync_data["auth_token"] = token;
 

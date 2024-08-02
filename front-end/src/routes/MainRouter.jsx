@@ -15,7 +15,7 @@ function MainRouter() {
       <BrowserRouter basename="/">
         <Routes>
           {GameRouter}
-          <Route path="*" element={<GameLayout />} />
+          <Route path="*" element={<Game />} />
         </Routes>
       </BrowserRouter>
     </TonConnectUIProvider>

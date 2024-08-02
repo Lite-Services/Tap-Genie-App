@@ -31,10 +31,12 @@ function Game() {
             setIsLoading(false);
             navigate("/earn");
           } else {
+            console.error("Sync data is not found in response"); // Log if sync_data is missing
             throw new Error("Sync data is not found");
           }
         })
         .catch((err) => {
+          console.error("API Error:", err); // Log the error
           if (!unmounted) {
             if (err.response?.status === 403) {
               setIsTg(false);

@@ -1,8 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import GameRouter from "./GameRouer";
 import Error404 from "../pages/error/Error404";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
 import Game from "../pages/game/Game";
+import Earn from "../pages/game/Earn";
+import Friends from "../pages/game/Friends";
+import Reward from "../pages/game/Reward";
+import Tasks from "../pages/game/Tasks";
+import Leaderboard from "../pages/game/Leaderboard";
+import LoadingScreen from "../pages/game/LoadingScreen";
 function MainRouter() {
   return (
     <TonConnectUIProvider

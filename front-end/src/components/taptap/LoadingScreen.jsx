@@ -28,7 +28,7 @@ function LoadingScreen({ isloaded, reURL='' }) {
     setTimeout(() => {
 
 
-     if(reURL!='') navigate('/earn');
+     if(reURL!='') navigate('');
     }, 2000);
   }, [navigate, reURL]);
 

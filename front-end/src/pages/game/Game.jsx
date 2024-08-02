@@ -3,11 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Error500 from "../error/Error500";
-
 import { getTGUser } from "../../utlis/tg";
 import { setSession } from "../../utlis/localstorage";
-
-import LoadingScreen from "../../components/taptap/LoadingScreen"
+import LoadingScreen from "../../components/taptap/LoadingScreen";
 
 function Game() {
   const navigate = useNavigate();
@@ -17,30 +15,28 @@ function Game() {
   const [error, setError] = useState(false);
   const [isTg, setIsTg] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  useEffect(function () {
+
+  useEffect(() => {
     let unmounted = false;
     let tg_user = getTGUser();
     setIsTg(tg_user !== false);
 
     if (tg_user !== false) {
       tg_user["referral_by"] = referral_by;
-      axios
-        .post("https://taptap-production.up.railway.app/api/tg/auth/", tg_user)
+      axios.post("https://taptap-production.up.railway.app/api/tg/auth/", tg_user)
         .then((res) => {
-          var data = res.data;
-          //TODO: check this sync_data validation
+          const data = res.data;
           if (data.sync_data) {
             setSession(data.sync_data);
             setIsLoading(false);
             navigate("/earn");
-            return;
           } else {
             throw new Error("Sync data is not found");
           }
         })
         .catch((err) => {
           if (!unmounted) {
-            if (err.response.status === 403) {
+            if (err.response?.status === 403) {
               setIsTg(false);
             } else {
               setError(true);
@@ -55,13 +51,13 @@ function Game() {
     return () => {
       unmounted = true;
     };
-  }, []);
+  }, [navigate, referral_by]);
 
   return (
     <>
-      {isLoading === true && <LoadingScreen isloaded={isLoading} reURL={''} />}
-      {isLoading === false && error === true && <Error500 />}
-      {isLoading === false && error === false && isTg === false && (
+      {isLoading && <LoadingScreen isloaded={isLoading} reURL="" />}
+      {!isLoading && error && <Error500 />}
+      {!isLoading && !error && !isTg && (
         <h1 className="text-7xl text-white font-sfSemi text-center">
           Please open in TG
         </h1>

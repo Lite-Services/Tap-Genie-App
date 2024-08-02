@@ -106,8 +106,8 @@ function Earn() {
       const token = getAuth();
       const tgUser = getTGUser();
 
-      const response = await axios.get('https://taptap-production.up.railway.app/api/earn/getscore',{
-        headers: { Authorization: 'Bearer v86MpRQS+FUMEOogX7AG581oyAeij4x6ID6NKqg5Hg0=' },
+      const response = await axios.get(`https://taptap-production.up.railway.app/api/earn/getscore`,{
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       console.log("response==>",response)
@@ -275,7 +275,7 @@ function Earn() {
             restore_time:moment.utc().format("YYYY-MM-DD HH:mm:ss"),
           },
           {
-            headers: { Authorization: `Bearer v86MpRQS+FUMEOogX7AG581oyAeij4x6ID6NKqg5Hg0=` },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
         

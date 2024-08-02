@@ -4,7 +4,7 @@ import axios from "axios";
 
 import Error500 from "../error/Error500";
 import { getTGUser } from "../../utlis/tg";
-import { setSession } from "../../utlis/localstorage";
+import { setSession, setAuth } from "../../utlis/localstorage";
 import LoadingScreen from "../../components/taptap/LoadingScreen";
 
 function Game() {
@@ -28,6 +28,7 @@ function Game() {
           const data = res.data;
           if (data.sync_data) {
             setSession(data.sync_data);
+            setAuth(data.sync_data['auth_token']);
             setIsLoading(false);
             navigate("/earn");
           } else {

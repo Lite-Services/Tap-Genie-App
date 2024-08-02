@@ -1,14 +1,13 @@
 const { sequelize } = require("../config/mysql-sequelize");
-const { getUTCTime } = require("../utils/helperfun")
+const { getUTCTime } = require("../utils/helperfun");
 const { Op, col } = require("sequelize");
 
 const Earnings = require("../models/Earnings");
 const TGUser = require("../models/TGUser");
 
-// TODO :Remove the console in pro
+// TODO : Remove the console in production
 async function getscore(req, res, next) {
     try {
-
         const { user: tgUser } = req;
 
         if (!tgUser || tgUser.id == null) {
@@ -17,7 +16,7 @@ async function getscore(req, res, next) {
 
         const userDetails = await Earnings.findOne({ where: { userid: tgUser.id } });
 
-        if (userDetails && userDetails != null) {
+        if (userDetails) {
             const value = {
                 checkin_score: userDetails.checkin_score,
                 miner_points: userDetails.miner_points,
@@ -33,7 +32,7 @@ async function getscore(req, res, next) {
         }
     } catch (error) {
         console.error("Error retrieving data:", error);
-        return next('An error occurred on the get score');
+        return next(new Error('An error occurred while retrieving the score'));
     }
 }
 
@@ -44,14 +43,14 @@ async function upscore(req, res, next) {
         const tgUser = req.user;
 
         if (!tgUser || !tgUser.id) {
-            res.status(401).json({ error: 'Unauthorized', message: 'Authentication required' });
+            return res.status(401).json({ error: 'Unauthorized', message: 'Authentication required' });
         }
 
         const { id: teleid } = tgUser;
 
         const userDetails = await Earnings.findOne({ where: { userid: teleid } });
 
-        //TODO : add score validation
+        // TODO: Add score validation
 
         const updata = {
             tap_score: parseInt(score),
@@ -63,19 +62,18 @@ async function upscore(req, res, next) {
         if (userDetails) {
             const [updated] = await Earnings.update(updata, { where: { userid: teleid } });
             if (updated > 0) {
-                res.status(200).json({ message: 'Success', data: [] });
+                return res.status(200).json({ message: 'Success', data: [] });
             } else {
-                returnres.status(409).json({ error: 'Conflict', message: 'Score update failed' });
+                return res.status(409).json({ error: 'Conflict', message: 'Score update failed' });
             }
         } else {
             return res.status(422).json({ error: 'Unprocessable Entity', message: 'Validation failed for the input data' });
         }
     } catch (error) {
         console.error("Error updating points:", error);
-        next("An error occurred on update score")
+        return next(new Error('An error occurred while updating the score'));
     }
 }
-
 
 module.exports = {
     getscore,

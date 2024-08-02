@@ -8,6 +8,7 @@ import Reward from "../pages/game/Reward";
 import Tasks from "../pages/game/Tasks";
 import Leaderboard from "../pages/game/Leaderboard";
 import LoadingScreen from "../pages/game/LoadingScreen";
+
 function MainRouter() {
   return (
     <TonConnectUIProvider
@@ -18,14 +19,14 @@ function MainRouter() {
     >
       <BrowserRouter basename="/">
         <Routes>
-        <Route key="game" path="/" element={<Game />} />,
-        <Route key="LoadingScreen" path="/loadingScreen" element={<LoadingScreen />} />,
-        <Route key="earn" path="/earn" element={<Earn />} />,
-        <Route key="friends" path="/friends" element={<Friends />} />,
-        <Route key="reward" path="/reward" element={<Reward />} />,
-        <Route key="tasks" path="/tasks" element={<Tasks />} />,
-        <Route key="leaderboard" path="/leaderboard" element={<Leaderboard />} />,
-        <Route path="*" element={<Error404 />} />
+          <Route path="/" element={<Game />} />
+          <Route path="/loadingScreen" element={<LoadingScreen />} />
+          <Route path="/earn" element={<Earn />} />
+          <Route path="/friends" element={<Friends />} />
+          <Route path="/reward" element={<Reward />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="*" element={<Error404 />} />
         </Routes>
       </BrowserRouter>
     </TonConnectUIProvider>

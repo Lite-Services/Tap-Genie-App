@@ -17,49 +17,48 @@ function Game() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    let unmounted = false;
-    let tg_user = getTGUser();
-    setIsTg(tg_user !== false);
+    let isMounted = true;
 
-    if (tg_user !== false) {
-      tg_user["referral_by"] = referral_by;
-      axios.post("https://taptap-production.up.railway.app/api/tg/auth/", tg_user)
-        .then((res) => {
-          const data = res.data;
-          if (data.sync_data) {
-            setSession(data.sync_data);
-            setAuth(data.sync_data['auth_token']);
-            setIsLoading(false);
-            navigate("/earn");
+    const authenticateUser = async () => {
+      try {
+        const tg_user = getTGUser();
+        if (tg_user) {
+          tg_user.referral_by = referral_by;
+          const response = await axios.post("https://taptap-production.up.railway.app/api/tg/auth/", tg_user);
+          const { sync_data } = response.data;
+
+          if (sync_data) {
+            setSession(sync_data);
+            setAuth(sync_data.auth_token);
+            if (isMounted) {
+              setIsLoading(false);
+              navigate("/earn");
+            }
           } else {
-            console.error("Sync data is not found in response"); // Log if sync_data is missing
             throw new Error("Sync data is not found");
           }
-        })
-        .catch((err) => {
-          console.error("API Error:", err); // Log the error
-          console.error('Error response:', err.response);
-    console.error('Error message:', err.message);
-    console.error('Error config:', err.config);
-    console.error('Error code:', err.code);
-    setError(true);
-    setIsLoading(false);
-          if (!unmounted) {
-            if (err.response?.status === 403) {
-              setIsTg(false);
-            } else {
-              setError(true);
-            }
-            
+        } else {
+          if (isMounted) {
             setIsLoading(false);
           }
-        });
-    } else {
-      setIsLoading(false);
-    }
+        }
+      } catch (err) {
+        console.error("API Error:", err); 
+        if (isMounted) {
+          if (err.response?.status === 403) {
+            setIsTg(false);
+          } else {
+            setError(true);
+          }
+          setIsLoading(false);
+        }
+      }
+    };
+
+    authenticateUser();
 
     return () => {
-      unmounted = true;
+      isMounted = false;
     };
   }, [navigate, referral_by]);
 

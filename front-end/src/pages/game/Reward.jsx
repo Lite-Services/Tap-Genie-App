@@ -189,7 +189,7 @@ function RoboMine() {
     axios
         .get("https://taptap-production.up.railway.app/api/reward/claim", {
           headers: {
-            Authorization: `Bearer v86MpRQS+FUMEOogX7AG581oyAeij4x6ID6NKqg5Hg0=`,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {
@@ -234,7 +234,7 @@ function RoboMine() {
     axios
         .get("https://taptap-production.up.railway.app/api/reward/upgrade", {
           headers: {
-            Authorization: `Bearer v86MpRQS+FUMEOogX7AG581oyAeij4x6ID6NKqg5Hg0=`,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {

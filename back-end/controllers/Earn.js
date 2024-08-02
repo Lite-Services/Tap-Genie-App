@@ -11,7 +11,7 @@ async function getscore(req, res, next) {
         const { user: tgUser } = req;
 
         if (!tgUser || tgUser.id == null) {
-            console.log('no user found');
+            
             return res.status(401).json({ error: 'Unauthorized', message: 'Authentication required' });
         }
 
@@ -27,6 +27,7 @@ async function getscore(req, res, next) {
                 energy_remaning: userDetails.energy_remaning,
                 game_level: userDetails.miner_level,
             };
+            console.log(value);
             return res.status(200).json({ message: 'Success', data: value });
         } else {
             return res.status(200).json({ message: 'Success', data: [] });

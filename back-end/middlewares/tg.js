@@ -17,7 +17,7 @@ function tgauth_required(req, res, next) {
         });
     }
 
-    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
+    jwt.verify(token, 'v86MpRQS+FUMEOogX7AG581oyAeij4x6ID6NKqg5Hg0=', (err, user) => {
         if (err) {
             return res.status(401).json({
                 status: "error",

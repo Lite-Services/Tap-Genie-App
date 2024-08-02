@@ -88,7 +88,7 @@ const Friends = () => {
   const loadFriends = () => {
     const tgData = getTGUser();
     getUserData(tgData);
-    navigate('/game/friends');
+    navigate('friends');
   };
 
   const triggerCopy = (e) => {
@@ -130,7 +130,7 @@ const Friends = () => {
       } else {
       
         setOpen(false);
-        navigate("/game/friends");
+        navigate("/friends");
       }
     } catch (error) {
       console.error("Error claiming reward:", error);

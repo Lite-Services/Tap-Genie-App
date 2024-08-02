@@ -9,10 +9,10 @@ import LeaderBoardImg from "../../assets/img/leaderboard.svg";
 import { useNavigate } from "react-router-dom";
 
 let tabs = [
-  { id: "Earn", label: "Earn", img: TokenImg, path: "/game/earn" },
-  { id: "Friends", label: "Friends", img: FriendImg, path: "/game/friends" },
-  { id: "Reward", label: "Mine", img: GiftImg, path: "/game/reward" },
-  { id: "Tasks", label: "Tasks", img: TaskImg, path: "/game/tasks" },
+  { id: "Earn", label: "Earn", img: TokenImg, path: "/earn" },
+  { id: "Friends", label: "Friends", img: FriendImg, path: "/friends" },
+  { id: "Reward", label: "Mine", img: GiftImg, path: "/reward" },
+  { id: "Tasks", label: "Tasks", img: TaskImg, path: "/tasks" },
   // {
   //   id: "Leaderboard",
   //   label: "Leaderboard",

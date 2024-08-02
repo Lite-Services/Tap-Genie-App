@@ -9,7 +9,7 @@ function TGAuth({ children }) {
   ) : (
     <Navigate
       to={{
-        pathname: "/game",
+        pathname: "/",
       }}
     />
   );

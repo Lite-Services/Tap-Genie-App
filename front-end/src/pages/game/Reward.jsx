@@ -163,7 +163,7 @@ function RoboMine() {
     let last_mine_date = localStorage.getItem("last_mine_date");
 
     if (score === null || miner_level === null || last_mine_date === null) {
-      return navigate("/game");
+      return navigate("/");
     }
     let remaining_seconds = getRemainingSeconds();
     setCountDown(remaining_seconds);
@@ -205,7 +205,7 @@ function RoboMine() {
           //TODO need to handle err properly
           alert("Something went wrong!");
           if (err.response.status === 401) {
-            return navigate("/game");
+            return navigate("/");
           }
         });
   }
@@ -249,7 +249,7 @@ function RoboMine() {
           //TODO need to handle err properly
           alert("Something went wrong!");
           if (err.response.status === 401) {
-            return navigate("/game");
+            return navigate("/");
           }
         });
   }

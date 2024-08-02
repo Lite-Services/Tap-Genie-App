@@ -40,7 +40,7 @@ function Leaderboard() {
 
   const getUserData = async (tgData) => {
     if (!tgData) {
-      navigate("/game");
+      navigate("/");
       return;
     }
 
@@ -60,7 +60,7 @@ function Leaderboard() {
         setUserEarndetails(userDetails.specificUserDetails);
         setIsLoading(false)
       } else {
-        navigate("/game/earn");
+        navigate("/earn");
       }
     } catch (error) {
       console.error("Error:", error);

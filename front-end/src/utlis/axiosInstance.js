@@ -22,7 +22,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     const { status } = error.response;
     if (status === 401) {
-      window.location.href = "/game";
+      window.location.href = "/";
     } else {
       return Promise.reject(error);
     }

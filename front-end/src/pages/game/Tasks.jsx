@@ -128,7 +128,7 @@ function Tasks() {
       } else {
         setIsCheckin(false);
         setOpen(false);
-        navigate("/game/earn");
+        navigate("/earn");
       }
     } catch (error) {
       console.error("Error claiming reward:", error);

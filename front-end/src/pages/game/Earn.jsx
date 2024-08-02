@@ -514,7 +514,7 @@ style={{
 >
 <div className="topbar bg-black/35 backdrop-blur-sm border-[#3131316c] border-[1px] w-[90%] py-2 absolute top-0 z-20 rounded-3xl">
   <Link
-    to="/game/reward"
+    to="/reward"
     className="miner flex flex-col items-center justify-center absolute my-2 ml-4"
   >
     <img src={robot[`${gamelevel}`] ? robot[`${gamelevel}`] : robot_1}

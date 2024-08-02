@@ -6,7 +6,7 @@ function LoadingScreen() {
     "Winter",
     "is",
     "coming",
-    "....",
+    "up....",
     
   ];
   const [currentWord, setCurrentWord] = useState(words[0]);

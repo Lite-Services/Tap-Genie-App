@@ -3,11 +3,10 @@ import { AnimatePresence, motion, LayoutGroup } from "framer-motion";
 import { Navigate, useNavigate } from "react-router-dom";
 function LoadingScreen() {
   const words = [
-    "Our",
-    "Robo",
+    "Winter",
     "is",
-    "waking",
-    "up....",
+    "coming",
+    "....",
     
   ];
   const [currentWord, setCurrentWord] = useState(words[0]);

@@ -13,7 +13,7 @@ import LoadingScreen from "../pages/game/LoadingScreen";
 
 const GameRouter = [
 
-  <Route key="game" path="/game" element={<Game />} />,
+  <Route key="game" path="/" element={<Game />} />,
   <Route key="LoadingScreen" path="/game/loadingScreen" element={<LoadingScreen />} />,
   <Route key="earn" path="/game/earn" element={<Earn />} />,
   <Route key="friends" path="/game/friends" element={<Friends />} />,

@@ -35,7 +35,7 @@ const Friends = () => {
     const token = getAuth();
     try {
       const response = await axios.post(endpoint, data,{
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer v86MpRQS+FUMEOogX7AG581oyAeij4x6ID6NKqg5Hg0=` },
       });
       return response.data;
     } catch (error) {

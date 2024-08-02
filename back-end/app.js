@@ -1,5 +1,6 @@
 var createError = require("http-errors");
 var express = require("express");
+const cors = require('cors');
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
@@ -27,6 +28,13 @@ app.disable('etag'); // for disable node If-None-Match comparing
 
 app.use("/api", apiRouter);
 
+
+app.use(cors({
+    origin: 'https://taptap-eta.vercel.app', // Replace with your application's origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
+  
 //404 handler
 app.use(function(req, res, next) {
     return res.status(404).json({

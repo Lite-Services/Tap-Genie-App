@@ -28,11 +28,14 @@ app.disable('etag'); // for disable node If-None-Match comparing
 
 app.use("/api", apiRouter);
 
-
-app.use(cors({
-    origin: 'https://taptap-eta.vercel.app', // Replace with your application's origin
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*"); // Adjust this to the specific origin if needed
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+  
+  app.use(cors({
+    origin: '*', // Allow requests from any origin
   }));
   
 //404 handler

@@ -14,16 +14,15 @@ function Game() {
   const location = useLocation();
   const query_params = new URLSearchParams(location.search);
   const referral_by = query_params.get("tgWebAppStartParam");
-
   const [error, setError] = useState(false);
   const [isTg, setIsTg] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(function () {
     let unmounted = false;
     let tg_user = getTGUser();
-    setIsTg(tg_user !== false);
+    setIsTg(tg_user != false);
 
-    if (tg_user !== false) {
+    if (tg_user != false) {
       tg_user["referral_by"] = referral_by;
       axios
         .post("/api/tg/auth/", tg_user)

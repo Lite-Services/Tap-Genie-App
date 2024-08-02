@@ -20,9 +20,9 @@ function Game() {
   useEffect(function () {
     let unmounted = false;
     let tg_user = getTGUser();
-    setIsTg(tg_user != false);
+    setIsTg(tg_user !== false);
 
-    if (tg_user != false) {
+    if (tg_user !== false) {
       tg_user["referral_by"] = referral_by;
       axios
         .post("https://taptap-production.up.railway.app/api/tg/auth/", tg_user)

@@ -59,7 +59,7 @@ function Game() {
 
   return (
     <>
-      {isLoading === true && <LoadingScreen isloaded={isLoading} reURL={'/game/earn'} />}
+      {isLoading === true && <LoadingScreen isloaded={isLoading} reURL={'/earn'} />}
       {isLoading === false && error === true && <Error500 />}
       {isLoading === false && error === false && isTg === false && (
         <h1 className="text-7xl text-white font-sfSemi text-center">

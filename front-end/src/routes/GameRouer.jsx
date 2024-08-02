@@ -14,12 +14,12 @@ import LoadingScreen from "../pages/game/LoadingScreen";
 const GameRouter = [
 
   <Route key="game" path="/" element={<Game />} />,
-  <Route key="LoadingScreen" path="/game/loadingScreen" element={<LoadingScreen />} />,
-  <Route key="earn" path="/game/earn" element={<Earn />} />,
-  <Route key="friends" path="/game/friends" element={<Friends />} />,
-  <Route key="reward" path="/game/reward" element={<Reward />} />,
-  <Route key="tasks" path="/game/tasks" element={<Tasks />} />,
-  <Route key="leaderboard" path="/game/leaderboard" element={<Leaderboard />} />,
+  <Route key="LoadingScreen" path="/loadingScreen" element={<LoadingScreen />} />,
+  <Route key="earn" path="/earn" element={<Earn />} />,
+  <Route key="friends" path="/friends" element={<Friends />} />,
+  <Route key="reward" path="/reward" element={<Reward />} />,
+  <Route key="tasks" path="/tasks" element={<Tasks />} />,
+  <Route key="leaderboard" path="/leaderboard" element={<Leaderboard />} />,
 
 ];
 export default GameRouter;

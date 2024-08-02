@@ -20,48 +20,39 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.disable('etag'); // for disable node If-None-Match comparing 
+app.disable('etag'); // Disable node If-None-Match comparing 
 
-// app.get('*', function(req, res) {
-//     res.render('maintenance');
-// });
+// CORS configuration
+app.use(cors({
+  origin: 'https://taptap-eta.vercel.app', // Allow requests from this origin
+  methods: ['GET', 'POST', 'OPTIONS'], // Allowed methods
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'], // Allowed headers
+}));
 
 app.use("/api", apiRouter);
 
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*"); // Adjust this to the specific origin if needed
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
-  
-  app.use(cors({
-    origin: '*', // Allow requests from any origin
-  }));
-  
-//404 handler
+// 404 handler
 app.use(function(req, res, next) {
-    return res.status(404).json({
-        statusCode: 404,
-        status: "error",
-        message: "Not found",
-    });
+  return res.status(404).json({
+    statusCode: 404,
+    status: "error",
+    message: "Not found",
+  });
 });
 
-
-//500 handler
+// 500 handler
 app.use(function(err, req, res, next) {
-    console.log(
-        "err",
-        err,
-        "timestamp: ",
-        moment().utc().format("YYYY-MM-DD HH:mm:ss")
-    );
-    return res.status(err.status || 500).json({
-        statusCode: 500,
-        status: "error",
-        message: "Internal server error",
-    });
+  console.log(
+    "err",
+    err,
+    "timestamp: ",
+    moment().utc().format("YYYY-MM-DD HH:mm:ss")
+  );
+  return res.status(err.status || 500).json({
+    statusCode: 500,
+    status: "error",
+    message: "Internal server error",
+  });
 });
-
 
 module.exports = app;

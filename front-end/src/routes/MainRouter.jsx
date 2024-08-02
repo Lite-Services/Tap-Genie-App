@@ -10,7 +10,7 @@ function MainRouter() {
         twaReturnUrl: "https://t.me/snowtapcoin_bot",
       }}
     >
-      <BrowserRouter basename="/">
+      <BrowserRouter basename="/game">
         <Routes>
           {GameRouter}
           <Route path="*" element={<Error404 />} />

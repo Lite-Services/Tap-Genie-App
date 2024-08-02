@@ -25,7 +25,7 @@ function Game() {
     if (tg_user != false) {
       tg_user["referral_by"] = referral_by;
       axios
-        .post("/api/tg/auth/", tg_user)
+        .post("https://taptap-production.up.railway.app/api/tg/auth/", tg_user)
         .then((res) => {
           var data = res.data;
           //TODO: check this sync_data validation

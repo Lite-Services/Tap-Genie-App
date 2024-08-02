@@ -11,6 +11,7 @@ async function getscore(req, res, next) {
         const { user: tgUser } = req;
 
         if (!tgUser || tgUser.id == null) {
+            console.log('no user found');
             return res.status(401).json({ error: 'Unauthorized', message: 'Authentication required' });
         }
 

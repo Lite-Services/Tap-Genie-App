@@ -72,7 +72,7 @@ function LoadingScreen() {
             position: "absolute",
           }}
           className={
-            "z-10 inline-block relative text-left text-[#0FF378] text-4xl font-sfSemi  px-2"
+            "z-10 inline-block relative text-left text-[#3396FF] text-4xl font-sfSemi  px-2"
           }
           key={currentWord}
         >

@@ -226,7 +226,7 @@ const Friends = () => {
         <a
           href="#"
           onClick={triggerCopy}
-          className="text-[#0b0b0b] text-xl w-1/2  mb-28 rounded-[20px] bg-[#0FF378]  justify-center py-4 mt-2 mx-auto flex items-center"
+          className="text-[#0b0b0b] text-xl w-1/2  mb-28 rounded-[20px] bg-[#3396FF]  justify-center py-4 mt-2 mx-auto flex items-center"
         >
           Invite friends
           <svg

@@ -124,8 +124,8 @@ function Leaderboard() {
               ))}
           </div>
           {userEarndetails && (
-            <div className="bg-[#0FF378] backdrop-blur-md shadow-[0_0_24px_8px_#000000] absolute bottom-0 w-full pt-4 rounded-t-3xl">
-              <div className="flex items-center justify-between w-[95%] bg-[#0FF378] rounded-2xl py-2 mt-2 px-4 mx-auto gap-2">
+            <div className="bg-[#3396FF] backdrop-blur-md shadow-[0_0_24px_8px_#000000] absolute bottom-0 w-full pt-4 rounded-t-3xl">
+              <div className="flex items-center justify-between w-[95%] bg-[#3396FF] rounded-2xl py-2 mt-2 px-4 mx-auto gap-2">
                 <div className="flex items-center">
                   <h1 className="text-[#0B0B0B] text-2xl">{userPosition}</h1>
                   <img

@@ -31,7 +31,7 @@ export default function Tabs() {
             to={tab.path}
             key={tab.id}
             className={`inline-flex flex-col items-center justify-center px-6 py-2 rounded-2xl  group ${
-              location.pathname === tab.path ? "bg-[#0FF378]" : "bg-[#0B0B0B]"
+              location.pathname === tab.path ? "bg-[#3396FF]" : "bg-[#0B0B0B]"
             }`}
           >
             <img

@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 function LoadingScreen({ isloaded, reURL='' }) {
-  const words = ["Our", "Robo", "is", "waking", "up...."];
+  const words = ["Winter", "is", "coming", "...."];
   const [currentWord, setCurrentWord] = useState(words[0]);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -66,7 +66,7 @@ function LoadingScreen({ isloaded, reURL='' }) {
               position: "absolute",
             }}
             className={
-              "z-10 inline-block relative text-left text-[#0FF378] text-4xl font-sfSemi px-2"
+              "z-10 inline-block relative text-left text-[#3396FF] text-4xl font-sfSemi px-2"
             }
             key={currentWord}
           >

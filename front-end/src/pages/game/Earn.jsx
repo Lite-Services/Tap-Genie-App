@@ -496,7 +496,7 @@ function Earn() {
 className="hero w-full h-24 min-h-24 mb-4 rounded-3xl bg-no-repeat bg-cover flex flex-col items-center justify-center"
 style={{ backgroundImage: `url(${heroBackgroundImg})` }}
 >
-<span className="flex flex-row items-center justify-center gap-2 text-xl font-black bg-[#181A1B] rounded-full text-[#0FF378] py-2 px-2 pr-4">
+<span className="flex flex-row items-center justify-center gap-2 text-xl font-black bg-[#181A1B] rounded-full text-[#3396FF] py-2 px-2 pr-4">
   <img
     src={PlayIcon}
     className="w-8 h-8 object-contain rounded-full"
@@ -535,11 +535,11 @@ style={{
     <span
       key={idx}
       className={
-        "pointer-events-none absolute left-1/2 top-1/2 h-0.5 w-0.5 rotate-[215deg] animate-meteor rounded-[9999px] bg-[#0FF378] shadow-[0_0_0_1px_#ffffff10]"
+        "pointer-events-none absolute left-1/2 top-1/2 h-0.5 w-0.5 rotate-[215deg] animate-meteor rounded-[9999px] bg-[#3396FF] shadow-[0_0_0_1px_#ffffff10]"
       }
       style={style}
     >
-      <div className="pointer-events-none absolute top-1/2 -z-10 h-[1px] w-[50px] -translate-y-1/2 bg-gradient-to-r from-[#0FF378] to-transparent" />
+      <div className="pointer-events-none absolute top-1/2 -z-10 h-[1px] w-[50px] -translate-y-1/2 bg-gradient-to-r from-[#3396FF] to-transparent" />
     </span>
   ))}
   <div className="flex">
@@ -573,13 +573,13 @@ style={{
 <div className="rank flex flex-row gap-2 small:items-start items-center justify-center left-0 my-10 small:my-0">
   <div className="progressbar w-60 rounded-full relative h-3 bg-[#050F08]">
     <div
-      className="absolute h-full bg-gradient-to-r from-[#0FF378] to-[#6ABE6A] bottom-0 rounded-full"
+      className="absolute h-full bg-gradient-to-r from-[#3396FF] to-[#6ABE6A] bottom-0 rounded-full"
       style={{
         width: `${Math.min(Math.max((parseInt(localEnergy) / 2000) * 100, 0), 100)}%`,
       }}
     ></div>
   </div>
-  <h1 className="text-sm text-[#0FF378] flex flex-row items-center gap-1">
+  <h1 className="text-sm text-[#3396FF] flex flex-row items-center gap-1">
     {restoreTime != null && restoreTime !== '' && localEnergy === 0 ? (
       !isNaN(parseInt(elapsedSeconds)) ? formatTime(elapsedSeconds) : `1h`
       // elapsedSeconds

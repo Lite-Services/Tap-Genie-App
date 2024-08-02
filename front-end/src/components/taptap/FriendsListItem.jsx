@@ -14,7 +14,7 @@ const FriendsListItem = ({
 }) => {
   return (
     <div
-      className="flex items-center justify-center w-[95%] bg-[#0FF378] rounded-2xl py-2 mt-2 shadow-[0_0_24px_-6px_#6ABE6A] px-4 mx-auto"
+      className="flex items-center justify-center w-[95%] bg-[#3396FF] rounded-2xl py-2 mt-2 shadow-[0_0_24px_-6px_#6ABE6A] px-4 mx-auto"
       onClick={onButtonClick}
     >
       <h1 className="text-[#0B0B0B] text-2xl">{rank}</h1>

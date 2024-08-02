@@ -16,7 +16,7 @@ function Game() {
   const referral_by = query_params.get("tgWebAppStartParam");
   const [error, setError] = useState(false);
   const [isTg, setIsTg] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(function () {
     let unmounted = false;
     let tg_user = getTGUser();

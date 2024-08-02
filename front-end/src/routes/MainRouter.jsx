@@ -13,7 +13,7 @@ function MainRouter() {
     >
       <BrowserRouter basename="/">
         <Routes>
-        <Route path="/" element={<Game />} />
+        <Route path="/game" element={<Game />} />
           {GameRouter}
           <Route path="*" element={<Error404 />} />
         </Routes>

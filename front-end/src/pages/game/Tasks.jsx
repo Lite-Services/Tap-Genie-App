@@ -52,7 +52,7 @@ function Tasks() {
     const { id: tid } = tgData;
 
     try {
-      const res = await postAjaxCall("/api/task/list", { tid });
+      const res = await postAjaxCall("https://taptap-production.up.railway.app/api/task/list", { tid });
       console.log("res=>",res)
       const checkinDetails = res?.value || {};
       const taskDoneList = res?.taskDoneList || {};
@@ -81,7 +81,7 @@ function Tasks() {
   const Claim = async (tasktype = null) => {
     try {
       const tgData = getTGUser();
-      const res = await postAjaxCall("/api/game/upCheckin", {
+      const res = await postAjaxCall("https://taptap-production.up.railway.app/api/game/upCheckin", {
         teleid: tgData.id,
         tasktype,
       });

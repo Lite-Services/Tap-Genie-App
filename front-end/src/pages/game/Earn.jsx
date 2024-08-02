@@ -106,7 +106,7 @@ function Earn() {
       const token = getAuth();
       const tgUser = getTGUser();
 
-      const response = await axios.get(`/api/earn/getscore`,{
+      const response = await axios.get(`https://taptap-production.up.railway.app/api/earn/getscore`,{
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -268,7 +268,7 @@ function Earn() {
 
       if( points>0){
         await axios.post(
-          `/api/game/upscore`,
+          `https://taptap-production.up.railway.app/api/game/upscore`,
           {
             score: 10000,
             energy_remaning: 100,

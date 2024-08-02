@@ -187,7 +187,7 @@ function RoboMine() {
     miner_level = !isNaN(parseInt(miner_level)) ? parseInt(miner_level) : 0;
     const token = getAuth();
     axios
-        .get("/api/reward/claim", {
+        .get("https://taptap-production.up.railway.app/api/reward/claim", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -232,7 +232,7 @@ function RoboMine() {
 
     const token = getAuth();
     axios
-        .get("/api/reward/upgrade", {
+        .get("https://taptap-production.up.railway.app/api/reward/upgrade", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -56,7 +56,7 @@ const Friends = () => {
     const { id: tid } = tgData;
 
     try {
-      const res = await postAjaxCall('/api/referral/claim', {  });
+      const res = await postAjaxCall('https://taptap-production.up.railway.app/api/referral/claim', {  });
       console.log(res.data)
       const userDetails = res?.data || null;
 
@@ -113,7 +113,7 @@ const Friends = () => {
     try {
       const tgData = getTGUser();
       // console.log({ friendID:friendId,"refCode":refcode})
-     const res =  await postAjaxCall('/api/game/refclaim', { friendID:friendId,"refCode":refcode});
+     const res =  await postAjaxCall('https://taptap-production.up.railway.app/api/game/refclaim', { friendID:friendId,"refCode":refcode});
      
     //  console.log(res)
      if(res && res.icalimed){

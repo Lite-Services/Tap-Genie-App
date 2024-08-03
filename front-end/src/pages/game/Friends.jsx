@@ -42,7 +42,7 @@ const Friends = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const userDetails = response.data || null;
-
+      alert(userDetails.refCode);
       if (userDetails) {
         setFriends(userDetails.friends || []);
         const refCode = userDetails?.refCode || '';

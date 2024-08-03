@@ -129,7 +129,6 @@ function Earn() {
       setUser(userData);
 
       setGamelevel(userData.game_level);
-
       // console.log("ds",userData)
       // if(userData.points == 0){
 

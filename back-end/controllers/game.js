@@ -573,7 +573,7 @@ async function getAllUserRank(req, res, next) {
             return res.status(401).json({ error: "unauth" });
         }
 
-        const [results, metadata] = await sequelize.query("SELECT e.tap_score, t.username, e.game_level, e.id, t.first_name from tg_users as t JOIN earnings as e ON t.userid=e.teleid and e.tap_points !=0 order by e.tap_points desc;");
+        const [results, metadata] = await sequelize.query("SELECT e.tap_score, t.username, e.game_level, e.id, t.first_name from tg_users as t JOIN earnings as e ON t.userid=e.id and e.tap_score !=0 order by e.tap_score desc;");
         const topUsers = results;
 
         if (!topUsers) {
@@ -590,7 +590,7 @@ async function getAllUserRank(req, res, next) {
         if (tid) {
             const userInTop = topplayers.find((player) => player.id === tid);
             if (!userInTop) {
-                const [results1, metadata1] = await sequelize.query(`SELECT e.tap_score, t.username, e.game_level, e.id, t.first_name from tg_users as t JOIN earnings as e ON t.userid=e.teleid where t.userid='${tid}' order by e.tap_points desc;`);
+                const [results1, metadata1] = await sequelize.query(`SELECT e.tap_score, t.username, e.game_level, e.id, t.first_name from tg_users as t JOIN earnings as e ON t.userid=e.id where t.userid='${tid}' order by e.tap_score desc;`);
                 const specificUser = results1;
 
                 if (specificUser.length > 0) {

@@ -38,7 +38,7 @@ const Friends = () => {
 
       const token = getAuth();
     try {
-      const response = await axios.post('https://taptap-production.up.railway.app/api/referral/list', {
+      const response = await axios.get('https://taptap-production.up.railway.app/api/referral/list', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const userDetails = response.data || null;

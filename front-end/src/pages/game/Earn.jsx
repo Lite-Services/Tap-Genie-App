@@ -126,10 +126,10 @@ function Earn() {
       }
 
       const userData = resdata;
-      setUser(userData.tap_score);
+      setUser(userData);
 
       setGamelevel(userData.game_level);
-      alert(userData);
+      alert(userData.tap_score);
 
       // console.log("ds",userData)
       // if(userData.points == 0){

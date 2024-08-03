@@ -274,7 +274,7 @@ function RoboMine() {
         </Drawer>
         <div
             className="RoboMine relative h-screen bg-black bg-cover bg-no-repeat flex items-center justify-center px-2 flex-col py-4 bg-top pt-10"
-            style={{ backgroundImage: `url(${minerbg})` }}
+           
         >
           {/* <button
           className="absolute top-0 left-0 m-2 bg-white p-3 rounded-full"

@@ -495,10 +495,7 @@ function Earn() {
 
 <div
 className={`coinsection w-full h-full bg-black flex flex-col items-center justify-center p-4 relative select-none mb-2 bg-center bg-no-repeat `}
-style={{
-  backgroundImage: `url(${coinBackgroundImg})`,
-  backgroundBlendMode: "hard-light",
-}}
+
 >
 <div className="topbar bg-black/35 backdrop-blur-sm border-[#3131316c] border-[1px] w-[90%] py-2 absolute top-0 z-20 rounded-3xl">
   <Link

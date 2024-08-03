@@ -265,7 +265,7 @@ function Earn() {
 
   const syncWithServer = async (energy, points, restore_time) => {
     const token = getAuth();
-    alert(user);
+    //alert(user);
 
     if (user) {
 

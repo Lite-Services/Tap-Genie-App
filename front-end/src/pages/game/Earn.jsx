@@ -19,7 +19,7 @@ import AnimatedCounter from "../../components/taptap/AnimatedCounter";
 import PlayIcon from "../../assets/img/play-icon.svg";
 import coinBackgroundImg from "../../assets/img/coin-background.png";
 import heroBackgroundImg from "../../assets/img/background-hero.png";
-import LogoImg from "../../assets/img/logo.png";
+import LogoImg from "../../assets/img/coin.png";
 import RobotImg from "../../assets/img/robot-1.png";
 import RobotImg4 from "../../assets/img/robot-4.png";
 import CoinImg from "../../assets/img/coin.png";

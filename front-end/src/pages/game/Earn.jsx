@@ -312,6 +312,7 @@ function Earn() {
   }, []);
 
   const handleTap = (tapcount = 1) => {
+
     console.log("tab test", isActive, localEnergy, localPoints, user, restoreTime)
 
     if (localEnergy > 0) {
@@ -336,6 +337,7 @@ function Earn() {
         const restoreTimess = futureUtcTime.format("YYYY-MM-DD HH:mm:ss");
         
         localStorage.setItem("restoreTime", restoreTimess);
+        alert(localPoints);
         if(newPoints == 0){
 
         

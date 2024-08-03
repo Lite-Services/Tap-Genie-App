@@ -69,21 +69,29 @@ async function claim(req, res, next) {
         const tgUser = req.user;
         const { friendID } = req.body;
 
+        // Validate input
         if (!tgUser || !tgUser.id || !tgUser.referral_code) {
             return res.status(401).json({ error: 'Unauthorized', message: 'Authentication required' });
         }
 
-        const refCode = tgUser.referral_code
+        if (!friendID) {
+            return res.status(400).json({ error: 'Bad Request', message: 'Friend ID is required' });
+        }
 
+        const refCode = tgUser.referral_code;
+
+        // Fetch earnings details
         const earnDetails = await Earnings.findOne({
             where: {
                 userid: tgUser.id,
             },
         });
 
-        if (!earnDetails && earnDetails == null && !earnDetails.userid) {
+        if (!earnDetails || !earnDetails.userid) {
             return res.status(401).json({ error: 'Unauthorized', message: 'Authentication required' });
         }
+
+        // Fetch user details
         const userDetails = await TGUser.findOne({
             where: {
                 [Op.and]: [
@@ -94,21 +102,23 @@ async function claim(req, res, next) {
             },
         });
 
-        if (!userDetails && userDetails == null) {
-            return res.status(401).json({ error: 'Unauthorized', message: 'Authentication required' });
+        if (!userDetails) {
+            return res.status(404).json({ error: 'Not Found', message: 'User not found or not eligible for claim' });
         }
 
-        const referral_score = userDetails.tg_premium_user === "Y" ? process.env.PREMIUM : process.env.NON_PREMIUM;
+        const referral_score = userDetails.tg_premium_user === "Y" ? parseInt(process.env.PREMIUM) : parseInt(process.env.NON_PREMIUM);
 
-        const earnUpdata = {
-            referral_score: parseInt(earnDetails.referral_score) + parseInt(referral_score),
-            tap_score: parseInt(earnDetails.tap_score) + parseInt(referral_score)
+        const earnUpdate = {
+            referral_score: parseInt(earnDetails.referral_score) + referral_score,
+            tap_score: parseInt(earnDetails.tap_score) + referral_score
         };
-        const [updated] = await Earnings.update(earnUpdata, {
+
+        const [updated] = await Earnings.update(earnUpdate, {
             where: {
                 userid: tgUser.id,
             },
         });
+
         if (updated > 0) {
             const [isClaim] = await TGUser.update({ ref_claim: "Y" }, {
                 where: {
@@ -119,6 +129,7 @@ async function claim(req, res, next) {
                     ],
                 },
             });
+
             if (isClaim > 0) {
                 return res.status(200).json({ message: 'Success', data: { friendid: friendID, claimedPoint: referral_score } });
             } else {
@@ -128,10 +139,11 @@ async function claim(req, res, next) {
             return res.status(409).json({ error: 'Conflict', message: 'Referral claim failed' });
         }
     } catch (error) {
-        console.error("Error calim referral score:", error);
-        next("An error occurred on calim referral score")
+        console.error("Error claiming referral score:", error);
+        return next(new Error('An error occurred while claiming referral score'));
     }
 }
+
 
 async function claimAll(req, res, next) {
     try {

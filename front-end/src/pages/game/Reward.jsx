@@ -282,8 +282,8 @@ function RoboMine() {
         >
           <img src={back} className="w-4 h-4" alt="" />
         </button> */}
-          <h1 className="font-bold text-4xl text-white">ROBO MINER</h1>
-          <p className=" text-xl text-white">Upgrade your robot</p>
+          <h1 className="font-bold text-4xl text-white">SNOW MINER</h1>
+          <p className=" text-xl text-white">Upgrade your Snowball</p>
           <div className="robotcontainer relative flex">
             <img
                 src={robot[`${miner_level}`] ? robot[`${miner_level}`] : robot_1}

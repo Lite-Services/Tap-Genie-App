@@ -129,7 +129,7 @@ function Earn() {
       setUser(userData);
 
       setGamelevel(userData.game_level);
-      alert(userData.tap_score);
+      //alert(userData.tap_score);
 
       // console.log("ds",userData)
       // if(userData.points == 0){
@@ -152,8 +152,8 @@ function Earn() {
 
      
       if(storedPoints==0){
-        localStorage.setItem("score",userData.points)
-        storedPoints = userData.points
+        localStorage.setItem("score", userData.tap_score)
+        storedPoints = userData.tap_score
          
       }
 
@@ -165,7 +165,7 @@ function Earn() {
         if (!lastSyncTime || (lastSyncTime && now - lastSyncTime > 2000)) {
           let tempLocalEn = localStorage.getItem("energy");
           let tempLocalPO = localStorage.getItem("score");
-          await syncWithServer(tempLocalEn, tempLocalPO, userData.restore_time)
+          await syncWithServer(tempLocalEn, tempLocalPO, userData.energy_restore_time)
           .then(() => {
                       setLocalEnergy(tempLocalEn);
                       setLocalPoints(tempLocalPO);
@@ -182,8 +182,8 @@ function Earn() {
           }
         }
       } else {
-        const energy = userData.energy;
-        const points = userData.points;
+        const energy = userData.energy_remaning;
+        const points = userData.tap_score;
         if (energy !== null && points !== null) {
           setLocalEnergy(energy <= 0 ? defaultEnergyLevel : energy);
           setLocalPoints(points);
@@ -219,39 +219,39 @@ function Earn() {
           setRestoreTime('');
           setLocalEnergy(storedEnergy !== null ? storedEnergy : defaultEnergyLevel);
         }
-      } else if (userData.restore_time && userData.restore_time !== null) {
+      } else if (userData.energy_restore_time && userData.energy_restore_time !== null) {
         console.log("4")
-        const result = checkTime(userData.restore_time);
+        const result = checkTime(userData.energy_restore_time);
         if (result !== null && result !== '') {
           setRestoreTime(result);
           console.log("5")
-          if(userData.energy==0){
+          if(userData.energy_remaning == 0){
             console.log("from db 5")
             const currentTime = moment.utc().format("YYYY-MM-DD HH:mm:ss");
             
-            console.log("userData.restore_time",userData.restore_time)
+            console.log("userData.restore_time",userData.energy_restore_time)
 
-            const temp = moment(userData.restore_time).format("YYYY-MM-DD HH:mm:ss");
+            const temp = moment(userData.energy_restore_time).format("YYYY-MM-DD HH:mm:ss");
             console.log("temp",temp)
 
             const duration = moment.duration(moment(currentTime).diff(moment(temp))).asSeconds();
             setElapsedSeconds(duration);
-            setLocalEnergy(userData.energy);
-            setRestoreTime(userData.restore_time);
+            setLocalEnergy(userData.energy_remaning);
+            setRestoreTime(userData.energy_restore_time);
 
           }else{
 
             console.log("from db 5 relse")
-            setLocalEnergy(userData.energy);
+            setLocalEnergy(userData.energy_remaning);
             setElapsedSeconds('')
-            setRestoreTime(userData.restore_time);
+            setRestoreTime(userData.energy_restore_time);
 
           }
          
         } else {
           console.log("6")
           setRestoreTime('');
-          setLocalEnergy(storedEnergy !== null ? storedEnergy : userData.energy || defaultEnergyLevel);
+          setLocalEnergy(storedEnergy !== null ? storedEnergy : userData.energy_remaning || defaultEnergyLevel);
         }
       } else {
         console.log("7")

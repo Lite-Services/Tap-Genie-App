@@ -166,7 +166,7 @@ function Earn() {
           await syncWithServer(tempLocalEn, tempLocalPO, userData.restore_time)
           .then(() => {
                       setLocalEnergy(tempLocalEn);
-                      setLocalPoints(tempLocalPO);
+                      setLocalPoints(parseInt(tempLocalPO));
                     });
         } else {
           const energy = storedEnergy;

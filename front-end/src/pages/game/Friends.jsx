@@ -81,22 +81,22 @@ const Friends = () => {
     navigate('/friends');
   };
 
-  const triggerCopy = (e) => {
+  const triggerCopy = async (e) => {
     e.preventDefault();
-
-    navigator.clipboard
-      .writeText(refLink)
-      .then(() => {
-        setOpen(true);
-        setCusText('Invite Copied, Share it with your friends and family.');
-      })
-      .catch(() => {
-        setOpen(false);
-        setCusText('Failed to copy.');
-      })
-      .finally(() => {
-        setTimeout(() => setOpen(false), 5000);
-      });
+    if (!refLink) {
+      setCusText('No link to copy.');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(refLink);
+      setOpen(true);
+      setCusText('Invite Copied, Share it with your friends and family.');
+    } catch (error) {
+      console.error('Clipboard copy failed:', error);
+      setCusText('Failed to copy.');
+    } finally {
+      setTimeout(() => setOpen(false), 5000);
+    }
   };
 
   const Claim = async (friendId) => {

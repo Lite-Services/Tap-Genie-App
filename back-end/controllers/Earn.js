@@ -48,9 +48,9 @@ async function upscore(req, res, next) {
             return res.status(401).json({ error: 'Unauthorized', message: 'Authentication required' });
         }
 
-        const { id: teleid } = tgUser;
+        const { id: id } = tgUser;
 
-        const userDetails = await Earnings.findOne({ where: { userid: teleid } });
+        const userDetails = await Earnings.findOne({ where: { userid: id } });
 
         // TODO: Add score validation
 
@@ -62,7 +62,7 @@ async function upscore(req, res, next) {
         };
 
         if (userDetails) {
-            const [updated] = await Earnings.update(updata, { where: { userid: teleid } });
+            const [updated] = await Earnings.update(updata, { where: { userid: id } });
             if (updated > 0) {
                 return res.status(200).json({ message: 'Success', data: [] });
             } else {

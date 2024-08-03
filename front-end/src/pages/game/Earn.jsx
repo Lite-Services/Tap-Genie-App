@@ -509,7 +509,7 @@ className={`coinsection w-full h-full bg-black flex flex-col items-center justif
   <div className="flex flex-col items-center justify-center gap-2">
     <h1 className="font-sfSemi text-sm text-white">YOU'VE EARNED</h1>
     <h1 className="font-sfSemi text-2xl text-white flex flex-row gap-2 items-center justify-center">
-      <AnimatedCounter from={prePoint} to={localPoints} />
+      <AnimatedCounter from={parseInt(prePoint)} to={parseInt(localPoints)} />
       
       <img src={LogoImg} className="w-8 h-8" />
     </h1>

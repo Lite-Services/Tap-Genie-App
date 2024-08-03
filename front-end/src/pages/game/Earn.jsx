@@ -268,6 +268,7 @@ function Earn() {
     if (userData) {
 
       if( points>0){
+        alert(points);
         await axios.post(
           `https://taptap-production.up.railway.app/api/earn/upscore`,
           {

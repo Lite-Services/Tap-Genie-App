@@ -265,8 +265,9 @@ function Earn() {
 
   const syncWithServer = async (energy, points, restore_time) => {
     const token = getAuth();
+    alert(user);
+
     if (user) {
-      alert(user);
 
       if( points>0){
         await axios.post(

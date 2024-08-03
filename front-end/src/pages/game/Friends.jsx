@@ -46,8 +46,8 @@ const Friends = () => {
     const { id: tid } = tgData;
 
     try {
-      const res = await postAjaxCall('https://taptap-production.up.railway.app/api/referral/claim', {});
-      alert(res.data);
+      const res = await postAjaxCall('https://taptap-production.up.railway.app/api/referral/list', {});
+    alert(res.data);
       const userDetails = res?.data || null;
 
       if (userDetails) {

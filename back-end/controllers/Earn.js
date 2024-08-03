@@ -30,7 +30,7 @@ async function getscore(req, res, next) {
             console.log(value);
             return res.status(200).json({ message: 'Success', data: value });
         } else {
-            return res.status(200).json({ message: 'Success', data: [] });
+            return res.status(401).json({ message: 'Not found' });
         }
     } catch (error) {
         console.error("Error retrieving data:", error);

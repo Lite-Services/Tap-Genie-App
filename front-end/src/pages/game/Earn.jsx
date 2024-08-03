@@ -126,7 +126,7 @@ function Earn() {
       }
 
       const userData = resdata;
-      setUser(userData.points);
+      setUser(userData.tap_score);
 
       setGamelevel(userData.game_level);
       alert(userData);

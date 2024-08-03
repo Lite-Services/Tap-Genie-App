@@ -492,18 +492,7 @@ function Earn() {
       {!isLoading && (
         <>
 
-<div
-className="hero w-full h-24 min-h-24 mb-4 rounded-3xl bg-no-repeat bg-cover flex flex-col items-center justify-center"
->
-<span className="flex flex-row items-center justify-center gap-2 text-xl font-black bg-[#181A1B] rounded-full text-[#3396FF] py-2 px-2 pr-4">
-  <img
-    src={PlayIcon}
-    className="w-8 h-8 object-contain rounded-full"
-    alt=""
-  />{" "}
-  PLAY
-</span>
-</div>
+
 <div
 className={`coinsection w-full h-full bg-black flex flex-col items-center justify-center p-4 relative select-none mb-2 bg-center bg-no-repeat `}
 style={{

@@ -337,7 +337,7 @@ function Earn() {
         const restoreTimess = futureUtcTime.format("YYYY-MM-DD HH:mm:ss");
         
         localStorage.setItem("restoreTime", restoreTimess);
-        alert(localPoints);
+        alert(newPoints);
         if(newPoints == 0){
 
         

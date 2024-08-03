@@ -103,163 +103,91 @@ function Earn() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const token = getAuth();
-      const tgUser = getTGUser();
+      try {
+        const token = getAuth();
+        const response = await axios.get('https://taptap-production.up.railway.app/api/earn/getscore', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-      const response = await axios.get(`https://taptap-production.up.railway.app/api/earn/getscore`,{
-        headers: { Authorization: `Bearer ${token}` },
-      });
+        const { data } = response;
+        const userData = data.data;
 
-      console.log("response==>",response)
+        if (!userData) {
+          // navigate("/game"); // Uncomment if navigation is needed
+          setIsLoading(false);
+          return;
+        }
 
-      const res = response.data;
-      const resdata = res.data;
-
-      if (!resdata) {
-        // navigate("/game");
-        return;
-      }else{
-
+        setUser(userData);
+        setGamelevel(userData.game_level);
         
+        const storedEnergy = localStorage.getItem('energy');
+        let storedPoints = parseInt(localStorage.getItem('score'), 10) || 0;
+        const lastSyncTime = localStorage.getItem('lastSyncTime');
 
-        setIsLoading(false)
-      }
-
-      const userData = resdata;
-      setUser(userData);
-
-      setGamelevel(userData.game_level);
-      // console.log("ds",userData)
-      // if(userData.points == 0){
-
-      //   localStorage.setItem("energy",2000);
-      //   localStorage.setItem("score",0);
-      //   localStorage.setItem("lastSyncTime",null);
-      //   localStorage.setItem("restoreTime",null);
-
-      // }
-
-      
-
-
-      const storedEnergy = localStorage.getItem("energy");
-      var storedPoints = parseInt(localStorage.getItem("score"), 10) || 0;
-      const lastSyncTime = localStorage.getItem("lastSyncTime");
-
-      console.log("storedPoints==>",storedPoints)
-
-     
-      if(storedPoints==0){
-        localStorage.setItem("score",userData.points)
-        storedPoints = userData.points
-         
-      }
-
-
-
-
-      if (storedEnergy && storedPoints) {
-        const now = Date.now();
-        if (!lastSyncTime || (lastSyncTime && now - lastSyncTime > 2000)) {
-          let tempLocalEn = localStorage.getItem("energy");
-          let tempLocalPO = localStorage.getItem("score");
-          await syncWithServer(tempLocalEn, tempLocalPO, userData.restore_time)
-          .then(() => {
-                      setLocalEnergy(tempLocalEn);
-                      setLocalPoints(parseInt(tempLocalPO));
-                    });
-        } else {
-          const energy = storedEnergy;
-          const points = storedPoints;
-          if (energy !== null && points !== null) {
-            setLocalEnergy(energy <= 0 ? defaultEnergyLevel : energy);
-            setLocalPoints(points);
-          } else {
-            setLocalEnergy(defaultEnergyLevel);
-            setLocalPoints(0);
-          }
+        if (storedPoints === 0) {
+          localStorage.setItem('score', userData.points);
+          storedPoints = userData.points;
         }
-      } else {
-        const energy = userData.energy;
-        const points = userData.points;
-        if (energy !== null && points !== null) {
-          setLocalEnergy(energy <= 0 ? defaultEnergyLevel : energy);
-          setLocalPoints(points);
-        } else {
-          setLocalEnergy(defaultEnergyLevel);
-          setLocalPoints(0);
-        }
-      }
 
-      const storedRestoreTime = localStorage.getItem("restoreTime");
-      
-
-      if (storedRestoreTime && storedRestoreTime !== null) {
-        const result = checkTime(storedRestoreTime);
-        console.log("1")
-        if (result !== null && result !== '') {
-          console.log("2")
-          setRestoreTime(result);
-          const currentTime = moment.utc().format("YYYY-MM-DD HH:mm:ss");
-          const duration = moment.duration(moment( localStorage.getItem("restoreTime")).diff(currentTime));
-          setElapsedSeconds(duration.asSeconds());
-          if(storedEnergy>0 ){
+        if (storedEnergy && storedPoints) {
+          const now = Date.now();
+          if (!lastSyncTime || now - lastSyncTime > 2000) {
+            await syncWithServer(storedEnergy, storedPoints, userData.restore_time);
             setLocalEnergy(storedEnergy);
-          }else{
-            setLocalEnergy(0);
+            setLocalPoints(storedPoints);
+          } else {
+            setLocalEnergy(storedEnergy > 0 ? storedEnergy : defaultEnergyLevel);
+            setLocalPoints(storedPoints);
           }
-          
-        //  localStorage.getItem("restoreTime");
-        console.log("result", localStorage.getItem("restoreTime"))
-         setRestoreTime( localStorage.getItem("restoreTime"));
         } else {
-          console.log("3")
-          setRestoreTime('');
-          setLocalEnergy(storedEnergy !== null ? storedEnergy : defaultEnergyLevel);
+          setLocalEnergy(userData.energy > 0 ? userData.energy : defaultEnergyLevel);
+          setLocalPoints(userData.points);
         }
-      } else if (userData.restore_time && userData.restore_time !== null) {
-        console.log("4")
-        const result = checkTime(userData.restore_time);
-        if (result !== null && result !== '') {
-          setRestoreTime(result);
-          console.log("5")
-          if(userData.energy==0){
-            console.log("from db 5")
-            const currentTime = moment.utc().format("YYYY-MM-DD HH:mm:ss");
-            
-            console.log("userData.restore_time",userData.restore_time)
 
-            const temp = moment(userData.restore_time).format("YYYY-MM-DD HH:mm:ss");
-            console.log("temp",temp)
-
-            const duration = moment.duration(moment(currentTime).diff(moment(temp))).asSeconds();
-            setElapsedSeconds(duration);
-            setLocalEnergy(userData.energy);
-            setRestoreTime(userData.restore_time);
-
-          }else{
-
-            console.log("from db 5 relse")
-            setLocalEnergy(userData.energy);
-            setElapsedSeconds('')
-            setRestoreTime(userData.restore_time);
-
+        const storedRestoreTime = localStorage.getItem('restoreTime');
+        if (storedRestoreTime) {
+          const result = checkTime(storedRestoreTime);
+          if (result) {
+            setRestoreTime(result);
+            const duration = moment.duration(moment(storedRestoreTime).diff(moment.utc()));
+            setElapsedSeconds(duration.asSeconds());
+            setLocalEnergy(storedEnergy > 0 ? storedEnergy : 0);
+          } else {
+            setRestoreTime('');
+            setLocalEnergy(storedEnergy > 0 ? storedEnergy : defaultEnergyLevel);
           }
-         
+        } else if (userData.restore_time) {
+          const result = checkTime(userData.restore_time);
+          if (result) {
+            setRestoreTime(result);
+            if (userData.energy === 0) {
+              const duration = moment.duration(moment.utc().diff(moment(userData.restore_time))).asSeconds();
+              setElapsedSeconds(duration);
+            } else {
+              setElapsedSeconds(null);
+            }
+            setLocalEnergy(userData.energy);
+          } else {
+            setRestoreTime('');
+            setLocalEnergy(userData.energy > 0 ? userData.energy : defaultEnergyLevel);
+          }
         } else {
-          console.log("6")
           setRestoreTime('');
-          setLocalEnergy(storedEnergy !== null ? storedEnergy : userData.energy || defaultEnergyLevel);
+          setElapsedSeconds(null);
+          setLocalEnergy(defaultEnergyLevel);
         }
-      } else {
-        console.log("7")
-        setRestoreTime('');
-        setElapsedSeconds(null);
-        setLocalEnergy(storedEnergy !== null ? storedEnergy : defaultEnergyLevel);
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        setIsLoading(false);
       }
     };
+
     fetchUser();
-  }, [!user, navigate]);
+  }, [navigate]); // Fixed dependency array
+
 
   const syncWithServer = async (energy, points, restore_time) => {
     const token = getAuth();

@@ -269,7 +269,7 @@ function Earn() {
 
       if( points>0){
         await axios.post(
-          `https://taptap-production.up.railway.app/api/game/upscore`,
+          `https://taptap-production.up.railway.app/api/earn/upscore`,
           {
             score: 10000,
             energy_remaning: 100,

@@ -9,7 +9,7 @@ import axios from "axios";
 import InviteCard from "../../components/taptap/InviteCard";
 import FriendsListItem from "../../components/taptap/FriendsListItem";
 
-import LogoImg from "../../assets/img/logo.png";
+import LogoImg from "../../assets/img/coin.png";
 import ActualizarImg from "../../assets/img/actualizar.png";
 import PeopleImg from "../../assets/img/people.png";
 import coinIcon from "../../assets/img/coin.png";
@@ -181,13 +181,13 @@ const Friends = () => {
           points="+2500 TTC"
           description="for you and your friend"
           logo={LogoImg}
-          background={giftbox1}
+          
         />
         <InviteCard
           title="Invite friend with Telegram Premium"
           points="+5000 TTC"
           description="for you and your friend"
-          background={giftbox2}
+        
           logo={LogoImg}
         />
 

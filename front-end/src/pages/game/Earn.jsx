@@ -36,24 +36,16 @@ import LoadingScreen from "../../components/taptap/LoadingScreen";
 
 function Earn() {
   const navigate = useNavigate();
-
   const [clicks, setClicks] = useState([]);
   const [scale, setScale] = useState(1);
   const [meteorStyles, setMeteorStyles] = useState([]);
-
-  const [deductCount, setDeductCount] = useState(1);
-  const [prePoint, setprePoint] = useState(1);
-
   const [localEnergy, setLocalEnergy] = useState(2000);
   const [localPoints, setLocalPoints] = useState(0);
   const [restoreTime, setRestoreTime] = useState(null);
-  const [newsCount, setNewsCount] = useState(0);
   const [elapsedSeconds, setElapsedSeconds] = useState(null);
   const [isActive, setIsActive] = useState(true);
   const [user, setUser] = useState();
-  const [remingtime,setRemingtime] = useState();
-  const [gamelevel,setGamelevel] =useState();
-  const [isLoading,setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const defaultEnergyLevel = 2000;
 
@@ -73,18 +65,17 @@ function Earn() {
     3: "LVL 3",
     4: "LVL 4",
     5: "LVL 5"
-  }
+  };
 
   const checkTime = (time) => {
     const localTime = moment(time, 'YYYY-MM-DD HH:mm:ss');
     const utcTime = localTime.utc();
     const currentUtcTime = moment.utc();
-    return utcTime.isBefore(currentUtcTime) ?  utcTime.format('YYYY-MM-DD HH:mm:ss') :'';
+    return utcTime.isBefore(currentUtcTime) ? utcTime.format('YYYY-MM-DD HH:mm:ss') : '';
   };
 
-  //TODO
   useEffect(() => {
-    console.log("effect test", isActive, localEnergy, localPoints, user, restoreTime)
+    console.log("Effect test", isActive, localEnergy, localPoints, user, restoreTime);
   }, []);
 
   useEffect(() => {
@@ -109,37 +100,33 @@ function Earn() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        const { data } = response;
-        const userData = data.data;
-
+        const userData = response.data.data;
         if (!userData) {
-          // navigate("/game"); // Uncomment if navigation is needed
           setIsLoading(false);
           return;
         }
 
         setUser(userData);
-        setGamelevel(userData.game_level);
-        
-        const storedEnergy = localStorage.getItem('energy');
-        let storedPoints = parseInt(localStorage.getItem('score'), 10) || 0;
-        const lastSyncTime = localStorage.getItem('lastSyncTime');
+
+        let storedEnergy = localStorage.getItem('energy') || defaultEnergyLevel;
+        let storedPoints = parseInt(localStorage.getItem('score'), 10) || userData.points;
 
         if (storedPoints === 0) {
-          localStorage.setItem('score', userData.points);
           storedPoints = userData.points;
+          updateLocalStorage(storedEnergy, storedPoints);
+        }
+
+        const lastSyncTime = localStorage.getItem('lastSyncTime');
+        const now = Date.now();
+
+        if (!lastSyncTime || now - lastSyncTime > 2000) {
+          await syncWithServer(storedEnergy, storedPoints, userData.restore_time);
+          updateLocalStorage(storedEnergy, storedPoints);
         }
 
         if (storedEnergy && storedPoints) {
-          const now = Date.now();
-          if (!lastSyncTime || now - lastSyncTime > 2000) {
-            await syncWithServer(storedEnergy, storedPoints, userData.restore_time);
-            setLocalEnergy(storedEnergy);
-            setLocalPoints(storedPoints);
-          } else {
-            setLocalEnergy(storedEnergy > 0 ? storedEnergy : defaultEnergyLevel);
-            setLocalPoints(storedPoints);
-          }
+          setLocalEnergy(storedEnergy);
+          setLocalPoints(storedPoints);
         } else {
           setLocalEnergy(userData.energy > 0 ? userData.energy : defaultEnergyLevel);
           setLocalPoints(userData.points);
@@ -150,12 +137,8 @@ function Earn() {
           const result = checkTime(storedRestoreTime);
           if (result) {
             setRestoreTime(result);
-            const duration = moment.duration(moment(storedRestoreTime).diff(moment.utc()));
-            setElapsedSeconds(duration.asSeconds());
-            setLocalEnergy(storedEnergy > 0 ? storedEnergy : 0);
-          } else {
-            setRestoreTime('');
-            setLocalEnergy(storedEnergy > 0 ? storedEnergy : defaultEnergyLevel);
+            const remainingTime = moment.duration(moment(storedRestoreTime).diff(moment.utc())).asSeconds();
+            setElapsedSeconds(remainingTime);
           }
         } else if (userData.restore_time) {
           const result = checkTime(userData.restore_time);
@@ -164,13 +147,8 @@ function Earn() {
             if (userData.energy === 0) {
               const duration = moment.duration(moment.utc().diff(moment(userData.restore_time))).asSeconds();
               setElapsedSeconds(duration);
-            } else {
-              setElapsedSeconds(null);
             }
             setLocalEnergy(userData.energy);
-          } else {
-            setRestoreTime('');
-            setLocalEnergy(userData.energy > 0 ? userData.energy : defaultEnergyLevel);
           }
         } else {
           setRestoreTime('');
@@ -186,99 +164,80 @@ function Earn() {
     };
 
     fetchUser();
-  }, [navigate]); // Fixed dependency array
+  }, [navigate]);
 
+  const updateLocalStorage = (energy, points) => {
+    localStorage.setItem('energy', energy);
+    localStorage.setItem('score', points);
+  };
 
   const syncWithServer = async (energy, points, restore_time) => {
     const token = getAuth();
-    if (user ) {
-
-      if( points>0){
+    if (user) {
+      if (points > 0) {
         await axios.post(
           `https://taptap-production.up.railway.app/api/game/upscore`,
           {
-            score: 10000,
-            energy_remaning: 100,
-            restore_time:moment.utc().format("YYYY-MM-DD HH:mm:ss"),
+            score: points,
+            energy_remaning: energy,
+            restore_time: moment.utc().format("YYYY-MM-DD HH:mm:ss"),
           },
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        
         localStorage.setItem("lastSyncTime", Date.now());
-        
-        console.log("reset")
-
-      }else{
-        if(user.points>0){
-          localStorage.setItem("score",user.points);
-        }else{
-          localStorage.setItem("score",localPoints);
-        }
-        
+        console.log("Reset");
+      } else {
+        localStorage.setItem("score", user.points > 0 ? user.points : localPoints);
       }
-      
-
     }
   };
+
   useEffect(() => {
     const interval = setInterval(() => {
       setElapsedSeconds((prevSeconds) => {
         if (prevSeconds > 0) {
           return prevSeconds - 1;
         } else {
-          setLocalEnergy(defaultEnergyLevel)
+          setLocalEnergy(defaultEnergyLevel);
           clearInterval(interval);
           return 0;
         }
       });
     }, 1000);
 
-    return () => clearInterval(interval); // Clean up the interval on component unmount
+    return () => clearInterval(interval);
   }, []);
 
   const handleTap = (tapcount = 1) => {
-    console.log("tab test", isActive, localEnergy, localPoints, user, restoreTime)
+    console.log("Tab test", isActive, localEnergy, localPoints, user, restoreTime);
 
     if (localEnergy > 0) {
       const newEnergy = parseInt(localEnergy) - parseInt(tapcount);
       const newPoints = parseInt(localPoints, 10) + parseInt(tapcount, 10);
 
       setLocalEnergy(newEnergy);
-      setLocalPoints((prevLocalPoints) => {
-        setprePoint(prevLocalPoints);
-        return newPoints;
-      });
+      setLocalPoints(newPoints);
       setNewsCount(newPoints);
-      localStorage.setItem("energy", newEnergy);
-      localStorage.setItem("score", parseInt(newPoints, 10) ||  0);
+      updateLocalStorage(newEnergy, newPoints);
 
-      console.log("tap 1")
+      const currentUtcTime = moment.utc();
+      const futureUtcTime = currentUtcTime.add(1, 'hours');
+      const restoreTimeStr = futureUtcTime.format("YYYY-MM-DD HH:mm:ss");
+      localStorage.setItem("restoreTime", restoreTimeStr);
 
-     
-        console.log("tap 2")
-        const currentUtcTime = moment.utc();
-        const futureUtcTime = currentUtcTime.add(1, 'hours');
-        const restoreTimess = futureUtcTime.format("YYYY-MM-DD HH:mm:ss");
-        
-        localStorage.setItem("restoreTime", restoreTimess);
-        if(newPoints == 0){
-
-        
-          setRestoreTime(restoreTimess);
-          setElapsedSeconds(3600);
-        }
-  
-      
+      if (newPoints === 0) {
+        setRestoreTime(restoreTimeStr);
+        setElapsedSeconds(3600);
+      }
 
       setIsActive(true);
       playAudio();
     } else {
-      console.log("tap 3")
       stopAudio();
     }
-    console.log("effect test done", isActive, localEnergy, localPoints, user, restoreTime)
+    console.log("Effect test done", isActive, localEnergy, localPoints, user, restoreTime);
   };
 
   const formatTime = (seconds) => {
@@ -296,120 +255,24 @@ function Earn() {
   };
 
   useEffect(() => {
-    if (localEnergy === 0 && restoreTime && elapsedSeconds == null) {
+    if (localEnergy === 0 && restoreTime && elapsedSeconds === null) {
       const interval = setInterval(() => {
         const now = moment.utc().format("YYYY-MM-DD HH:mm:ss");
-        console.log("restoreTime",restoreTime)
-        console.log("now",now)
-        // const lcaorestime = moment(restoreTime).utc().format("YYYY-MM-DD HH:mm:ss");
-        // console.log("lcaorestime",lcaorestime)
         const remainingTime = moment.duration(moment(restoreTime).diff(moment(now))).asSeconds();
-        console.log("remainingTime",remainingTime)
         if (remainingTime <= 0) {
           setLocalEnergy(defaultEnergyLevel);
-          setRestoreTime(null);
-          // localStorage.removeItem("restoreTime");
-          clearInterval(interval); // Clear interval once the restore time has been processed
+          setElapsedSeconds(0);
+          setRestoreTime('');
+          clearInterval(interval);
         } else {
           setElapsedSeconds(remainingTime);
         }
       }, 1000);
 
-      // Clean up interval on component unmount or when conditions change
       return () => clearInterval(interval);
     }
-  }, [localEnergy, restoreTime,elapsedSeconds]);
+  }, [localEnergy, restoreTime, elapsedSeconds]);
 
-  useEffect(() => {
-    let syncInterval;
-    let inactivityTimer;
-
-    const startSync = () => {
-      clearInterval(syncInterval);
-      syncInterval = setInterval(() => {
-        syncWithServer(localEnergy, localPoints, restoreTime);
-      }, 1500); // Sync every 4 seconds
-    };
-
-    const stopSync = () => {
-      clearInterval(syncInterval);
-    };
-
-    const resetInactivityTimer = () => {
-      clearTimeout(inactivityTimer);
-      inactivityTimer = setTimeout(() => {
-        setIsActive(false);
-      }, 1000); // 5 seconds of inactivity
-    };
-
-    if (isActive) {
-      startSync();
-      resetInactivityTimer();
-    } else {
-      stopSync();
-    }
-
-    return () => {
-      clearInterval(syncInterval);
-      clearTimeout(inactivityTimer);
-    };
-  }, [isActive, localEnergy, localPoints, user, restoreTime]);
-
-  useEffect(() => {
-    const handleBeforeUnload = async () => {
-      await syncWithServer(localEnergy, localPoints, restoreTime);
-    };
-    handleBeforeUnload()
-    // window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [localEnergy, localPoints, user, restoreTime]);
-
-  const handleTouchStart = (e) => {
-    const touchCount = e.touches.length;
-    for (let i = 0; i < touchCount; i++) {
-      handleTap(touchCount);
-      handleCoinAnimaton();
-
-      const tg = window.Telegram.WebApp;
-      tg.HapticFeedback.impactOccurred("medium");
-      const touch = e.touches[i];
-      const x = touch.clientX;
-      const y = touch.clientY;
-
-      const newClick = {
-        id: Math.random(),
-        x,
-        y,
-      };
-
-      setClicks((prevClicks) => [...prevClicks, newClick]);
-
-      setTimeout(() => {
-        setClicks((prevClicks) =>
-          prevClicks.filter((click) => click.id !== newClick.id)
-        );
-      }, 1000);
-    }
-  };
-
-  const handleCoinAnimaton = () => {
-    setScale(0.9);
-    setTimeout(() => setScale(1), 50); // Reset to original scale after 100ms
-  };
-
-  const number = 20;
-  useEffect(() => {
-    const styles = [...new Array(number)].map(() => ({
-      top: 0,
-      left: Math.floor(Math.random() * window.innerWidth) + "px",
-      animationDelay: Math.random() * 1 + 0.2 + "s",
-      animationDuration: Math.floor(Math.random() * 8 + 2) + "s",
-    }));
-    setMeteorStyles(styles);
-  }, [number]);
 
   return (
     <GameLayout>

@@ -52,7 +52,7 @@ const Friends = () => {
       return;
     }
 
-    const GAME_TG_URL = "https://t.me/taptapcore_bot/Earn";
+    const GAME_TG_URL = "https://t.me/taptapcore_bot/earn";
     const { id: tid } = tgData;
 
     try {

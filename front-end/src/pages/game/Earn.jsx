@@ -129,6 +129,7 @@ function Earn() {
       setUser(userData);
 
       setGamelevel(userData.game_level);
+      alert(userData);
 
       // console.log("ds",userData)
       // if(userData.points == 0){
@@ -313,12 +314,12 @@ function Earn() {
 
   const handleTap = (tapcount = 1) => {
 
-    alert("tab test", isActive, localEnergy, localPoints, user, restoreTime)
+    //alert("tab test", isActive, localEnergy, localPoints, user, restoreTime)
 
     if (localEnergy > 0) {
       const newEnergy = parseInt(localEnergy) - parseInt(tapcount);
       const newPoints = parseInt(localPoints) + parseInt(tapcount);
-      alert(newPoints);
+      //alert(newPoints);
 
       setLocalEnergy(newEnergy);
       setLocalPoints((prevLocalPoints) => {

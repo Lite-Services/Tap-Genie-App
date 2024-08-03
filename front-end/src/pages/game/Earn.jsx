@@ -129,7 +129,7 @@ function Earn() {
       setUser(userData);
 
       setGamelevel(userData.game_level);
-      //alert(userData.tap_score);
+      //
 
       // console.log("ds",userData)
       // if(userData.points == 0){
@@ -265,7 +265,7 @@ function Earn() {
 
   const syncWithServer = async (energy, points, restore_time) => {
     const token = getAuth();
-    if (user ) {
+    if (userData) {
 
       if( points>0){
         await axios.post(
@@ -285,8 +285,8 @@ function Earn() {
         console.log("reset")
 
       }else{
-        if(user.points>0){
-          localStorage.setItem("score",user.points);
+        if(userData.tap_score>0){
+          localStorage.setItem("score",userData.tap_score);
         }else{
           localStorage.setItem("score",localPoints);
         }

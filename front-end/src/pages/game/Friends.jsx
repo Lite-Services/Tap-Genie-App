@@ -47,7 +47,7 @@ const Friends = () => {
 
     try {
       const res = await postAjaxCall('https://taptap-production.up.railway.app/api/referral/claim', {});
-      console.log(res.data);
+      alert(res.data);
       const userDetails = res?.data || null;
 
       if (userDetails) {

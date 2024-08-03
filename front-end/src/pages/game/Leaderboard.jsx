@@ -105,7 +105,7 @@ function Leaderboard() {
       {!isLoading && (
         <div
           className="leaderboard relative h-screen bg-black bg-cover bg-no-repeat flex items-center justify-center px-2 flex-col py-4 bg-top pt-10 gap-2"
-          style={{ backgroundImage: `url(${minerbg})` }}
+          
         >
           <h1 className="font-sfSemi text-4xl text-white">Leaderboard</h1>
           <div className="stats w-full h-full mb-8 flex flex-col items-center justify-start gap-2 overflow-y-auto rounded-3xl">

@@ -144,7 +144,7 @@ function Earn() {
 
 
       const storedEnergy = localStorage.getItem("energy");
-      var storedPoints = localStorage.getItem("score");
+      var storedPoints = parseInt(localStorage.getItem("score"), 10) || 0;
       const lastSyncTime = localStorage.getItem("lastSyncTime");
 
       console.log("storedPoints==>",storedPoints)
@@ -316,7 +316,7 @@ function Earn() {
 
     if (localEnergy > 0) {
       const newEnergy = parseInt(localEnergy) - parseInt(tapcount);
-      const newPoints = parseInt(localPoints) + parseInt(tapcount);
+      const newPoints = parseInt(localPoints, 10) + parseInt(tapcount, 10);
 
       setLocalEnergy(newEnergy);
       setLocalPoints((prevLocalPoints) => {
@@ -325,7 +325,7 @@ function Earn() {
       });
       setNewsCount(newPoints);
       localStorage.setItem("energy", newEnergy);
-      localStorage.setItem("score", newPoints);
+      localStorage.setItem("score", parseInt(newPoints, 10) ||  0);
 
       console.log("tap 1")
 

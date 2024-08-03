@@ -126,7 +126,7 @@ function Earn() {
       }
 
       const userData = resdata;
-      setUser(userData);
+      setUser(userData.points);
 
       setGamelevel(userData.game_level);
       alert(userData);

@@ -265,10 +265,10 @@ function Earn() {
 
   const syncWithServer = async (energy, points, restore_time) => {
     const token = getAuth();
-    if (userData) {
+    if (user) {
+      alert(user);
 
       if( points>0){
-        alert(points);
         await axios.post(
           `https://taptap-production.up.railway.app/api/earn/upscore`,
           {

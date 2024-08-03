@@ -494,7 +494,6 @@ function Earn() {
 
 <div
 className="hero w-full h-24 min-h-24 mb-4 rounded-3xl bg-no-repeat bg-cover flex flex-col items-center justify-center"
-style={{ backgroundImage: `url(${heroBackgroundImg})` }}
 >
 <span className="flex flex-row items-center justify-center gap-2 text-xl font-black bg-[#181A1B] rounded-full text-[#3396FF] py-2 px-2 pr-4">
   <img

@@ -44,7 +44,6 @@ const Friends = () => {
       const res = response.data;
       const userDetails = res.data;
 
-      alert(userDetails.refCode);
       if (userDetails) {
         setFriends(userDetails.friends || []);
         const refCode = userDetails?.refCode || '';

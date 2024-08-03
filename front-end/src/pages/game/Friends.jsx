@@ -27,32 +27,21 @@ const Friends = () => {
   const effectRan = useRef(false);
 
   const postAjaxCall = async (endpoint, data) => {
-    const token = getAuth();
-    try {
-      const response = await axios.post(endpoint, data, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error in endpoint:', error);
-      throw new Error("Error in endpoint", error);
-    }
+    
   };
 
   const getUserData = async (tgData) => {
-    if (!tgData){
-      alert('no data available');
-      return;
-    } 
+    if (!tgData) return;
 
     const GAME_TG_URL = "https://t.me/snowtapcoin_bot/earn";
     const { id: tid } = tgData;
 
+      const token = getAuth();
     try {
-      alert("fetched user data")
-      const res = await postAjaxCall('https://taptap-production.up.railway.app/api/referral/list', {});
-      alert(res.data);
-      const userDetails = res?.data || null;
+      const response = await axios.post('https://taptap-production.up.railway.app/api/referral/list', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const userDetails = response.data || null;
 
       if (userDetails) {
         setFriends(userDetails.friends || []);
@@ -67,9 +56,12 @@ const Friends = () => {
         // navigate("/game");
       }
     } catch (error) {
-      console.error('Error:', error);
-      // Optionally navigate or show a toast message for errors
+      console.error('Error in endpoint:', error);
+      throw new Error("Error in endpoint", error);
     }
+      
+      
+    
   };
 
   useEffect(() => {

@@ -41,7 +41,9 @@ const Friends = () => {
       const response = await axios.get('https://taptap-production.up.railway.app/api/referral/list', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const userDetails = response.data || null;
+      const res = response.data;
+      const userDetails = res.data;
+
       alert(userDetails.refCode);
       if (userDetails) {
         setFriends(userDetails.friends || []);

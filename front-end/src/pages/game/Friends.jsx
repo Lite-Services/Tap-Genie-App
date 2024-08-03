@@ -1,9 +1,9 @@
 import GameLayout from "../layout/GameLayout";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; 
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 
 import InviteCard from "../../components/taptap/InviteCard";
@@ -11,30 +11,25 @@ import FriendsListItem from "../../components/taptap/FriendsListItem";
 
 import LogoImg from "../../assets/img/coin.png";
 import ActualizarImg from "../../assets/img/actualizar.png";
-import PeopleImg from "../../assets/img/people.png";
 import coinIcon from "../../assets/img/coin.png";
 import { getTGUser } from "../../utlis/tg";
 import { getAuth } from "../../utlis/localstorage";
-import giftbox1 from "../../assets/img/giftbox1.png";
-import giftbox2 from "../../assets/img/giftbox2.png";
-import giftbox3 from "../../assets/img/giftbox3.png";
 import Drawer from "../../components/taptap/Drawer";
 
 const Friends = () => {
   const [friends, setFriends] = useState([]);
   const [refLink, setRefLink] = useState('');
-  const [refcode,setRefcode] = useState('');
-  // THIS IS FOR DRAWER
+  const [refcode, setRefcode] = useState('');
   const [open, setOpen] = useState(false);
-  // ------------------
+  const [cusText, setCusText] = useState('Invite Copied, Share it with your friends and family.');
+
   const navigate = useNavigate();
   const effectRan = useRef(false);
 
-  
   const postAjaxCall = async (endpoint, data) => {
     const token = getAuth();
     try {
-      const response = await axios.post(endpoint, data,{
+      const response = await axios.post(endpoint, data, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
@@ -44,36 +39,31 @@ const Friends = () => {
     }
   };
 
-  const  [cusText,setCusText] = useState('Invite Copied, Share it with your friends and family.')
-
   const getUserData = async (tgData) => {
-    if (!tgData) {
-      // navigate("/game");
-      return;
-    }
+    if (!tgData) return;
 
-    const GAME_TG_URL = "https://t.me/taptapcore_bot/earn";
+    const GAME_TG_URL = "https://t.me/snowtapcoin_bot/earn";
     const { id: tid } = tgData;
 
     try {
-      const res = await postAjaxCall('https://taptap-production.up.railway.app/api/referral/claim', {  });
-      console.log(res.data)
+      const res = await postAjaxCall('https://taptap-production.up.railway.app/api/referral/claim', {});
+      console.log(res.data);
       const userDetails = res?.data || null;
 
-      if (userDetails ) {
-        setFriends(userDetails.friends);
-        // console.log(userDetails.friends);
-
+      if (userDetails) {
+        setFriends(userDetails.friends || []);
         const refCode = userDetails?.refCode || '';
         if (refCode) {
           setRefcode(refCode);
           setRefLink(`${GAME_TG_URL}?startapp=${refCode}`);
         }
       } else {
+        // Optionally navigate if no user details are found
         // navigate("/game");
       }
     } catch (error) {
       console.error('Error:', error);
+      // Optionally navigate or show a toast message for errors
     }
   };
 
@@ -93,42 +83,36 @@ const Friends = () => {
 
   const triggerCopy = (e) => {
     e.preventDefault();
-    
+
     navigator.clipboard
       .writeText(refLink)
       .then(() => {
         setOpen(true);
-        setCusText('Invite Copied, Share it with your friends and family.')
-        
+        setCusText('Invite Copied, Share it with your friends and family.');
       })
       .catch(() => {
         setOpen(false);
-        setCusText('Fail to copy.')
+        setCusText('Failed to copy.');
       })
       .finally(() => {
         setTimeout(() => setOpen(false), 5000);
       });
   };
+
   const Claim = async (friendId) => {
     try {
       const tgData = getTGUser();
-      // console.log({ friendID:friendId,"refCode":refcode})
-     const res =  await postAjaxCall('https://taptap-production.up.railway.app/api/game/refclaim', { friendID:friendId,"refCode":refcode});
-     
-    //  console.log(res)
-     if(res && res.icalimed){
-      
-      setFriends((prevFriends) =>
-          prevFriends.map((friend) =>
+      const res = await postAjaxCall('https://taptap-production.up.railway.app/api/game/refclaim', { friendID: friendId, refCode: refcode });
+
+      if (res && res.icalimed) {
+        setFriends(prevFriends =>
+          prevFriends.map(friend =>
             friend.id === friendId ? { ...friend, isClaimed: "Y" } : friend
           )
         );
-
-        
-        setCusText(`Claimed your ${res.refpoint} coins, well done keep going.`)
+        setCusText(`Claimed your ${res.refpoint} coins, well done keep going.`);
         setOpen(true);
       } else {
-      
         setOpen(false);
         navigate("/friends");
       }
@@ -140,7 +124,6 @@ const Friends = () => {
   return (
     <GameLayout>
       <div className="w-full overflow-y-auto mb-24">
-        
         <Drawer open={open} setOpen={setOpen}>
           <div className="flex flex-col items-center justify-center px-4 gap-2">
             <h1 className="text-white font-sfSemi text-2xl ">
@@ -156,9 +139,9 @@ const Friends = () => {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className="icon icon-tabler icons-tabler-outline icon-tabler-circle-dashed-check w-14 h-14 text-white"
             >
               <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -181,13 +164,11 @@ const Friends = () => {
           points="+2500 SNC"
           description="for you and your friend"
           logo={LogoImg}
-          
         />
         <InviteCard
           title="Invite friend with Telegram Premium"
           points="+5000 SNC"
           description="for you and your friend"
-        
           logo={LogoImg}
         />
 
@@ -195,7 +176,7 @@ const Friends = () => {
           <h3 className="text-white text-[15px] font-sfSemi">Friends List</h3>
           <motion.a
             className="absolute right-0 top-0"
-            onTouchStart={loadFriends}
+            onClick={loadFriends}
             whileTap={{ rotate: 180 }}
           >
             <img
@@ -206,7 +187,7 @@ const Friends = () => {
           </motion.a>
         </div>
 
-        {friends.length > 0 &&
+        {friends.length > 0 ? (
           friends.map((frd) => (
             <FriendsListItem
               key={frd.id}
@@ -215,18 +196,20 @@ const Friends = () => {
               icon={coinIcon}
               profile={coinIcon}
               displayType="friend"
-              buttonDisabled={frd.Claimed == "Y"}
+              buttonDisabled={frd.Claimed === "Y"}
               onButtonClick={() => Claim(frd.id)}
             />
-          ))}
+          ))
+        ) : (
+          <p className="text-white text-center">No friends found.</p>
+        )}
       </div>
 
       <div className="h-auto w-full fixed bottom-0 bg-[#0b0b0b5e] backdrop-blur-md pt-2">
-        
         <a
           href="#"
           onClick={triggerCopy}
-          className="text-[#0b0b0b] text-xl w-1/2  mb-28 rounded-[20px] bg-[#3396FF]  justify-center py-4 mt-2 mx-auto flex items-center"
+          className="text-[#0b0b0b] text-xl w-1/2 mb-28 rounded-[20px] bg-[#3396FF] justify-center py-4 mt-2 mx-auto flex items-center"
         >
           Invite friends
           <svg
@@ -236,10 +219,10 @@ const Friends = () => {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="icon icon-tabler icons-tabler-outline icon-tabler-users w-8 h-8 mx-2"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="icon icon-tabler icons-tabler-outline icon-tabler-users w-8 h-8 mx-2"
           >
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />

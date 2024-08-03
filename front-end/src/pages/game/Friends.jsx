@@ -40,12 +40,16 @@ const Friends = () => {
   };
 
   const getUserData = async (tgData) => {
-    if (!tgData) return;
+    if (!tgData){
+      alert('no data available');
+      return;
+    } 
 
     const GAME_TG_URL = "https://t.me/snowtapcoin_bot/earn";
     const { id: tid } = tgData;
 
     try {
+      alert("fetched user data")
       const res = await postAjaxCall('https://taptap-production.up.railway.app/api/referral/list', {});
       alert(res.data);
       const userDetails = res?.data || null;

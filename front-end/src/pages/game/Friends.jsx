@@ -78,7 +78,7 @@ const Friends = () => {
   const loadFriends = () => {
     const tgData = getTGUser();
     getUserData(tgData);
-    navigate('friends');
+    navigate('/friends');
   };
 
   const triggerCopy = (e) => {

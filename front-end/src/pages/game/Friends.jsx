@@ -47,7 +47,7 @@ const Friends = () => {
 
     try {
       const res = await postAjaxCall('https://taptap-production.up.railway.app/api/referral/list', {});
-    alert(res.data);
+      alert(res.data);
       const userDetails = res?.data || null;
 
       if (userDetails) {
@@ -58,6 +58,7 @@ const Friends = () => {
           setRefLink(`${GAME_TG_URL}?startapp=${refCode}`);
         }
       } else {
+        alert("no user details");
         // Optionally navigate if no user details are found
         // navigate("/game");
       }

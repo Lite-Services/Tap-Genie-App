@@ -613,7 +613,7 @@ async function getAllUserRank(req, res, next) {
                 }
             }
         }
-
+        console.log(userPosition, topplayers);
         return res.status(200).json({
             isthere: true,
             message: "success",

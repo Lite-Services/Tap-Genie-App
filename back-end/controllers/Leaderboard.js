@@ -21,7 +21,7 @@ async function allrank(req, res, next) {
             JOIN earnings AS e ON t.userid = e.id AND e.tap_score != 0
             ORDER BY e.tap_score DESC
         `);
-        
+
         console.log("Top users query results:", results);
 
         const topUsers = results;

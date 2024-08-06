@@ -25,18 +25,7 @@ function Leaderboard() {
   const [userEarndetails, setUserEarndetails] = useState([]);
   const [isLoading,setIsLoading] = useState(true);
 
-  const postAjaxCall = async (endpoint, data) => {
-   
-    try {
-      const response = await axios.post(endpoint, data, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error in endpoint:", error);
-      throw new Error("Error in endpoint", error);
-    }
-  };
+  
 
   const getUserData = async (tgData) => {
     if (!tgData) {
@@ -45,22 +34,26 @@ function Leaderboard() {
     }
     const token = getAuth();
     const { id: tid } = tgData;
-
+  
     try {
-      const response = await axios.get("https://taptap-production.up.railway.app/api/leaderboard/allrank", { tid }, {
+      // Include params in the options object
+      const response = await axios.get("https://taptap-production.up.railway.app/api/leaderboard/allrank", {
+        params: { tid },
         headers: { Authorization: `Bearer ${token}` },
       });
-      // console.log("res", res);
+  
       const res = response.data;
       const userDetails = res?.value || null;
-      alert(userDetails.topplayers);
-      alert("userDetails", userDetails);
-
-      if (userDetails && res.isthere == true) {
+  
+      // Use console.log for debugging instead of alert
+      console.log("Top Players:", userDetails.topplayers);
+      console.log("User Details:", userDetails);
+  
+      if (userDetails && res.isthere === true) {
         setTopPlayers(userDetails.topplayers);
         setUserPosition(userDetails.userPosition);
         setUserEarndetails(userDetails.specificUserDetails);
-        setIsLoading(false)
+        setIsLoading(false);
       } else {
         navigate("/earn");
       }
@@ -68,7 +61,7 @@ function Leaderboard() {
       console.error("Error:", error);
     }
   };
-
+  
   useEffect(() => {
     if (!effectRan.current) {
       const tgData = getTGUser();

@@ -1,6 +1,5 @@
 const { sequelize } = require("../config/mysql-sequelize");
-const { getUTCTime } = require("../utils/helperfun");
-const { Op, col } = require("sequelize");
+const { Op } = require("sequelize");
 
 const Earnings = require("../models/Earnings");
 const TGUser = require("../models/TGUser");
@@ -22,14 +21,12 @@ async function allrank(req, res, next) {
             ORDER BY e.tap_score DESC
         `);
 
-        const topUsers = results;
-
-        if (!topUsers) {
+        if (!results || results.length === 0) {
             return res.status(404).json({ error: 'No users found', message: 'No user data available' });
         }
 
         // Mapping user data
-        const topplayers = topUsers.map(user => ({
+        const topplayers = results.map(user => ({
             id: user.id,
             firstname: user.first_name,
             username: user.username,
@@ -37,7 +34,6 @@ async function allrank(req, res, next) {
             gameLevel: user.game_level,
         }));
 
-        // If needed, additional user details
         let specificUserDetails = null;
         let userPosition = null;
 
@@ -46,9 +42,12 @@ async function allrank(req, res, next) {
                 SELECT e.tap_score, t.username, e.game_level, e.id, t.first_name 
                 FROM tg_users AS t
                 JOIN earnings AS e ON t.userid = e.id
-                WHERE t.userid = '${tgUser.id}'
+                WHERE t.userid = :tgUserId
                 ORDER BY e.tap_score DESC
-            `);
+            `, {
+                replacements: { tgUserId: tgUser.id },
+                type: sequelize.QueryTypes.SELECT
+            });
 
             if (specificUserResults.length > 0) {
                 const specificUser = specificUserResults[0];

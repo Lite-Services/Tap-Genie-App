@@ -24,7 +24,7 @@ async function allrank(req, res, next) {
         `);
 
         const topUsers = results;
-
+            console.log(topUsers);
         if (!topUsers) {
             return res.status(404).json({ error: 'No users found', message: 'No user data available' });
         }
@@ -60,7 +60,7 @@ async function allrank(req, res, next) {
                     overallPoints: specificUser.tap_score,
                     gameLevel: specificUser.game_level,
                 };
-
+                console.log(specificUserDetails);
                 // Calculate user position
                 const userRank = await Earnings.count({
                     where: {

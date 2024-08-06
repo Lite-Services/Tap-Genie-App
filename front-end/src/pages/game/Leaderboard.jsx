@@ -47,7 +47,7 @@ function Leaderboard() {
     const { id: tid } = tgData;
 
     try {
-      const response = await axios.post("https://taptap-production.up.railway.app/api/leaderboard/allrank", { tid }, {
+      const response = await axios.get("https://taptap-production.up.railway.app/api/leaderboard/allrank", { tid }, {
         headers: { Authorization: `Bearer ${token}` },
       });
       // console.log("res", res);

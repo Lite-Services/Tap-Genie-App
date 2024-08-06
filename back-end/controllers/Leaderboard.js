@@ -4,6 +4,8 @@ const { Op } = require("sequelize");
 const Earnings = require("../models/Earnings");
 const TGUser = require("../models/TGUser");
 
+
+
 async function allrank(req, res, next) {
     try {
         const { tid } = req.query; // Get tid from query parameters
@@ -23,7 +25,7 @@ async function allrank(req, res, next) {
 
         const topUsers = results;
 
-        if (!topUsers || topUsers.length === 0) {
+        if (!topUsers) {
             return res.status(404).json({ error: 'No users found', message: 'No user data available' });
         }
 
@@ -70,11 +72,10 @@ async function allrank(req, res, next) {
                 userPosition = userRank + 1;
             }
         }
-
         console.log("Top Players:", topplayers);
-        console.log("User Details:", specificUserDetails);
-        console.log("User Position:", userPosition);
-
+        console.log("User Details:", userDetails);
+    
+  
         return res.status(200).json({
             isthere: true,
             message: "success",
@@ -89,3 +90,5 @@ async function allrank(req, res, next) {
 module.exports = {
     allrank
 };
+
+

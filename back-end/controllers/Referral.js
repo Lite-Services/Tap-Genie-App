@@ -51,7 +51,7 @@ async function list(req, res, next) {
         }));
 
         if (friendsData != null) {
-            console.log(refCode);
+            console.log(friendsData);
             return res.status(200).json({ message: 'Success', data: { refCode: refCode, friends: friendsData } });
         } else {
             return res.status(404).json({ message: 'Not found' });

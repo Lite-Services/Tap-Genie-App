@@ -26,7 +26,7 @@ function Leaderboard() {
   const [isLoading,setIsLoading] = useState(true);
 
   const postAjaxCall = async (endpoint, data) => {
-    const token = getAuth();
+   
     try {
       const response = await axios.post(endpoint, data, {
         headers: { Authorization: `Bearer ${token}` },
@@ -43,13 +43,15 @@ function Leaderboard() {
       navigate("/");
       return;
     }
-
+    const token = getAuth();
     const { id: tid } = tgData;
 
     try {
-      const res = await postAjaxCall("https://taptap-production.up.railway.app/api/leaderboard/allrank", { tid });
-
+      const response = await axios.post("https://taptap-production.up.railway.app/api/leaderboard/allrank", { tid }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       // console.log("res", res);
+      const res = response.data;
       const userDetails = res?.value || null;
       alert(userDetails.topplayers);
       alert("userDetails", userDetails);

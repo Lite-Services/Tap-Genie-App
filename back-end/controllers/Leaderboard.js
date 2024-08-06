@@ -72,7 +72,10 @@ async function allrank(req, res, next) {
                 userPosition = userRank + 1;
             }
         }
-
+        console.log("Top Players:", topplayers);
+        console.log("User Details:", userPosition);
+    
+  
         return res.status(200).json({
             isthere: true,
             message: "success",

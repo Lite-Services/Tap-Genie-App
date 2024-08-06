@@ -273,8 +273,8 @@ function Earn() {
         await axios.post(
           `https://taptap-production.up.railway.app/api/earn/upscore`,
           {
-            score: 10000,
-            energy_remaning: 100,
+            score: points,
+            energy_remaning: energy,
             restore_time:moment.utc().format("YYYY-MM-DD HH:mm:ss"),
           },
           {

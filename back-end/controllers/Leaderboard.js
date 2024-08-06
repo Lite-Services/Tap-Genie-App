@@ -4,11 +4,7 @@ const { Op } = require("sequelize");
 const Earnings = require("../models/Earnings");
 const TGUser = require("../models/TGUser");
 
-const { sequelize } = require("../config/mysql-sequelize");
-const { Op } = require("sequelize");
 
-const Earnings = require("../models/Earnings");
-const TGUser = require("../models/TGUser");
 
 async function allrank(req, res, next) {
     try {

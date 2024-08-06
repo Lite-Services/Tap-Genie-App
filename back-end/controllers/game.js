@@ -566,64 +566,77 @@ async function getAllUserRank(req, res, next) {
         const tgUser = req.user;
         const { tid } = req.body;
 
-        let userPosition = null;
-        let specificUserDetails = null;
-
-        if (!tgUser || !tgUser.id || tid != tgUser.id) {
+        if (!tgUser || !tgUser.id || tid !== tgUser.id) {
             return res.status(401).json({ error: "unauth" });
         }
 
-        const [results, metadata] = await sequelize.query("SELECT e.tap_score, t.username, e.game_level, e.id, t.first_name from tg_users as t JOIN earnings as e ON t.userid=e.id and e.tap_score !=0 order by e.tap_score desc;");
-        const topUsers = results;
+        const [topUsers, metadata] = await sequelize.query(
+            `SELECT e.tap_score, t.username, e.game_level, e.id, t.first_name 
+             FROM tg_users AS t 
+             JOIN earnings AS e ON t.userid = e.id AND e.tap_score != 0 
+             ORDER BY e.tap_score DESC;`
+        );
 
-        if (!topUsers) {
-            return res.status(401).json({ error: "Invalid user" });
+        if (!topUsers || topUsers.length === 0) {
+            return res.status(404).json({ error: "No top users found" });
         }
 
-        const topplayers = topUsers.map((user) => ({
+        const topplayers = topUsers.map(user => ({
             id: user.id,
             firstname: user.first_name,
             username: user.username,
-            overallPoints: user.tap_points,
+            overallPoints: user.tap_score, // Adjusted field name
             gameLevel: user.game_level,
         }));
+
+        let specificUserDetails = null;
+        let userPosition = null;
+
         if (tid) {
-            const userInTop = topplayers.find((player) => player.id === tid);
-            if (!userInTop) {
-                const [results1, metadata1] = await sequelize.query(`SELECT e.tap_score, t.username, e.game_level, e.id, t.first_name from tg_users as t JOIN earnings as e ON t.userid=e.id where t.userid='${tid}' order by e.tap_score desc;`);
-                const specificUser = results1;
-
-                if (specificUser.length > 0) {
-                    specificUserDetails = {
-                        id: specificUser[0].id,
-                        firstname: specificUser[0].first_name,
-                        username: specificUser[0].username,
-                        overallPoints: specificUser[0].tap_points,
-                        gameLevel: specificUser[0].game_level,
-                    };
-
-                    const userRank = await Earnings.count({
-                        where: {
-                            tap_points: {
-                                [Op.gt]: specificUser[0].tap_points,
-                            },
-                        },
-                    });
-                    userPosition = userRank + 1;
+            const [specificUser, metadata1] = await sequelize.query(
+                `SELECT e.tap_score, t.username, e.game_level, e.id, t.first_name 
+                 FROM tg_users AS t 
+                 JOIN earnings AS e ON t.userid = e.id 
+                 WHERE t.userid = ? 
+                 ORDER BY e.tap_score DESC;`, 
+                {
+                    replacements: [tid],
+                    type: sequelize.QueryTypes.SELECT
                 }
+            );
+
+            if (specificUser.length > 0) {
+                specificUserDetails = {
+                    id: specificUser[0].id,
+                    firstname: specificUser[0].first_name,
+                    username: specificUser[0].username,
+                    overallPoints: specificUser[0].tap_score, // Adjusted field name
+                    gameLevel: specificUser[0].game_level,
+                };
+
+                const userRank = await Earnings.count({
+                    where: {
+                        tap_points: {
+                            [Op.gt]: specificUser[0].tap_score, // Adjusted field name
+                        },
+                    },
+                });
+
+                userPosition = userRank + 1;
             }
         }
-        console.log(userPosition, topplayers);
+
         return res.status(200).json({
             isthere: true,
             message: "success",
             value: { topplayers, specificUserDetails, userPosition },
         });
     } catch (e) {
-        console.error("Error fetching leaderboard:", e);
+        console.error("Error fetching leaderboard:", e.message); // Log only the message
         return res.status(500).json({ error: "Internal server error" });
     }
 }
+
 
 module.exports = {
     upscore,

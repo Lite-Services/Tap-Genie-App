@@ -51,8 +51,8 @@ function Leaderboard() {
 
       // console.log("res", res);
       const userDetails = res?.value || null;
-
-      // console.log("userDetails", userDetails);
+      alert(userDetails.topplayers);
+      alert("userDetails", userDetails);
 
       if (userDetails && res.isthere == true) {
         setTopPlayers(userDetails.topplayers);

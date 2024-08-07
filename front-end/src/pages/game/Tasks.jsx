@@ -160,7 +160,7 @@ function Tasks() {
             </h1>
           </Drawer>
           <>
-            {/* <FriendsListItem
+            <FriendsListItem
               profile={logo}
               key={1}
               name={`Day ${checkinDetails.todayRewardDay}`}
@@ -169,7 +169,7 @@ function Tasks() {
               displayType="checkin"
               buttonDisabled={!isCheckin}
               onButtonClick={() => !isCheckin ? Claim("daily") : null}
-            /> */}
+            /> 
             <FriendsListItem
               profile={Xlogo}
               key={2}

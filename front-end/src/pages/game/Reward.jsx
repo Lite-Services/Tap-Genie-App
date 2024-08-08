@@ -38,7 +38,7 @@ function RoboMine() {
   };
 
   let miner_level = localStorage.getItem("miner_level");
-  alert(miner_level);
+  //alert(miner_level);
   miner_level = !isNaN(parseInt(miner_level)) ? parseInt(miner_level) : 0;
   let last_mine_date = localStorage.getItem("last_mine_date");
   last_mine_date =

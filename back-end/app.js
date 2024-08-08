@@ -24,7 +24,7 @@ app.disable('etag'); // Disable node If-None-Match comparing
 
 // CORS configuration
 app.use(cors({
-  origin: 'https://bot.snowdex.org/', // Allow requests from this origin
+  origin: 'https://bot.snowdex.org', // Allow requests from this origin
   methods: ['GET', 'POST', 'OPTIONS'], // Allowed methods
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'], // Allowed headers
 }));

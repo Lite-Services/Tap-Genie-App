@@ -102,7 +102,7 @@ async function list(req, res, next) {
 
 
         if (tasks == null || tasks.length === 0) {
-            return res.status(200).json({ message: 'No task found', data: [] });
+            return res.status(404).json({ message: 'No task found', data: [] });
         }
 
         const taskList = tasks.map((task) => ({
@@ -115,9 +115,10 @@ async function list(req, res, next) {
         }));
 
         if (checkindetails != null && taskList != null) {
+            console.log(taskList, checkindetails);
             return res.status(200).json({ message: 'Success', data: { tasklist: taskList, checkin: checkindetails } });
         } else {
-            return res.status(200).json({ message: 'No task found', data: [] });
+            return res.status(404).json({ message: 'No task found', data: [] });
         }
 
     } catch (error) {

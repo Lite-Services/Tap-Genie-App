@@ -8,9 +8,10 @@ import { setSession, setAuth } from "../../utlis/localstorage";
 import LoadingScreen from "../../components/taptap/LoadingScreen";
 
 function Game() {
+  window.Telegram.WebApp.init();
   const navigate = useNavigate();
   const location = useLocation();
-  const query_params = new URLSearchParams(location.search);
+  const query_params = new URLSearchParams(window.location.search);
   console.log(location.search);
   const referral_by = query_params.get("startapp");
   const [error, setError] = useState(false);

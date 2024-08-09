@@ -11,7 +11,7 @@ function Game() {
   const navigate = useNavigate();
   const location = useLocation();
   const query_params = new URLSearchParams(location.search);
-  alert(location.search);
+  console.log(location.search);
   const referral_by = query_params.get("startapp");
   const [error, setError] = useState(false);
   const [isTg, setIsTg] = useState(false);
@@ -25,7 +25,7 @@ function Game() {
         const tg_user = getTGUser();
         if (tg_user) {
           tg_user.referral_by = referral_by;
-          //alert(referral_by);
+          console.log(referral_by);
           const response = await axios.post("https://taptap-production.up.railway.app/api/tg/auth/", tg_user);
           const { sync_data } = response.data;
 

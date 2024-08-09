@@ -11,7 +11,7 @@ function Game() {
   window.Telegram.WebApp.init();
   const navigate = useNavigate();
   const location = useLocation();
-  const query_params = new URLSearchParams(window.location.search);
+  const query_params = new URLSearchParams(location.search);
   console.log(location.search);
   const referral_by = query_params.get("startapp");
   const [error, setError] = useState(false);
@@ -19,6 +19,11 @@ function Game() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+
+    if (window.Telegram && window.Telegram.WebApp) {
+      // Ensure the WebApp is initialized
+      window.Telegram.WebApp.ready();
+    }
     let isMounted = true;
 
     const authenticateUser = async () => {

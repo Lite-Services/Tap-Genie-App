@@ -10,7 +10,7 @@ import LoadingScreen from "../../components/taptap/LoadingScreen";
 function Game() {
   const navigate = useNavigate();
   const location = useLocation();
-  const query_params = new URLSearchParams(location.search);
+  const query_params = new URLSearchParams(window.location.search);
   alert(query_params);
   const referral_by = query_params.get("startapp");
   const [error, setError] = useState(false);

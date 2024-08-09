@@ -33,7 +33,7 @@ const Friends = () => {
   const getUserData = async (tgData) => {
     if (!tgData) return;
 
-    const GAME_TG_URL = "https://t.me/snowtapcoin_bot/game/earn";
+    const GAME_TG_URL = "https://t.me/snowtapcoin_bot/game";
     const { id: tid } = tgData;
 
       const token = getAuth();

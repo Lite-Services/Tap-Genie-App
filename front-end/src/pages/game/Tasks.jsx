@@ -152,34 +152,19 @@ function Tasks() {
               Claimed Successfully
             </h1>
           </Drawer>
-          {isCheckin ? (
-            alert("Checkin is successful");
-          <FriendsListItem
-            key="dailyCheckin"
-            profile={logo}
-            name={`Day ${checkinDetails.rewardDay}`}
-            level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
-            icon={logo}
-            displayType="checkin"
-            buttonDisabled={!isCheckin}
-            onButtonClick={isCheckin ? undefined : () => CheckIn()}
-            />
-          )
-        : (
-          
-          <FriendsListItem
-            key="dailyCheckin"
-            profile={logo}
-            name={`Day ${checkinDetails.rewardDay}`}
-            level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
-            icon={logo}
-            displayType="checkin"
-            buttonDisabled={!isCheckin}
-            onButtonClick={() => CheckIn()}
-            />
-        )}
 
-         
+          {/* Daily Check-in Task */}
+            <FriendsListItem
+              key="dailyCheckin"
+              profile={logo}
+              name={`Day ${checkinDetails.rewardDay}`}
+              level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
+              icon={logo}
+              displayType="checkin"
+              buttonDisabled={!isCheckin}
+              isCheckin={isCheckin}
+              onButtonClick={() => CheckIn()}
+            />
 
           {/* Dynamic Task List */}
             {taskList.map((task) => (

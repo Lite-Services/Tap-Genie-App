@@ -61,6 +61,7 @@ function Tasks() {
       getUserData(tgData);
       effectRan.current = true;
     }
+    alert(isCheckin);
   }, []);
 
   const handleSuccess = (rewardPoints) => {

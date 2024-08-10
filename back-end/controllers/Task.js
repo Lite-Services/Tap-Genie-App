@@ -151,7 +151,7 @@ async function claim(req, res, next) {
 
         const taskPoint = tasksDetails.claim_score
         const taskId = tasksDetails.id
-
+        console.log(taskPoint, taskId);
         const earnDetails = await Earnings.findOne({
             where: {
                 userid: tgUser.id,

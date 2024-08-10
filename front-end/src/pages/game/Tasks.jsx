@@ -44,7 +44,7 @@ function Tasks() {
       if (res.message === 'Success') {
         setTaskList(res.data.tasklist || []);
         setCheckinDetails(res.data.checkin || {});
-        //setIsCheckin(res.data.checkin?.dailycheckin || false);
+        setIsCheckin(res.data.checkin?.dailycheckin || false);
       } else {
         console.error("Error: Unexpected response message");
       }
@@ -61,6 +61,7 @@ function Tasks() {
       getUserData(tgData);
       effectRan.current = true;
     }
+    alert(isCheckin);
   }, []);
 
   const handleSuccess = (rewardPoints) => {

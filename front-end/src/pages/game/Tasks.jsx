@@ -91,7 +91,7 @@ function Tasks() {
     }
   };
 
-  const Claim = async (taskId, taskUrl) => {
+  const Claim = async (taskId, taskUrl, taskPoints) => {
     try {
       const token = getAuth();
       const res = await axios.post("https://taptap-production.up.railway.app/api/task/claim", {
@@ -113,8 +113,11 @@ function Tasks() {
           window.Telegram.WebApp.openLink(taskUrl);
         }
 
-        handleSuccess(checkinDetails.rewardPoints || 5000);
-      } else {
+        const pointsInLocalStorage = localStorage.getItem("score") || 0;
+        localStorage.setItem("score", parseInt(pointsInLocalStorage) + taskPointsPoints);   
+        setOpen(true);
+        setTimeout(() => setOpen(false), 3000);  
+       } else {
         setIsCheckin(false);
         navigate("/earn");
       }
@@ -158,7 +161,7 @@ function Tasks() {
             icon={logo}
             displayType="checkin"
             buttonDisabled={!isCheckin}
-            onButtonClick={() => !isCheckin ? setOpen(true) : null}
+            onButtonClick={() => !isCheckin ? CheckIn() : null}
           />
 
           {/* Dynamic Task List */}
@@ -171,7 +174,7 @@ function Tasks() {
               icon={logo}
               displayType="checkin"
               buttonDisabled={task.isClaimed === 'Y'}
-              onButtonClick={() => task.isClaimed === 'N' ? Claim(task.id, task.url) : null}
+              onButtonClick={() => task.isClaimed === 'N' ? Claim(task.id, task.url, task.points) : null}
             />
           ))}
         </>

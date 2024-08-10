@@ -141,6 +141,10 @@ function Tasks() {
     }
   };
 
+  useEffect(() => {
+    alert(isCheckin);
+  }, []);
+
   return (
     <GameLayout>
       {isLoading ? (

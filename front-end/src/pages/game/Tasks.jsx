@@ -44,8 +44,7 @@ function Tasks() {
       if (res.message === 'Success') {
         setTaskList(res.data.tasklist || []);
         setCheckinDetails(res.data.checkin || {});
-        setIsCheckin(res.data.checkin?.dailycheckin);
-        alert("djjufjfjf"+res.data.checkin?.dailycheckin);
+        //setIsCheckin(res.data.checkin?.dailycheckin);
       } else {
         console.error("Error: Unexpected response message");
       }

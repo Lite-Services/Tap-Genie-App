@@ -13,7 +13,7 @@ function Game() {
   const query_params = new URLSearchParams(location.search);
   const referral_by = query_params.get("start");
   const [error, setError] = useState(false);
-  const [isTg, setIsTg] = useState(false);
+  const [isTg, setIsTg] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

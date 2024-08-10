@@ -153,6 +153,7 @@ function Tasks() {
             </h1>
           </Drawer>
           {isCheckin ? (
+            alert("Checkin is successful");
           <FriendsListItem
             key="dailyCheckin"
             profile={logo}
@@ -165,6 +166,7 @@ function Tasks() {
             />
           )
         : (
+          
           <FriendsListItem
             key="dailyCheckin"
             profile={logo}

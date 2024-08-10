@@ -47,7 +47,7 @@ function Game() {
         console.error("API Error:", err); 
         if (isMounted) {
           if (err.response?.status === 403) {
-            setIsTg(false);
+            setIsTg(true);
           } else {
             setError(true);
           }

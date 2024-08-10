@@ -162,7 +162,7 @@ function Tasks() {
               icon={logo}
               displayType="checkin"
               buttonDisabled={!isCheckin}
-              onButtonClick={isCheckin ? undefined : () => CheckIn()}
+              onButtonClick={() => CheckIn()}
             />
 
           {/* Dynamic Task List */}

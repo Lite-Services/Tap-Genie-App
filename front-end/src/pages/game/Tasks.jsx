@@ -46,29 +46,34 @@ function Tasks() {
 
   const getUserData = async (tgData) => {
     if (!tgData) {
-      // navigate("/game");
       return;
     }
     const { id: tid } = tgData;
-
+  
     try {
       const res = await postAjaxCall("https://taptap-production.up.railway.app/api/task/list", { tid });
-        // alert("res=>",res)
-      const checkinDetails = res?.value || {};
-      const taskDoneList = res?.taskDoneList || {};
-
-      if (checkinDetails && res.isCheckin === true) {
-        setIsCheckin(true);
-        setCheckinDetails(checkinDetails);
-        setTaskList(taskDoneList);
-        setOpen(false);
-        
+      console.log("res=>", res);
+  
+      // Check if the response is successful
+      if (res.message === 'Success') {
+        const tasks = res.data.tasklist || [];
+        const checkinDetails = res.data.checkin || {};
+  
+        setTaskList(tasks);
+        if (checkinDetails.dailycheckin) {
+          setIsCheckin(true);
+          setCheckinDetails(checkinDetails);
+        }
+        setIsLoading(false);
+      } else {
+        console.error("Error: Unexpected response message");
+        setIsLoading(false);
       }
-      setIsLoading(false)
     } catch (error) {
       console.error("Error:", error);
     }
   };
+  
 
   useEffect(() => {
     if (!effectRan.current) {
@@ -78,53 +83,34 @@ function Tasks() {
     }
   }, [navigate]);
 
-  const Claim = async (tasktype = null) => {
+  const Claim = async (taskId, taskUrl) => {
     try {
       const tgData = getTGUser();
       const res = await postAjaxCall("https://taptap-production.up.railway.app/api/game/upCheckin", {
         teleid: tgData.id,
-        tasktype,
+        taskid: taskId,
       });
-
-      if (res && res.isCheckin) {
-        let newTaskList = { ...taskList };
-
-        if (tasktype === "daily") {
-          setIsCheckin(false);
-          newTaskList.dailycheckin = true;
-          const pointsInLocalStorage = localStorage.getItem("score");
-          localStorage.setItem(
-            "score",
-            parseInt(pointsInLocalStorage) + parseInt(checkinDetails.points)
-          );
-        } else if (tasktype === "x") {
-          window.Telegram.WebApp.openLink("https://x.com/TapTap_bot");
-          newTaskList.X = true;
-          const pointsInLocalStorage = localStorage.getItem("score");
-          localStorage.setItem("score", parseInt(pointsInLocalStorage) + 5000);
-        } else if (tasktype === "telegram") {
-          window.Telegram.WebApp.openLink("https://t.me/taptap_official");
-          newTaskList.T = true;
-          const pointsInLocalStorage = localStorage.getItem("score");
-          localStorage.setItem("score", parseInt(pointsInLocalStorage) + 5000);
-        } else if (tasktype === "ime") {
-          window.Telegram.WebApp.openLink("https://t.me/ime_en");
-          newTaskList.ime = true;
-          const pointsInLocalStorage = localStorage.getItem("score");
-          localStorage.setItem("score", parseInt(pointsInLocalStorage) + 5000);
-        }else if (tasktype === "telecommunity") {
-          window.Telegram.WebApp.openLink("https://t.me/taptapbotchat");
-          newTaskList.telecom = true;
-          const pointsInLocalStorage = localStorage.getItem("score");
-          localStorage.setItem("score", parseInt(pointsInLocalStorage) + 5000);
+  
+      if (res.message === 'Success' && res.data.isCheckin) {
+        setTaskList(prevList =>
+          prevList.map(task =>
+            task.id === taskId
+              ? { ...task, isClaimed: 'Y' }
+              : task
+          )
+        );
+  
+        // Open the task URL if applicable
+        if (taskUrl) {
+          window.Telegram.WebApp.openLink(taskUrl);
         }
-
-        setTaskList(newTaskList);
+  
+        // Update local storage or other states as needed
+        const pointsInLocalStorage = localStorage.getItem("score");
+        localStorage.setItem("score", parseInt(pointsInLocalStorage) + (checkinDetails.rewardPoints || 5000));
+  
         setOpen(false);
-
-        setTimeout(() => {
-          setOpen(false);
-        }, 3000);
+        setTimeout(() => setOpen(false), 3000);
       } else {
         setIsCheckin(false);
         setOpen(false);
@@ -134,6 +120,7 @@ function Tasks() {
       console.error("Error claiming reward:", error);
     }
   };
+  
 
   const formatNumber = (value) => {
     if (value >= 1e9) {
@@ -171,18 +158,18 @@ function Tasks() {
             onButtonClick={() => !isCheckin ? Claim("daily") : null}
             />
 
-            {taskList.map((task, index) => (
+            {taskList.map((task) => (
           <FriendsListItem
-            key={index}
-            profile={task.icon}
-            name={task.name}
-            level={task.level}
+            key={task.id}
+            profile={logo}  // Replace with an appropriate icon or remove if not needed
+            name={task.title}
+            level={`+${task.points}`}
             icon={logo}
             displayType="checkin"
-            buttonDisabled={task.completed}
-            onButtonClick={() => !task.completed ? Claim(task.type) : null}
+            buttonDisabled={task.isClaimed === 'Y'}
+            onButtonClick={() => task.isClaimed === 'N' ? Claim(task.id, task.url) : null}
           />
-        ))}
+          ))}
             
             
             

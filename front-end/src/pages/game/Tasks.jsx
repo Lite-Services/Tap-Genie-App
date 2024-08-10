@@ -73,6 +73,7 @@ function Tasks() {
   }, [navigate]);
 
   const Claim = async (taskId, taskUrl) => {
+    alert("task is about to be claimed");
     try {
       const tgData = getTGUser();
       const res = await postAjaxCall("https://taptap-production.up.railway.app/api/game/upCheckin", {

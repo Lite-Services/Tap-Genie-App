@@ -44,22 +44,7 @@ const FriendsListItem = ({
           }}
           className={`ml-2 p-4 text-sm rounded-lg shadow-md transition duration-300 bg-[#0b0b0b] text-white hover:bg-[#0b0b0b5e] hover:backdrop-blur-md active:grayscale`}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="icon icon-tabler icons-tabler-outline icon-tabler-moneybag"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M9.5 3h5a1.5 1.5 0 0 1 1.5 1.5a3.5 3.5 0 0 1 -3.5 3.5h-1a3.5 3.5 0 0 1 -3.5 -3.5a1.5 1.5 0 0 1 1.5 -1.5z" />
-            <path d="M4 17v-1a8 8 0 1 1 16 0v1a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" />
-          </svg>
+          Claim
         </motion.button>
       )}
      {displayType === "checkin" && (
@@ -74,25 +59,10 @@ const FriendsListItem = ({
             }}
             className="ml-2 p-4 text-sm rounded-lg shadow-md transition duration-300 bg-[#0b0b0b] text-white hover:bg-[#0b0b0b5e] hover:backdrop-blur-md active:grayscale"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="icon icon-tabler icon-tabler-outline icon-tabler-moneybag"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M9.5 3h5a1.5 1.5 0 0 1 1.5 1.5a3.5 3.5 0 0 1 -3.5 3.5h-1a3.5 3.5 0 0 1 -3.5 -3.5a1.5 1.5 0 0 1 1.5 -1.5z" />
-              <path d="M4 17v-1a8 8 0 1 1 16 0v1a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" />
-            </svg>
+            Claim
           </motion.button>
         ) : (
-          <span className="text-white">claimed</span>
+          <span className="text-white">Claimed</span>
         )
       )}
     </div>

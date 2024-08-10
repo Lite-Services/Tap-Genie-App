@@ -202,41 +202,34 @@ async function checkin(req, res, next) {
 
         const earnDetails = await Earnings.findOne({ where: { userid: tgUser.id } });
 
-        if (!earnDetails || !earnDetails.userid) {
-            return res.status(401).json({ error: 'Unauthorized', message: 'Authentication required' });
+        if (!earnDetails) {
+            return res.status(401).json({ error: 'Unauthorized', message: 'User earnings details not found' });
         }
 
         const checkInData = getCheckinDetails(earnDetails);
 
-        if (checkInData == null) {
-            throw new Error("Checkin details not provided.");
+        if (!checkInData.dailycheckin) {
+            return res.status(409).json({ error: 'Conflict', message: 'Not a valid check-in' });
         }
-        if (checkInData.dailycheckin) {
 
-            const earnUpdata = {
-                current_streak: parseInt(checkInData.current_streak),
-                checkin_score: parseInt(checkInData.rewardPoints),
-                tap_score: parseInt(earnDetails.tap_score) + parseInt(checkInData.rewardPoints),
-                recent_login: checkInData.today,
-            }
+        const earnUpdate = {
+            current_streak: checkInData.current_streak,
+            checkin_score: checkInData.rewardPoints,
+            tap_score: parseInt(earnDetails.tap_score) + checkInData.rewardPoints,
+            recent_login: checkInData.today,
+        };
 
-            const [updated] = await Earnings.update(earnUpdata, { where: { userid: tgUser.id } });
+        const [updated] = await Earnings.update(earnUpdate, { where: { userid: tgUser.id } });
 
-            if (updated > 0) {
-                return res.status(200).json({ message: 'Success', data: checkInData });
-            } else {
-                return res.status(422).json({ error: 'Unprocessable Entity', message: 'Checkin not updeted' });
-            }
+        if (updated > 0) {
+            return res.status(200).json({ message: 'Success', data: checkInData });
         } else {
-            return res.status(409).json({ error: 'Conflict', message: 'Not vaild checkin ' });
+            return res.status(422).json({ error: 'Unprocessable Entity', message: 'Check-in not updated' });
         }
     } catch (error) {
-
-        console.error("Error Daily check-in", error);
-        next("Error on Daily check-in")
-
+        console.error("Error during daily check-in:", error);
+        next("An error occurred during daily check-in");
     }
-
 }
 
 

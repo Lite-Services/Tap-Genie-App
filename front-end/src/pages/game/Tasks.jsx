@@ -163,9 +163,7 @@ function Tasks() {
             icon={logo}
             displayType="checkin"
             buttonDisabled={isCheckin} // Disable button if check-in is true
-            onButtonClick={() => {
-              if (!isCheckin) CheckIn(); // Call CheckIn if isCheckin is false
-            }}
+            onButtonClick={() => CheckIn()}
           />
 
           {/* Dynamic Task List */}

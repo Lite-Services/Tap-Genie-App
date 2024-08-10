@@ -69,6 +69,9 @@ function Tasks() {
     setIsCheckin(true);
     setOpen(true);
     setTimeout(() => setOpen(false), 3000);
+    alert(isCheckin);
+    setIsCheckin(true);
+
   };
 
   const CheckIn = async () => {
@@ -82,7 +85,6 @@ function Tasks() {
       if (res.data.message === 'Success' && res.data.data.dailycheckin) {
         alert('Updating isCheckin to true'); // Debug before state update
         setIsCheckin(true);
-        alert(isCheckin);
         handleSuccess(res.data.data.rewardPoints || 5000);
       } else {
         alert("error");

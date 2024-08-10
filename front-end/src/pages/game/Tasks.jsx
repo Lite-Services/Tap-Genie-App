@@ -72,28 +72,16 @@ function Tasks() {
     }
   }, [navigate]);
 
-  const CheckIn = async (taskId, taskUrl) => {  
+  const CheckIn = async () => {  
     try {
       const token = getAuth(); // Ensure you're retrieving the token correctly
   
       const tgData = getTGUser(); // Get the Telegram user data
       const res = await axios.post("https://taptap-production.up.railway.app/api/task/checkin", {
-        teleid: tgData.id,
-        taskid: taskId,
+        headers: { Authorization: `Bearer ${token}` } // Add the token to the headers
       });
   
       if (res.data.message === 'Success' && res.data.data.dailycheckin) {
-        setTaskList(prevList =>
-          prevList.map(task =>
-            task.id === taskId
-              ? { ...task, isClaimed: 'Y' }
-              : task
-          )
-        );
-  
-        if (taskUrl) {
-          window.Telegram.WebApp.openLink(taskUrl);
-        }
   
         const pointsInLocalStorage = localStorage.getItem("score") || 0;
         localStorage.setItem("score", parseInt(pointsInLocalStorage) + (res.data.data.rewardPoints || 5000));

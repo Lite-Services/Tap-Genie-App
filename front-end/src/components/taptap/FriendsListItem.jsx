@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-
 const FriendsListItem = ({
   name = "Unknown",
   level = "N/A",
@@ -12,13 +11,9 @@ const FriendsListItem = ({
   profile = "https://via.placeholder.com/150",
   onButtonClick = () => {},
   buttonDisabled = false,
-  isCheckin = false, // Add this prop to control button visibility
 }) => {
   return (
-    <div
-      className="flex items-center justify-center w-[95%] bg-[#3396FF] rounded-2xl py-2 mt-2 shadow-[0_0_24px_-6px_#6ABE6A] px-4 mx-auto"
-      // Use onClick for the entire item
-    >
+    <div className="flex items-center justify-center w-[95%] bg-[#3396FF] rounded-2xl py-2 mt-2 shadow-[0_0_24px_-6px_#6ABE6A] px-4 mx-auto">
       <h1 className="text-[#0B0B0B] text-2xl">{rank}</h1>
       <img
         src={profile}
@@ -39,7 +34,7 @@ const FriendsListItem = ({
         <motion.button
           onClick={onButtonClick}
           whileTap={{ scale: 0.95 }}
-          whileHover={{
+          whileHover={{ 
             boxShadow: "0px 0px 8px rgb(0, 0, 0)",
             backgroundColor: "rgba(11, 11, 11, 0.5)",
             backdropFilter: "blur(8px)",
@@ -49,26 +44,26 @@ const FriendsListItem = ({
           Claim
         </motion.button>
       )}
-      {displayType === "checkin" && !isCheckin && (
-        <motion.button
-          onClick={onButtonClick}
-          whileTap={{ scale: 0.95 }}
-          whileHover={{
-            boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-            backgroundColor: "rgba(11, 11, 11, 0.5)",
-            backdropFilter: "blur(8px)",
-          }}
-          className="ml-2 p-4 text-sm rounded-lg shadow-md transition duration-300 bg-[#0b0b0b] text-white hover:bg-[#0b0b0b5e] hover:backdrop-blur-md active:grayscale"
-        >
-          Claim
-        </motion.button>
-      )}
-      {displayType === "checkin" && isCheckin && (
-        <span className="text-white">Claimed</span>
+      {displayType === "checkin" && (
+        !buttonDisabled ? (
+          <motion.button
+            onClick={onButtonClick}
+            whileTap={{ scale: 0.95 }}
+            whileHover={{
+              boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+              backgroundColor: "rgba(11, 11, 11, 0.5)",
+              backdropFilter: "blur(8px)",
+            }}
+            className="ml-2 p-4 text-sm rounded-lg shadow-md transition duration-300 bg-[#0b0b0b] text-white hover:bg-[#0b0b0b5e] hover:backdrop-blur-md active:grayscale"
+          >
+            Claim
+          </motion.button>
+        ) : (
+          <span className="text-white">Claimed</span>
+        )
       )}
     </div>
   );
 };
-
 
 export default FriendsListItem;

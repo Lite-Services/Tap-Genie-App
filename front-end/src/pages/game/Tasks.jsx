@@ -138,8 +138,8 @@ function Tasks() {
           <FriendsListItem
             profile={logo}
             key="dailyCheckin"
-            name={`Day ${checkinDetails.todayRewardDay}`}
-            level={`+ ${formatNumber(checkinDetails.points) !== "0" ? formatNumber(checkinDetails.points) : formatNumber(checkinDetails.todayRewardDay !== "" ? parseInt(checkinDetails.todayRewardDay) * 5000 : 5000)}`}
+            name={`Day ${checkinDetails.rewardDay}`}
+            level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
             icon={logo}
             displayType="checkin"
             buttonDisabled={!isCheckin}

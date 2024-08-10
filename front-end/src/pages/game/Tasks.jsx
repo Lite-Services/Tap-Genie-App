@@ -72,16 +72,15 @@ function Tasks() {
     }
   }, [navigate]);
 
-  const Claim = async (taskId, taskUrl) => {
-    alert("task is about to be claimed");
+  const CheckIn = async (taskId, taskUrl) => {  
     try {
-      const tgData = getTGUser();
-      const res = await postAjaxCall("https://taptap-production.up.railway.app/api/game/upCheckin", {
+      const tgData = getTGUser(); // Get the Telegram user data
+      const res = await axios.post("https://taptap-production.up.railway.app/api/task/checkin", {
         teleid: tgData.id,
         taskid: taskId,
       });
   
-      if (res.message === 'Success' && res.data.isCheckin) {
+      if (res.data.message === 'Success' && res.data.data.dailycheckin) {
         setTaskList(prevList =>
           prevList.map(task =>
             task.id === taskId
@@ -90,13 +89,49 @@ function Tasks() {
           )
         );
   
-        // Open the task URL if applicable
         if (taskUrl) {
           window.Telegram.WebApp.openLink(taskUrl);
         }
   
-        // Update local storage or other states as needed
-        const pointsInLocalStorage = localStorage.getItem("score");
+        const pointsInLocalStorage = localStorage.getItem("score") || 0;
+        localStorage.setItem("score", parseInt(pointsInLocalStorage) + (res.data.data.rewardPoints || 5000));
+  
+        setOpen(false);
+        setTimeout(() => setOpen(false), 3000);
+      } else {
+        setIsCheckin(false);
+        setOpen(false);
+        navigate("/earn");
+      }
+    } catch (error) {
+      console.error("Error claiming reward:", error);
+      setIsCheckin(false);
+      setOpen(false);
+      navigate("/earn");
+    }
+  };
+  
+  const Claim = async (taskId, taskUrl) => {
+    try {
+      const tgData = getTGUser(); // Get the Telegram user data
+      const res = await axios.post("https://taptap-production.up.railway.app/api/task/claim", {
+        taskID: taskId,
+      });
+  
+      if (res.data.message === 'Success' && res.data.data.isCheckin) {
+        setTaskList(prevList =>
+          prevList.map(task =>
+            task.id === taskId
+              ? { ...task, isClaimed: 'Y' }
+              : task
+          )
+        );
+  
+        if (taskUrl) {
+          window.Telegram.WebApp.openLink(taskUrl);
+        }
+  
+        const pointsInLocalStorage = localStorage.getItem("score") || 0;
         localStorage.setItem("score", parseInt(pointsInLocalStorage) + (checkinDetails.rewardPoints || 5000));
   
         setOpen(false);
@@ -108,8 +143,12 @@ function Tasks() {
       }
     } catch (error) {
       console.error("Error claiming reward:", error);
+      setIsCheckin(false);
+      setOpen(false);
+      navigate("/earn");
     }
   };
+  
   
   const formatNumber = (value) => {
     if (value >= 1e9) {
@@ -144,7 +183,7 @@ function Tasks() {
             icon={logo}
             displayType="checkin"
             buttonDisabled={!isCheckin}
-            onButtonClick={() => !isCheckin ? Claim("daily", null) : null}
+            onButtonClick={() => !isCheckin ? CheckIn("daily", null) : null}
           />
 
           {/* Dynamic Task List */}

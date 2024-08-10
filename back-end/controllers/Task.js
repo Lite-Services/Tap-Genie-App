@@ -232,8 +232,8 @@ async function checkin(req, res, next) {
         }
     } catch (error) {
 
-        console.error("Error Dail check-in", error);
-        next("Error on Dail check-in")
+        console.error("Error Daily check-in", error);
+        next("Error on Daily check-in")
 
     }
 

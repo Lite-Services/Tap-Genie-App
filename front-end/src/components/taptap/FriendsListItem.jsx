@@ -11,8 +11,9 @@ const FriendsListItem = ({
   balance = "",
   profile = "https://via.placeholder.com/150",
   onButtonClick = () => {},
-  buttonDisabled = false,
   isCheckin = false, // Add this prop to control button visibility
+  buttonDisabled = isCheckin,
+
 }) => {
   return (
     <div

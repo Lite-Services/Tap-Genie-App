@@ -61,12 +61,12 @@ function Tasks() {
       getUserData(tgData);
       effectRan.current = true;
     }
-    alert(isCheckin);
   }, []);
 
   const handleSuccess = (rewardPoints) => {
     const pointsInLocalStorage = localStorage.getItem("score") || 0;
     localStorage.setItem("score", parseInt(pointsInLocalStorage) + rewardPoints);
+    setIsCheckin(true);
     setOpen(true);
     setTimeout(() => setOpen(false), 3000);
   };
@@ -80,13 +80,15 @@ function Tasks() {
       });
 
       if (res.data.message === 'Success' && res.data.data.dailycheckin) {
-        setIsCheckin(true);
         handleSuccess(res.data.data.rewardPoints || 5000);
       } else {
+        alert("error");
         setIsCheckin(false);
         navigate("/earn");
       }
     } catch (error) {
+      alert("error");
+
       console.error("Error checking in:", error);
       setIsCheckin(false);
       navigate("/earn");

@@ -158,7 +158,7 @@ function Tasks() {
             icon={logo}
             displayType="checkin"
             buttonDisabled={!isCheckin}
-            onButtonClick={() => !isCheckin ? CheckIn() : null}
+            onButtonClick={() => !isCheckin ? setOpen(true) : null}
           />
 
           {/* Dynamic Task List */}

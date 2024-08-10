@@ -44,7 +44,7 @@ function Tasks() {
       if (res.message === 'Success') {
         setTaskList(res.data.tasklist || []);
         setCheckinDetails(res.data.checkin || {});
-        setIsCheckin(res.data.checkin?.dailycheckin || false);
+        //setIsCheckin(res.data.checkin?.dailycheckin || false);
       } else {
         console.error("Error: Unexpected response message");
       }
@@ -83,7 +83,6 @@ function Tasks() {
       });
 
       if (res.data.message === 'Success' && res.data.data.dailycheckin) {
-        alert('Updating isCheckin to true'); // Debug before state update
         setIsCheckin(true);
         handleSuccess(res.data.data.rewardPoints || 5000);
       } else {

@@ -114,8 +114,12 @@ function Tasks() {
   const Claim = async (taskId, taskUrl) => {
     try {
       const tgData = getTGUser(); // Get the Telegram user data
+      const token = getAuth(); // Ensure you're retrieving the token correctly
+  
       const res = await axios.post("https://taptap-production.up.railway.app/api/task/claim", {
         taskID: taskId,
+      }, {
+        headers: { Authorization: `Bearer ${token}` } // Add the token to the headers
       });
   
       if (res.data.message === 'Success' && res.data.data.isCheckin) {
@@ -148,6 +152,7 @@ function Tasks() {
       navigate("/earn");
     }
   };
+  
   
   
   const formatNumber = (value) => {

@@ -25,6 +25,7 @@ function Tasks() {
     try {
       const response = await axios.get(endpoint, {
         headers: { Authorization: `Bearer ${token}` },
+        params: data, // Pass parameters as query params
       });
       return response.data;
     } catch (error) {
@@ -34,25 +35,16 @@ function Tasks() {
   };
 
   const getUserData = async (tgData) => {
-    if (!tgData) {
-      return;
-    }
-    const { id: tid } = tgData;
-  
+    if (!tgData) return;
+
     try {
-      const res = await postAjaxCall("https://taptap-production.up.railway.app/api/task/list", { tid });
+      const res = await postAjaxCall("https://taptap-production.up.railway.app/api/task/list", { tid: tgData.id });
       console.log("res=>", res);
-  
-      // Check if the response is successful
+
       if (res.message === 'Success') {
-        const tasks = res.data.tasklist || [];
-        const checkinDetails = res.data.checkin || {};
-  
-        setTaskList(tasks);
-        if (checkinDetails.dailycheckin) {
-          setIsCheckin(true);
-          setCheckinDetails(checkinDetails);
-        }
+        setTaskList(res.data.tasklist || []);
+        setCheckinDetails(res.data.checkin || {});
+        setIsCheckin(res.data.checkin?.dailycheckin || false);
         setIsLoading(false);
       } else {
         console.error("Error: Unexpected response message");
@@ -60,9 +52,9 @@ function Tasks() {
       }
     } catch (error) {
       console.error("Error:", error);
+      setIsLoading(false);
     }
   };
-  
 
   useEffect(() => {
     if (!effectRan.current) {
@@ -72,21 +64,20 @@ function Tasks() {
     }
   }, [navigate]);
 
-  const CheckIn = async () => {  
+  const CheckIn = async () => {
     try {
       const token = getAuth(); // Ensure you're retrieving the token correctly
-  
-      const tgData = getTGUser(); // Get the Telegram user data
-      const res = await axios.post("https://taptap-production.up.railway.app/api/task/checkin", {
-        headers: { Authorization: `Bearer ${token}` } // Add the token to the headers
+
+      const res = await axios.post("https://taptap-production.up.railway.app/api/task/checkin", {}, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-  
+
       if (res.data.message === 'Success' && res.data.data.dailycheckin) {
         setIsCheckin(true);
         const pointsInLocalStorage = localStorage.getItem("score") || 0;
         localStorage.setItem("score", parseInt(pointsInLocalStorage) + (res.data.data.rewardPoints || 5000));
-  
-        setOpen(false);
+
+        setOpen(true);
         setTimeout(() => setOpen(false), 3000);
       } else {
         setIsCheckin(false);
@@ -94,24 +85,23 @@ function Tasks() {
         navigate("/earn");
       }
     } catch (error) {
-      console.error("Error claiming reward:", error);
+      console.error("Error checking in:", error);
       setIsCheckin(false);
       setOpen(false);
       navigate("/earn");
     }
   };
-  
+
   const Claim = async (taskId, taskUrl) => {
     try {
-      const tgData = getTGUser(); // Get the Telegram user data
       const token = getAuth(); // Ensure you're retrieving the token correctly
-  
+
       const res = await axios.post("https://taptap-production.up.railway.app/api/task/claim", {
         taskID: taskId,
       }, {
-        headers: { Authorization: `Bearer ${token}` } // Add the token to the headers
+        headers: { Authorization: `Bearer ${token}` },
       });
-  
+
       if (res.data.message === 'Success') {
         setTaskList(prevList =>
           prevList.map(task =>
@@ -120,15 +110,15 @@ function Tasks() {
               : task
           )
         );
-  
+
         if (taskUrl) {
           window.Telegram.WebApp.openLink(taskUrl);
         }
-  
+
         const pointsInLocalStorage = localStorage.getItem("score") || 0;
         localStorage.setItem("score", parseInt(pointsInLocalStorage) + (checkinDetails.rewardPoints || 5000));
-  
-        setOpen(false);
+
+        setOpen(true);
         setTimeout(() => setOpen(false), 3000);
       } else {
         setIsCheckin(false);
@@ -142,9 +132,7 @@ function Tasks() {
       navigate("/earn");
     }
   };
-  
-  
-  
+
   const formatNumber = (value) => {
     if (value >= 1e9) {
       return (value / 1e9).toFixed(1).replace(/\.0$/, "") + "B";

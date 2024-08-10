@@ -67,6 +67,7 @@ function Tasks() {
   const CheckIn = async () => {
     try {
       alert('Check In');
+
       const token = getAuth(); // Ensure you're retrieving the token correctly
 
       const res = await axios.post("https://taptap-production.up.railway.app/api/task/checkin", {}, {

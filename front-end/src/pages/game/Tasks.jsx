@@ -79,6 +79,7 @@ function Tasks() {
       if (res.data.message === 'Success' && res.data.checkInData.dailycheckin) {
         setIsCheckin(true); // Update check-in status
         setCheckinDetails(res.data.checkInData);
+        alert(res.data.checkInData)
         handleSuccess(res.data.checkInData.rewardPoints || 5000);
       } else {
         alert("Check-in failed");

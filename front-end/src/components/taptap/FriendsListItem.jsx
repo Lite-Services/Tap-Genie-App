@@ -13,10 +13,7 @@ const FriendsListItem = ({
   buttonDisabled = false,
 }) => {
   return (
-    <div
-      className="flex items-center justify-center w-[95%] bg-[#3396FF] rounded-2xl py-2 mt-2 shadow-[0_0_24px_-6px_#6ABE6A] px-4 mx-auto"
-      onClick={onButtonClick}
-    >
+    <div className="flex items-center justify-center w-[95%] bg-[#3396FF] rounded-2xl py-2 mt-2 shadow-[0_0_24px_-6px_#6ABE6A] px-4 mx-auto">
       <h1 className="text-[#0B0B0B] text-2xl">{rank}</h1>
       <img
         src={profile}
@@ -47,7 +44,7 @@ const FriendsListItem = ({
           Claim
         </motion.button>
       )}
-     {displayType === "checkin" && (
+      {displayType === "checkin" && (
         !buttonDisabled ? (
           <motion.button
             onClick={onButtonClick}

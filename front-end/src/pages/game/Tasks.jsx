@@ -4,12 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import GameLayout from "../layout/GameLayout";
 import FriendsListItem from "../../components/taptap/FriendsListItem";
 import Drawer from "../../components/taptap/Drawer";
-import minerbg from "../../assets/img/mine-bg.png";
-import coin from "../../assets/img/token.png";
 import logo from "../../assets/img/coin.png";
-import Xlogo from "../../assets/img/logo-black.png";
-import telelogo from "../../assets/img/Logo.svg";
-import ime from "../../assets/img/ime.jpg";
 import { getTGUser } from "../../utlis/tg";
 import { getAuth } from "../../utlis/localstorage";
 import LoadingScreen from "../../components/taptap/LoadingScreen";
@@ -18,14 +13,8 @@ function Tasks() {
   const [isCheckin, setIsCheckin] = useState(false);
   const [checkinDetails, setCheckinDetails] = useState({});
   const [open, setOpen] = useState(false);
-  const [isLoading,setIsLoading] = useState(true);
-  const [taskList, setTaskList] = useState({
-    dailycheckin: false,
-    X: true,
-    T: false,
-    ime: false,
-    telecom:false
-  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [taskList, setTaskList] = useState([]); // Initialize as an empty array
   const [cusText, setCusText] = useState('Claimed Successfully');
 
   const navigate = useNavigate();
@@ -121,7 +110,6 @@ function Tasks() {
     }
   };
   
-
   const formatNumber = (value) => {
     if (value >= 1e9) {
       return (value / 1e9).toFixed(1).replace(/\.0$/, "") + "B";
@@ -136,7 +124,6 @@ function Tasks() {
 
   return (
     <GameLayout>
-    
       {isLoading ? (
         <LoadingScreen isloaded={isLoading} reURL={''} />
       ) : (
@@ -146,37 +133,34 @@ function Tasks() {
               {cusText}
             </h1>
           </Drawer>
-          <>
+
+          {/* Daily Check-in Task */}
           <FriendsListItem
             profile={logo}
-            key={1}
+            key="dailyCheckin"
             name={`Day ${checkinDetails.todayRewardDay}`}
             level={`+ ${formatNumber(checkinDetails.points) !== "0" ? formatNumber(checkinDetails.points) : formatNumber(checkinDetails.todayRewardDay !== "" ? parseInt(checkinDetails.todayRewardDay) * 5000 : 5000)}`}
             icon={logo}
             displayType="checkin"
             buttonDisabled={!isCheckin}
-            onButtonClick={() => !isCheckin ? Claim("daily") : null}
-            />
-
-            {taskList.map((task) => (
-          <FriendsListItem
-            key={task.id}
-            profile={logo}  // Replace with an appropriate icon or remove if not needed
-            name={task.title}
-            level={`+${task.points}`}
-            icon={logo}
-            displayType="checkin"
-            buttonDisabled={task.isClaimed === 'Y'}
-            onButtonClick={() => task.isClaimed === 'N' ? Claim(task.id, task.url) : null}
+            onButtonClick={() => !isCheckin ? Claim("daily", null) : null}
           />
+
+          {/* Dynamic Task List */}
+          {taskList.map((task) => (
+            <FriendsListItem
+              key={task.id}
+              profile={logo}  // Replace with an appropriate icon or remove if not needed
+              name={task.title}
+              level={`+${task.points}`}
+              icon={logo}
+              displayType="checkin"
+              buttonDisabled={task.isClaimed === 'Y'}
+              onButtonClick={() => task.isClaimed === 'N' ? Claim(task.id, task.url) : null}
+            />
           ))}
-            
-            
-            
-          </>
-          </>
+        </>
       )}
-    
     </GameLayout>
   );
 }

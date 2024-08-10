@@ -82,7 +82,7 @@ function Tasks() {
       });
   
       if (res.data.message === 'Success' && res.data.data.dailycheckin) {
-  
+        setIsCheckin(true);
         const pointsInLocalStorage = localStorage.getItem("score") || 0;
         localStorage.setItem("score", parseInt(pointsInLocalStorage) + (res.data.data.rewardPoints || 5000));
   
@@ -178,7 +178,7 @@ function Tasks() {
             icon={logo}
             displayType="checkin"
             buttonDisabled={!isCheckin}
-            onButtonClick={() => !isCheckin ? CheckIn("daily", null) : null}
+            onButtonClick={() => !isCheckin ? CheckIn() : null}
           />
 
           {/* Dynamic Task List */}

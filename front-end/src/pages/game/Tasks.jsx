@@ -163,6 +163,16 @@ function Tasks() {
             buttonDisabled={!isCheckin}
             onButtonClick={() => !isCheckin ? CheckIn() : null}
           />
+          <FriendsListItem
+              key={'dailyCheckin'}
+              profile={logo}
+              name={`Day ${checkinDetails.rewardDay}`}
+              level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
+              icon={logo}
+              displayType="checkin"
+              buttonDisabled={!isCheckin}
+              onButtonClick={() => !isCheckin ? CheckIn() : null}
+              />
 
           {/* Dynamic Task List */}
           {taskList.map((task) => (

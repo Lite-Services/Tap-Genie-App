@@ -160,7 +160,7 @@ function Tasks() {
             level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
             icon={logo}
             displayType="checkin"
-            buttonDisabled={!isCheckin}
+            buttonDisabled={isCheckin}
             onButtonClick={isCheckin ? undefined : () => CheckIn()}
             />
           )

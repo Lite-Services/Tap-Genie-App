@@ -75,14 +75,11 @@ function Tasks() {
       const res = await axios.post("https://taptap-production.up.railway.app/api/task/checkin", {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (res.data.message === 'Success' && res.data.checkInData.dailycheckin) {
-        let newTaskList = res.data.checkInData;
-        alert(newTaskList);
 
-        setIsCheckin(true)
-        newTaskList.dailycheckin = true;
-        setCheckinDetails(newTaskList);
-        handleSuccess(res.data.checkInData.rewardPoints);
+      if (res.data.message === 'Success' && res.data.checkInData.dailycheckin) {
+        setIsCheckin(true); // Update check-in status
+        setCheckinDetails(res.data.checkInData);
+        handleSuccess(res.data.checkInData.rewardPoints || 5000);
       } else {
         alert("Check-in failed");
         setIsCheckin(false);
@@ -145,8 +142,6 @@ function Tasks() {
     }
   };
 
-  
-
   return (
     <GameLayout>
       {isLoading ? (
@@ -167,8 +162,10 @@ function Tasks() {
             level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
             icon={logo}
             displayType="checkin"
-            buttonDisabled={!isCheckin} // Disable button if check-in is true
-            onButtonClick={() => CheckIn()}
+            buttonDisabled={isCheckin} // Disable button if check-in is true
+            onButtonClick={() => {
+              if (!isCheckin) CheckIn(); // Call CheckIn if isCheckin is false
+            }}
           />
 
           {/* Dynamic Task List */}

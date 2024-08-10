@@ -53,7 +53,7 @@ function Tasks() {
 
     try {
       const res = await postAjaxCall("https://taptap-production.up.railway.app/api/task/list", { tid });
-      alert("res=>",res)
+        // alert("res=>",res)
       const checkinDetails = res?.value || {};
       const taskDoneList = res?.taskDoneList || {};
 
@@ -160,57 +160,32 @@ function Tasks() {
             </h1>
           </Drawer>
           <>
-            <FriendsListItem
-              profile={logo}
-              key={1}
-              name={`Day ${checkinDetails.todayRewardDay}`}
-              level={`+ ${formatNumber(checkinDetails.points) !== "0" ? formatNumber(checkinDetails.points) : formatNumber(checkinDetails.todayRewardDay !== "" ? parseInt(checkinDetails.todayRewardDay) * 5000 : 5000)}`}
-              icon={logo}
-              displayType="checkin"
-              buttonDisabled={!isCheckin}
-              onButtonClick={() => !isCheckin ? Claim("daily") : null}
-            /> 
-            <FriendsListItem
-              profile={Xlogo}
-              key={2}
-              name={"Follow on X"}
-              level={"+10k"}
-              icon={logo}
-              displayType="checkin"
-              buttonDisabled={taskList.X}
-              onButtonClick={() => !taskList.X ? Claim("x") : null}
+          <FriendsListItem
+            profile={logo}
+            key={1}
+            name={`Day ${checkinDetails.todayRewardDay}`}
+            level={`+ ${formatNumber(checkinDetails.points) !== "0" ? formatNumber(checkinDetails.points) : formatNumber(checkinDetails.todayRewardDay !== "" ? parseInt(checkinDetails.todayRewardDay) * 5000 : 5000)}`}
+            icon={logo}
+            displayType="checkin"
+            buttonDisabled={!isCheckin}
+            onButtonClick={() => !isCheckin ? Claim("daily") : null}
             />
-            <FriendsListItem
-              profile={telelogo}
-              key={3}
-              name={"Join on Telegram"}
-              level={"+10K"}
-              icon={logo}
-              displayType="checkin"
-              buttonDisabled={taskList.T}
-              onButtonClick={() => !taskList.T ? Claim("telegram") : null}
-            />
+
+            {taskList.map((task, index) => (
+          <FriendsListItem
+            key={index}
+            profile={task.icon}
+            name={task.name}
+            level={task.level}
+            icon={logo}
+            displayType="checkin"
+            buttonDisabled={task.completed}
+            onButtonClick={() => !task.completed ? Claim(task.type) : null}
+          />
+        ))}
             
-            <FriendsListItem
-              profile={ime}
-              key={5}
-              name={"Join on iMe"}
-              level={"+10k"}
-              icon={logo}
-              displayType="checkin"
-              buttonDisabled={taskList.ime}
-              onButtonClick={() => !taskList.ime ? Claim("ime") : null}
-            />
-            <FriendsListItem
-              profile={telelogo}
-              key={6}
-              name={"Join on Telegram community"}
-              level={"+10K"}
-              icon={logo}
-              displayType="checkin"
-              buttonDisabled={taskList.telecom}
-              onButtonClick={() => !taskList.telecom ? Claim("telecommunity") : null}
-            />
+            
+            
           </>
           </>
       )}

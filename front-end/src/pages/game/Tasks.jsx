@@ -75,10 +75,12 @@ function Tasks() {
       const res = await axios.post("https://taptap-production.up.railway.app/api/task/checkin", {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      if (res.data.message === 'Success' && res.data.data.dailycheckin) {
-        setIsCheckin(true); // Set isCheckin to true on successful check-in
-        handleSuccess(res.data.data.rewardPoints || 5000);
+        var newTaskList = res.data.checkInData;
+      if (res.data.message === 'Success' && res.data.checkInData.dailycheckin) {
+        setIsCheckin(false)
+        newTaskList.dailycheckin = true;
+        setCheckinDetails(newTaskList);
+        handleSuccess(res.data.checkInData.rewardPoints);
       } else {
         alert("Check-in failed");
         setIsCheckin(false);
@@ -141,9 +143,7 @@ function Tasks() {
     }
   };
 
-  useEffect(() => {
-    alert(isCheckin);
-  }, []);
+  
 
   return (
     <GameLayout>

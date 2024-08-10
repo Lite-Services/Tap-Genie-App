@@ -45,7 +45,7 @@ function Tasks() {
         setTaskList(res.data.tasklist || []);
         setCheckinDetails(res.data.checkin || {});
         setIsCheckin(res.data.checkin?.dailycheckin);
-        alert(res.data.checkin?.dailycheckin);
+        alert("djjufjfjf"+res.data.checkin?.dailycheckin);
       } else {
         console.error("Error: Unexpected response message");
       }

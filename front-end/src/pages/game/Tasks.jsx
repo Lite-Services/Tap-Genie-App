@@ -72,7 +72,7 @@ function Tasks() {
   };
 
   const CheckIn = async () => {
-    alert("Check");
+    setIsCheckin(true);
     try {
       const token = getAuth();
       const res = await axios.post("https://taptap-production.up.railway.app/api/task/checkin", {}, {

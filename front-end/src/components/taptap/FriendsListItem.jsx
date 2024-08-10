@@ -12,7 +12,7 @@ const FriendsListItem = ({
   profile = "https://via.placeholder.com/150",
   onButtonClick = () => {},
   isCheckin = false, // Add this prop to control button visibility
-  buttonDisabled = isCheckin,
+  buttonDisabled = !isCheckin,
 
 }) => {
   return (

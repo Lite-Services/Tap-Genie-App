@@ -154,32 +154,31 @@ function Tasks() {
           </Drawer>
 
           {/* Daily Check-in Task */}
-          <FriendsListItem
-            key="dailyCheckin"
-            profile={logo}
-            name={`Day ${checkinDetails.rewardDay}`}
-            level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
-            icon={logo}
-            displayType="checkin"
-            buttonDisabled={!isCheckin}
-            onButtonClick={isCheckin ? undefined : alert("Check")}
-          />
-
-        
-
-          {/* Dynamic Task List */}
-          {taskList.map((task) => (
             <FriendsListItem
-              key={task.id}
+              key="dailyCheckin"
               profile={logo}
-              name={task.title}
-              level={`+${task.points}`}
+              name={`Day ${checkinDetails.rewardDay}`}
+              level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
               icon={logo}
               displayType="checkin"
-              buttonDisabled={task.isClaimed === 'Y'}
-              onButtonClick={task.isClaimed === 'N' ? () => Claim(task.id, task.url, task.points) : undefined}
+              buttonDisabled={!isCheckin}
+              onButtonClick={isCheckin ? undefined : () => CheckIn()}
             />
-          ))}
+
+          {/* Dynamic Task List */}
+            {taskList.map((task) => (
+              <FriendsListItem
+                key={task.id}
+                profile={logo}
+                name={task.title}
+                level={`+${task.points}`}
+                icon={logo}
+                displayType="checkin"
+                buttonDisabled={task.isClaimed === 'Y'}
+                onButtonClick={task.isClaimed === 'N' ? () => Claim(task.id, task.url, task.points) : undefined}
+                />
+            ))}
+
         </>
       )}
     </GameLayout>

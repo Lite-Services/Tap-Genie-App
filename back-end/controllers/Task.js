@@ -30,27 +30,27 @@ function getCheckinDetails(earnDetails) {
         rewardPoints = 5000;
         rewardDay = 1;
         earnDetails.current_streak = 1;
-        dailycheckin = true;
+        dailycheckin = false;
 
     } else if (daysDifference === 0) {
         // Already logged in today
         rewardPoints = 0;
         rewardDay = earnDetails.current_streak;
-        dailycheckin = false;
+        dailycheckin = true;
 
     } else if (daysDifference === 1) {
         // Consecutive login
         earnDetails.current_streak += 1;
         rewardDay = earnDetails.current_streak;
         rewardPoints = earnDetails.current_streak * 5000;
-        dailycheckin = true;
+        dailycheckin = false;
 
     } else if (daysDifference > 1 && daysDifference <= 3) {
         // Login after a short break (1-3 days)
         rewardPoints = 5000;
         rewardDay = 1;
         earnDetails.current_streak = 1;
-        dailycheckin = true;
+        dailycheckin = false;
 
     }
 

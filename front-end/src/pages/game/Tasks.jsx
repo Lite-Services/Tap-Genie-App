@@ -14,8 +14,7 @@ function Tasks() {
   const [checkinDetails, setCheckinDetails] = useState({});
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [taskList, setTaskList] = useState([]); // Initialize as an empty array
-  const [cusText, setCusText] = useState('Claimed Successfully');
+  const [taskList, setTaskList] = useState([]);
 
   const navigate = useNavigate();
   const effectRan = useRef(false);
@@ -25,12 +24,12 @@ function Tasks() {
     try {
       const response = await axios.get(endpoint, {
         headers: { Authorization: `Bearer ${token}` },
-        params: data, // Pass parameters as query params
+        params: data,
       });
       return response.data;
     } catch (error) {
       console.error("Error in endpoint:", error);
-      throw new Error("Error in endpoint", error);
+      throw error;
     }
   };
 
@@ -45,13 +44,12 @@ function Tasks() {
         setTaskList(res.data.tasklist || []);
         setCheckinDetails(res.data.checkin || {});
         setIsCheckin(res.data.checkin?.dailycheckin || false);
-        setIsLoading(false);
       } else {
         console.error("Error: Unexpected response message");
-        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error:", error);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -62,42 +60,39 @@ function Tasks() {
       getUserData(tgData);
       effectRan.current = true;
     }
-  }, [navigate]);
+  }, []);
+
+  const handleSuccess = (rewardPoints) => {
+    const pointsInLocalStorage = localStorage.getItem("score") || 0;
+    localStorage.setItem("score", parseInt(pointsInLocalStorage) + rewardPoints);
+    setOpen(true);
+    setTimeout(() => setOpen(false), 3000);
+  };
 
   const CheckIn = async () => {
     try {
-      alert('Check In');
-
-      const token = getAuth(); // Ensure you're retrieving the token correctly
-
+      const token = getAuth();
       const res = await axios.post("https://taptap-production.up.railway.app/api/task/checkin", {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (res.data.message === 'Success' && res.data.data.dailycheckin) {
         setIsCheckin(true);
-        const pointsInLocalStorage = localStorage.getItem("score") || 0;
-        localStorage.setItem("score", parseInt(pointsInLocalStorage) + (res.data.data.rewardPoints || 5000));
-
-        setOpen(true);
-        setTimeout(() => setOpen(false), 3000);
+        handleSuccess(res.data.data.rewardPoints || 5000);
       } else {
         setIsCheckin(false);
-        setOpen(false);
         navigate("/earn");
       }
     } catch (error) {
       console.error("Error checking in:", error);
       setIsCheckin(false);
-      setOpen(false);
       navigate("/earn");
     }
   };
 
   const Claim = async (taskId, taskUrl) => {
     try {
-      const token = getAuth(); // Ensure you're retrieving the token correctly
-
+      const token = getAuth();
       const res = await axios.post("https://taptap-production.up.railway.app/api/task/claim", {
         taskID: taskId,
       }, {
@@ -117,20 +112,14 @@ function Tasks() {
           window.Telegram.WebApp.openLink(taskUrl);
         }
 
-        const pointsInLocalStorage = localStorage.getItem("score") || 0;
-        localStorage.setItem("score", parseInt(pointsInLocalStorage) + (checkinDetails.rewardPoints || 5000));
-
-        setOpen(true);
-        setTimeout(() => setOpen(false), 3000);
+        handleSuccess(checkinDetails.rewardPoints || 5000);
       } else {
         setIsCheckin(false);
-        setOpen(false);
         navigate("/earn");
       }
     } catch (error) {
       console.error("Error claiming reward:", error);
       setIsCheckin(false);
-      setOpen(false);
       navigate("/earn");
     }
   };
@@ -155,7 +144,7 @@ function Tasks() {
         <>
           <Drawer open={open} setOpen={setOpen}>
             <h1 className="text-white font-sfSemi text-2xl">
-              {cusText}
+              Claimed Successfully
             </h1>
           </Drawer>
 
@@ -175,7 +164,7 @@ function Tasks() {
           {taskList.map((task) => (
             <FriendsListItem
               key={task.id}
-              profile={logo}  // Replace with an appropriate icon or remove if not needed
+              profile={logo}
               name={task.title}
               level={`+${task.points}`}
               icon={logo}

@@ -11,8 +11,7 @@ function Game() {
   const navigate = useNavigate();
   const location = useLocation();
   const query_params = new URLSearchParams(location.search);
-  //alert(location.search);
-  const referral_by = query_params.get("startapp");
+  const referral_by = query_params.get("start");
   const [error, setError] = useState(false);
   const [isTg, setIsTg] = useState(false);
   const [isLoading, setIsLoading] = useState(true);

@@ -75,7 +75,8 @@ function Tasks() {
       const res = await axios.post("https://taptap-production.up.railway.app/api/task/checkin", {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
-        var newTaskList = res.data.checkInData;
+        let newTaskList = res.data.checkInData;
+        alert(newTaskList);
       if (res.data.message === 'Success' && res.data.checkInData.dailycheckin) {
         setIsCheckin(false)
         newTaskList.dailycheckin = true;

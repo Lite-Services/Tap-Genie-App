@@ -6,7 +6,7 @@ import FriendsListItem from "../../components/taptap/FriendsListItem";
 import Drawer from "../../components/taptap/Drawer";
 import minerbg from "../../assets/img/mine-bg.png";
 import coin from "../../assets/img/token.png";
-import logo from "../../assets/img/logo.png";
+import logo from "../../assets/img/coin.png";
 import Xlogo from "../../assets/img/logo-black.png";
 import telelogo from "../../assets/img/Logo.svg";
 import ime from "../../assets/img/ime.jpg";

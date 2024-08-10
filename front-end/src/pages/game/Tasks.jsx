@@ -74,6 +74,8 @@ function Tasks() {
 
   const CheckIn = async (taskId, taskUrl) => {  
     try {
+      const token = getAuth(); // Ensure you're retrieving the token correctly
+  
       const tgData = getTGUser(); // Get the Telegram user data
       const res = await axios.post("https://taptap-production.up.railway.app/api/task/checkin", {
         teleid: tgData.id,
@@ -122,7 +124,7 @@ function Tasks() {
         headers: { Authorization: `Bearer ${token}` } // Add the token to the headers
       });
   
-      if (res.data.message === 'Success' && res.data.data.isCheckin) {
+      if (res.data.message === 'Success') {
         setTaskList(prevList =>
           prevList.map(task =>
             task.id === taskId

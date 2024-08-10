@@ -169,6 +169,17 @@ function Tasks() {
 
           {/* Dynamic Task List */}
           {taskList.map((task) => (
+            <div>
+            <FriendsListItem
+            key="dailyCheckin"
+            profile={logo}
+            name={`Day ${checkinDetails.rewardDay}`}
+            level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
+            icon={logo}
+            displayType="checkin"
+            buttonDisabled={!isCheckin}
+            onButtonClick={isCheckin ? undefined : alert("Check")}
+          />
             <FriendsListItem
               key={task.id}
               profile={logo}
@@ -179,6 +190,7 @@ function Tasks() {
               buttonDisabled={task.isClaimed === 'Y'}
               onButtonClick={task.isClaimed === 'N' ? () => Claim(task.id, task.url, task.points) : undefined}
             />
+            </div>
           ))}
         </>
       )}

@@ -168,7 +168,7 @@ function Tasks() {
           {/* Daily Check-in Task */}
           {isCheckin ? (
             <FriendsListItem
-              key="dailyCheckin"
+              key={1}
               profile={logo}
               name={`Day ${checkinDetails.rewardDay}`}
               level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay!== ""? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
@@ -178,9 +178,9 @@ function Tasks() {
             />
           ) : (
             <FriendsListItem
-              key="dailyCheckin"
+              key={1}
               profile={logo}
-              name="Daily Check-in"
+              name={`Day ${checkinDetails.rewardDay}`}
               level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay!== ""? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
               icon={logo}
               displayType="checkin"

@@ -47,11 +47,7 @@ async function allrank(req, res, next) {
         if (tid) {
             console.log("Executing query to get specific user details");
             const [specificUserResults] = await sequelize.query(`
-                SELECT e.tap_score, t.username, e.game_level, e.id, t.first_name 
-                FROM tg_users AS t
-                JOIN earnings AS e ON t.userid = e.userid
-                WHERE t.userid = ?
-                ORDER BY e.tap_score DESC
+                SELECT e.tap_score, t.username, e.game_level, e.id, t.first_name from tg_users as t JOIN earnings as e ON t.userid = e.userid where t.userid='${tid}' order by e.score desc;
             `, { replacements: [tid], type: sequelize.QueryTypes.SELECT });
 
             console.log("Specific user details query results:", specificUserResults);

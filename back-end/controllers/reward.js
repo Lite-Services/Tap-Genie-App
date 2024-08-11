@@ -62,7 +62,7 @@ async function upgrade(req, res, next) {
         }
 
         let minerLevel = parseInt(earnings.miner_level, 10) || 0;
-        let score = parseInt(earnings.tap_points, 10) || 0;
+        let score = parseInt(earnings.tap_score, 10) || 0;
 
         console.log(`User ID: ${userId}`);
         console.log(`Current miner level: ${minerLevel}`);
@@ -77,7 +77,7 @@ async function upgrade(req, res, next) {
 
             if (score >= requiredScore) {
                 score -= requiredScore;
-                await earnings.update({ tap_points: score, miner_level: nextMinerLevel });
+                await earnings.update({ tap_score: score, miner_level: nextMinerLevel });
                 return res.status(200).json({
                     statusCode: 200,
                     status: 'success',
@@ -125,12 +125,12 @@ async function claim(req, res, next) {
             }
 
             if (claim) {
-                let score = parseInt(earnings.tap_points, 10) || 0;
+                let score = parseInt(earnings.tap_score, 10) || 0;
                 const [claimScore] = getClaimScore(minerLevel);
                 score += claimScore;
                 lastMineDate = moment.utc().toDate();
 
-                await earnings.update({ tap_points: score, last_mine_date: lastMineDate });
+                await earnings.update({ tap_score: score, last_mine_date: lastMineDate });
                 return res.status(200).json({
                     statusCode: 200,
                     status: 'success',

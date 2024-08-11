@@ -23,7 +23,7 @@ async function allrank(req, res, next) {
             ORDER BY e.tap_score DESC;
         `);
 
-        console.log("Top users query results:", results);
+        console.log("Top users query results:", tid);
 
         const topUsers = results;
 

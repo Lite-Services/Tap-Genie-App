@@ -11,6 +11,8 @@ import LoadingScreen from "../../components/taptap/LoadingScreen";
 
 function Tasks() {
   const [isCheckin, setIsCheckin] = useState(false);
+  const [checkedIn, setCheckIn] = useState(false);
+
   const [checkinDetails, setCheckinDetails] = useState({});
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);

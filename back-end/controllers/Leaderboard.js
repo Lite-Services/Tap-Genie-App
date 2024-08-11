@@ -52,8 +52,8 @@ async function allrank(req, res, next) {
 
             console.log("Specific user details query results:", specificUserResults);
 
-            if (specificUserResults.length > 0) {
-                const specificUser = specificUserResults[0];
+            if (specificUserResults) {
+                const specificUser = specificUserResults;
                 specificUserDetails = {
                     id: specificUser.id,
                     firstname: specificUser.first_name,

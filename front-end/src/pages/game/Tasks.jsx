@@ -77,7 +77,7 @@ function Tasks() {
       const res = await axios.post("https://taptap-production.up.railway.app/api/task/checkin", {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (res.data.message === 'Success' && res.data.checkInData.dailycheckin) {
+      if (res.data.message === 'Success' && !res.data.checkInData.dailycheckin) {
         setCheckIn(true);
         setIsCheckin(true)
         handleSuccess(res.data.checkInData.rewardPoints);
@@ -88,7 +88,7 @@ function Tasks() {
         navigate("/earn");
       }
     } catch (error) {
-      alert("Error during check-in");
+      alert("Error during check-in", error);
       console.error("Error checking in:", error);
       setCheckIn(false);
       setIsCheckin(false);

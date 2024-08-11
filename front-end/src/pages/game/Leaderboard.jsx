@@ -122,7 +122,7 @@ function Leaderboard() {
                 <div className="flex items-center">
                   <h1 className="text-[#0B0B0B] text-2xl">{userPosition}</h1>
                   <img
-                    src={coin}
+                    src={coinIcon}
                     className="w-12 h-12 m-2 border-2 border-[#0B2113] rounded-full basis-[10%]"
                     alt="Profile"
                   />
@@ -132,7 +132,7 @@ function Leaderboard() {
                     </p>
                     <p className="text-[#0B0B0B] text-base font-sfSemi flex-row flex items-center justify-start gap-1">
                       {formatNumber(userEarndetails.overallPoints)}{" "}
-                      <img src={logo} className="w-4 h-4" alt="" />
+                      <img src={coinIcon} className="w-4 h-4" alt="" />
                     </p>
                     <p className="text-[#0B0B0B] text-xl font-sfSemi -my-1">
                       {userEarndetails.game_level}

@@ -317,7 +317,7 @@ function RoboMine() {
                 </div>
                 <div className="progressbar w-full rounded-full relative  h-3 bg-[#050F08] border-[#45D470] border-[1px]">
                   <div
-                      className="absolute  h-full bg-gradient-to-r from-[#0FF378] to-[#6ABE6A] bottom-0 rounded-full"
+                      className="absolute  h-full bg-gradient-to-r from-[#0f85f3] to-[#6ABE6A] bottom-0 rounded-full"
                       style={{ width: `${miner_level * 20}%` }}
                   ></div>
                 </div>
@@ -332,7 +332,7 @@ function RoboMine() {
               </div>
               <div className="progressbar w-full rounded-full relative  h-3 bg-[#050F08] border-[#45D470] border-[1px]">
                 <div
-                  className="absolute  h-full bg-gradient-to-r from-[#0FF378] to-[#6ABE6A] bottom-0 rounded-full"
+                  className="absolute  h-full bg-gradient-to-r from-[#0f85f3] to-[#6ABE6A] bottom-0 rounded-full"
                   style={{ width: `${miner_level * 20}%` }}
                 ></div>
               </div>
@@ -347,7 +347,7 @@ function RoboMine() {
               </div>
               <div className="progressbar w-full rounded-full relative  h-3 bg-[#050F08] border-[#45D470] border-[1px]">
                 <div
-                  className="absolute  h-full bg-gradient-to-r from-[#0FF378] to-[#6ABE6A] bottom-0 rounded-full"
+                  className="absolute  h-full bg-gradient-to-r from-[#0f85f3] to-[#6ABE6A] bottom-0 rounded-full"
                   style={{ width: `${miner_level * 20}%` }}
                 ></div>
               </div>
@@ -357,7 +357,7 @@ function RoboMine() {
               {miner_level == 0 && (
                   <button
                       onClick={handleUpgrade}
-                      className="claim bg-[#0FF378] flex flex-row items-center justify-center gap-2 px-6 py-4 mt-2 rounded-2xl text-xl font-bold "
+                      className="claim bg-[#0f85f3] flex flex-row items-center justify-center gap-2 px-6 py-4 mt-2 rounded-2xl text-xl font-bold "
                   >
                     Unlock 20k
                   </button>
@@ -366,14 +366,14 @@ function RoboMine() {
                   <>
                     <button
                         onClick={handleUpgrade}
-                        className="claim bg-[#0FF378] flex flex-row items-center justify-center gap-2 px-6 py-4 mt-2 rounded-2xl text-xl font-bold "
+                        className="claim bg-[#0f85f3] flex flex-row items-center justify-center gap-2 px-6 py-4 mt-2 rounded-2xl text-xl font-bold "
                     >
                       <img src={upgrade} className="h-6 w-6" />
                       Upgrade
                     </button>
                     <button
                         onClick={handleClaim}
-                        className="claim bg-[#0FF378] flex flex-row items-center justify-center gap-2 px-6 py-4 mt-2 rounded-2xl text-xl font-bold "
+                        className="claim bg-[#0f85f3] flex flex-row items-center justify-center gap-2 px-6 py-4 mt-2 rounded-2xl text-xl font-bold "
                     >
                       Claim
                     </button>
@@ -383,12 +383,12 @@ function RoboMine() {
                   <>
                     <button
                         onClick={handleUpgrade}
-                        className="claim bg-[#0FF378] flex flex-row items-center justify-center gap-2 px-6 py-4 mt-2 rounded-2xl text-xl font-bold "
+                        className="claim bg-[#0f85f3] flex flex-row items-center justify-center gap-2 px-6 py-4 mt-2 rounded-2xl text-xl font-bold "
                     >
                       <img src={upgrade} className="h-6 w-6" />
                       Upgrade
                     </button>
-                    <button className="claim bg-[#0FF378] flex flex-row items-center justify-center gap-2 px-6 py-4 mt-2 rounded-2xl text-xl font-bold ">
+                    <button className="claim bg-[#0f85f3] flex flex-row items-center justify-center gap-2 px-6 py-4 mt-2 rounded-2xl text-xl font-bold ">
                       <img src={clock} className="h-6 w-6" />
                       {convertSecondsToTime(contdown)}
                     </button>

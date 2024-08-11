@@ -64,9 +64,16 @@ async function upgrade(req, res, next) {
         let minerLevel = parseInt(earnings.miner_level, 10) || 0;
         let score = parseInt(earnings.tap_points, 10) || 0;
 
+        console.log(`User ID: ${userId}`);
+        console.log(`Current miner level: ${minerLevel}`);
+        console.log(`Current score: ${score}`);
+
         if (minerLevel < 5) {
             const nextMinerLevel = minerLevel + 1;
             const [requiredScore] = getRequiredScore(nextMinerLevel);
+
+            console.log(`Next miner level: ${nextMinerLevel}`);
+            console.log(`Required score for next level: ${requiredScore}`);
 
             if (score >= requiredScore) {
                 score -= requiredScore;
@@ -79,15 +86,17 @@ async function upgrade(req, res, next) {
                     message: 'Successfully upgraded'
                 });
             } else {
-                return next(new Error(`Insufficient balance for ${userId} to upgrade from ${minerLevel} to ${nextMinerLevel}`));
+                return next(new Error(`Insufficient balance for ${userId} to upgrade from ${minerLevel} to ${nextMinerLevel}. Current score: ${score}, Required score: ${requiredScore}`));
             }
         } else {
             return next(new Error(`User exceeds upgrade level ${userId}`));
         }
     } catch (error) {
+        console.error('Error in upgrade function:', error);
         return next(error);
     }
 }
+
 
 // Claim endpoint
 async function claim(req, res, next) {

@@ -45,6 +45,8 @@ function Tasks() {
         setTaskList(res.data.tasklist || []);
         setCheckinDetails(res.data.checkin || {});
         //setIsCheckin(res.data.checkin?.dailycheckin);
+        setIsCheckin(JSON.parse(localStorage.getItem("isCheckin")) || res.data.checkin?.dailycheckin || false);
+
       } else {
         console.error("Error: Unexpected response message");
       }
@@ -77,6 +79,7 @@ function Tasks() {
 
   const CheckIn = async () => {
     setIsCheckin(true);
+    localStorage.setItem("isCheckin", JSON.stringify(true)); // Persist check-in status
     try {
       const token = getAuth();
       const res = await axios.post("https://taptap-production.up.railway.app/api/task/checkin", {}, {
@@ -84,19 +87,19 @@ function Tasks() {
       });
 
       if (res.data.message === 'Success' && res.data.data.dailycheckin) {
-        alert(res.data.message, res.data.data.dailycheckin);
-        setIsCheckin(true);
+        alert(res.data.data.rewardPoints);
         handleSuccess(res.data.data.rewardPoints || 5000);
       } else {
-        alert("error");
+        alert("Check-in failed");
         setIsCheckin(false);
+        localStorage.setItem("isCheckin", JSON.stringify(false)); // Update persisted status
         navigate("/earn");
       }
     } catch (error) {
-      alert("error");
-
+      alert("Error during check-in");
       console.error("Error checking in:", error);
       setIsCheckin(false);
+      localStorage.setItem("isCheckin", JSON.stringify(false)); // Update persisted status
       navigate("/earn");
     }
   };

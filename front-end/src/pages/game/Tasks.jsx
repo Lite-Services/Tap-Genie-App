@@ -166,17 +166,29 @@ function Tasks() {
           </Drawer>
 
           {/* Daily Check-in Task */}
+          {isCheckin ? (
             <FriendsListItem
               key="dailyCheckin"
               profile={logo}
               name={`Day ${checkinDetails.rewardDay}`}
-              level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
+              level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay!== ""? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
+              icon={logo}
+              displayType="checkin"
+              buttonDisabled={true}
+            />
+          ) : (
+            <FriendsListItem
+              key="dailyCheckin"
+              profile={logo}
+              name="Daily Check-in"
+              level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay!== ""? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
               icon={logo}
               displayType="checkin"
               buttonDisabled={!isCheckin}
               onButtonClick={() => CheckIn()}
             />
-
+          )}
+            
           {/* Dynamic Task List */}
             {taskList.map((task) => (
               <FriendsListItem

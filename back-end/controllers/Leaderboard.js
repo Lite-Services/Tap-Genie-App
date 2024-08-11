@@ -75,7 +75,7 @@ async function allrank(req, res, next) {
             }
         }
 
-        console.log("Top Players:", topplayers);
+       // console.log("Top Players:", topplayers);
         console.log("User Details:", specificUserDetails);
         console.log("User Position:", userPosition);
 

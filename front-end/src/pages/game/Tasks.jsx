@@ -8,11 +8,10 @@ import logo from "../../assets/img/coin.png";
 import { getTGUser } from "../../utlis/tg";
 import { getAuth } from "../../utlis/localstorage";
 import LoadingScreen from "../../components/taptap/LoadingScreen";
+import { motion } from "framer-motion";
 
 function Tasks() {
   const [isCheckin, setIsCheckin] = useState(false);
-  const [checkedIn, setCheckIn] = useState(false);
-
   const [checkinDetails, setCheckinDetails] = useState({});
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,7 +44,7 @@ function Tasks() {
       if (res.message === 'Success') {
         setTaskList(res.data.tasklist || []);
         setCheckinDetails(res.data.checkin || {});
-        setIsCheckin(res.data.checkin?.dailycheckin || false); // Set initial check-in status
+        //setIsCheckin(res.data.checkin?.dailycheckin);
       } else {
         console.error("Error: Unexpected response message");
       }
@@ -67,30 +66,35 @@ function Tasks() {
   const handleSuccess = (rewardPoints) => {
     const pointsInLocalStorage = localStorage.getItem("score") || 0;
     localStorage.setItem("score", parseInt(pointsInLocalStorage) + rewardPoints);
+    setIsCheckin(true);
     setOpen(true);
     setTimeout(() => setOpen(false), 3000);
+    alert(isCheckin);
+    setIsCheckin(true);
+
   };
 
   const CheckIn = async () => {
+    setIsCheckin(true);
     try {
       const token = getAuth();
       const res = await axios.post("https://taptap-production.up.railway.app/api/task/checkin", {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (res.data.message === 'Success' && !res.data.checkInData.dailycheckin) {
-        setCheckIn(true);
-        setIsCheckin(true)
-        handleSuccess(res.data.checkInData.rewardPoints);
+
+      if (res.data.message === 'Success' && res.data.data.dailycheckin) {
+        alert(res.data.message, res.data.data.dailycheckin);
+        setIsCheckin(true);
+        handleSuccess(res.data.data.rewardPoints || 5000);
       } else {
-        alert("Check-in failed");
-        setCheckIn(false);
+        alert("error");
         setIsCheckin(false);
         navigate("/earn");
       }
     } catch (error) {
-      alert("Error during check-in", error);
+      alert("error");
+
       console.error("Error checking in:", error);
-      setCheckIn(false);
       setIsCheckin(false);
       navigate("/earn");
     }
@@ -123,13 +127,11 @@ function Tasks() {
         setOpen(true);
         setTimeout(() => setOpen(false), 3000);
       } else {
-        setCheckIn(false);
         setIsCheckin(false);
         navigate("/earn");
       }
     } catch (error) {
       console.error("Error claiming reward:", error);
-      setCheckIn(false);
       setIsCheckin(false);
       navigate("/earn");
     }
@@ -146,8 +148,9 @@ function Tasks() {
       return value;
     }
   };
-
-  
+  useEffect(() => {
+   alert
+  }, []);
 
   return (
     <GameLayout>
@@ -161,54 +164,32 @@ function Tasks() {
             </h1>
           </Drawer>
 
-          {checkedIn ? (
+          {/* Daily Check-in Task */}
             <FriendsListItem
               key="dailyCheckin"
               profile={logo}
               name={`Day ${checkinDetails.rewardDay}`}
-              level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay!== ""? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
+              level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
               icon={logo}
               displayType="checkin"
-              buttonDisabled={true} // Disable button if check-in is true
-            />
-          ) : (
-            <FriendsListItem
-              key="dailyCheckin"
-              profile={logo}
-              name="Daily Check-in"
-              level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay!== ""? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
-              icon={logo}
-              displayType="checkin"
-              buttonDisabled={!isCheckin} // Disable button if check-in is true
+              buttonDisabled={!isCheckin}
               onButtonClick={() => CheckIn()}
             />
-          )}
-
-          {/* Daily Check-in Task */}
-          <FriendsListItem
-            key="dailyCheckin"
-            profile={logo}
-            name={`Day ${checkinDetails.rewardDay}`}
-            level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
-            icon={logo}
-            displayType="checkin"
-            buttonDisabled={!isCheckin} // Disable button if check-in is true
-            onButtonClick={() => CheckIn()}
-          />
 
           {/* Dynamic Task List */}
-          {taskList.map((task) => (
-            <FriendsListItem
-              key={task.id}
-              profile={logo}
-              name={task.title}
-              level={`+${task.points}`}
-              icon={logo}
-              displayType="checkin"
-              buttonDisabled={task.isClaimed === 'Y'}
-              onButtonClick={task.isClaimed === 'N' ? () => Claim(task.id, task.url, task.points) : undefined}
-            />
-          ))}
+            {taskList.map((task) => (
+              <FriendsListItem
+                key={task.id}
+                profile={logo}
+                name={task.title}
+                level={`+${task.points}`}
+                icon={logo}
+                displayType="checkin"
+                buttonDisabled={task.isClaimed === 'Y'}
+                onButtonClick={task.isClaimed === 'N' ? () => Claim(task.id, task.url, task.points) : undefined}
+                />
+            ))}
+
         </>
       )}
     </GameLayout>

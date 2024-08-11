@@ -46,8 +46,6 @@ function Leaderboard() {
       const userDetails = res?.value || null;
   
       // Use console.log for debugging instead of alert
-      alert("Top Players:", userDetails.topplayers);
-      alert("User Details:", userDetails);
   
       if (userDetails && res.isthere === true) {
         setTopPlayers(userDetails.topplayers);
@@ -111,7 +109,7 @@ function Leaderboard() {
                   name={player.firstname || player.username}
                   level={player.gameLevel}
                   rank={index + 1}
-                  icon={logo}
+                  icon={coinIcon}
                   profile={coinIcon}
                   displayType="leader"
                   balance={formatNumber(player.overallPoints)}

@@ -19,8 +19,8 @@ async function allrank(req, res, next) {
             SELECT e.tap_score, t.username, e.game_level, e.id, t.first_name
             FROM tg_users t
             JOIN earnings e ON t.userid = e.userid
-            WHERE e.tap_score != 0;
-            ORDER BY e.tap_score DESC
+            WHERE e.tap_score != 0
+            ORDER BY e.tap_score DESC;
         `);
 
         console.log("Top users query results:", results);

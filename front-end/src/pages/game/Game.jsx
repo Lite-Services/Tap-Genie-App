@@ -37,7 +37,7 @@ function Game() {
             }
           } else {
             throw new Error("Sync data is not found");
-          }
+          }``
         } else {
           if (isMounted) {
             setIsLoading(false);

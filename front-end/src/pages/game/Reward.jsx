@@ -147,7 +147,7 @@ function RoboMine() {
       setContent(`Upgraded to level ${nextMinerLevel}`);
       setOpen(true);
     } catch (err) {
-      alert("Something went wrong!");
+      alert(err);
       if (err.response?.status === 401) {
         navigate("/");
       }

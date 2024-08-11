@@ -1,184 +1,145 @@
-const moment = require("moment");
-const Earnings = require("../models/Earnings");
+const moment = require('moment');
+const Earnings = require('../models/Earnings');
 
-function getSecondOfDayUTC(date_time = null) {
-    const now = date_time !== null ? date_time : new Date();
-    const hours = now.getUTCHours();
-    const minutes = now.getUTCMinutes();
-    const seconds = now.getUTCSeconds();
+// Utility functions
+const getSecondsOfDayUTC = (date = new Date()) => {
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
+    const seconds = date.getUTCSeconds();
+    return hours * 3600 + minutes * 60 + seconds;
+};
 
-    const final_seconds = hours * 3600 + minutes * 60 + seconds;
+const findBatch = (date = new Date()) => {
+    const totalSecondsInDay = 24 * 3600;
+    const numberOfBatches = 8;
+    const secondsPerBatch = totalSecondsInDay / numberOfBatches;
+    const secondsOfDay = getSecondsOfDayUTC(date);
+    return Math.floor(secondsOfDay / secondsPerBatch) + 1;
+};
 
-    return final_seconds;
-}
+const getCurrentDateFormatted = () => {
+    return moment.utc().format('YYYY-MM-DD');
+};
 
-function findBatch(date_time = null) {
-    const total_seconds_in_day = 24 * 3600;
-    const number_of_batches = 8;
-    const seconds_per_batch = total_seconds_in_day / number_of_batches;
-
-    const seconds_of_day = getSecondOfDayUTC(date_time);
-    const batch = Math.floor(seconds_of_day / seconds_per_batch) + 1;
-
-    return batch;
-}
-
-function getCurrentDateFormatted() {
-    var now = new Date();
-
-    var year = now.getUTCFullYear();
-    var month = (now.getUTCMonth() + 1).toString().padStart(2, "0"); // getUTCMonth() returns month index (0-11)
-    var day = now.getUTCDate().toString().padStart(2, "0");
-
-    return year + "-" + month + "-" + day;
-}
-
-function getRequiredScore(miner_level) {
-    if (miner_level === 1) {
-        return [20000, "20k"];
-    } else if (miner_level === 2) {
-        return [100000, "100k"];
-    } else if (miner_level === 3) {
-        return [200000, "200k"];
-    } else if (miner_level === 4) {
-        return [500000, "500k"];
-    } else if (miner_level === 5) {
-        return [1000000, "1M"];
-    } else {
-        throw new Error(
-            `miner_level not found for getRequiredScore(${miner_level})`
-        );
+const getRequiredScore = (minerLevel) => {
+    const scoreMap = {
+        1: [20000, '20k'],
+        2: [100000, '100k'],
+        3: [200000, '200k'],
+        4: [500000, '500k'],
+        5: [1000000, '1M']
+    };
+    const [score, scoreText] = scoreMap[minerLevel] || [0, 'unknown'];
+    if (score === 0) {
+        throw new Error(`Invalid miner level: ${minerLevel}`);
     }
-}
+    return [score, scoreText];
+};
 
-function getClaimScore(miner_level) {
-    if (miner_level === 1) {
-        return [10000, "10k"];
-    } else if (miner_level === 2) {
-        return [50000, "50k"];
-    } else if (miner_level === 3) {
-        return [75000, "75k"];
-    } else if (miner_level === 4) {
-        return [100000, "100k"];
-    } else if (miner_level === 5) {
-        return [150000, "150k"];
-    } else {
-        throw new Error(`miner_level not found for getClaimScore(${miner_level})`);
+const getClaimScore = (minerLevel) => {
+    const scoreMap = {
+        1: [10000, '10k'],
+        2: [50000, '50k'],
+        3: [75000, '75k'],
+        4: [100000, '100k'],
+        5: [150000, '150k']
+    };
+    const [score, scoreText] = scoreMap[minerLevel] || [0, 'unknown'];
+    if (score === 0) {
+        throw new Error(`Invalid miner level: ${minerLevel}`);
     }
-}
+    return [score, scoreText];
+};
 
+// Upgrade endpoint
 async function upgrade(req, res, next) {
-    var userid = req.user.id;
+    try {
+        const userId = req.user.id;
+        const earnings = await Earnings.findOne({ where: { userid: userId } });
 
-    var earnings = await Earnings.findOne({
-        where: {
-            userid: userid,
-        },
-    });
-
-    if (earnings === null) {
-        return next(`No earnings record found for ${userid}`);
-    }
-
-    let miner_level = !isNaN(parseInt(earnings.miner_level)) ?
-        parseInt(earnings.miner_level) :
-        0;
-    let score = !isNaN(parseInt(earnings.tap_points)) ?
-        parseInt(earnings.tap_points) :
-        0;
-
-    if (miner_level < 5) {
-        let next_miner_level = miner_level + 1;
-        const [required_score, score_in_text] = getRequiredScore(next_miner_level);
-        if (score >= required_score) {
-            score -= required_score;
-            await earnings.update({
-                tap_points: score,
-                miner_level: next_miner_level,
-            });
-            return res.status(200).json({
-                statusCode: 200,
-                status: "success",
-                miner_level: next_miner_level,
-                score: score,
-                message: "Successfully upgraded",
-            });
-        } else {
-            return next(
-                `Insufficient balance for ${userid} to upgrade from ${miner_level} to ${next_miner_level}`
-            );
+        if (!earnings) {
+            return next(new Error(`No earnings record found for ${userId}`));
         }
-    } else {
-        return next(`User Exceed upgrade level ${userid}`);
+
+        let minerLevel = parseInt(earnings.miner_level, 10) || 0;
+        let score = parseInt(earnings.tap_points, 10) || 0;
+
+        if (minerLevel < 5) {
+            const nextMinerLevel = minerLevel + 1;
+            const [requiredScore] = getRequiredScore(nextMinerLevel);
+
+            if (score >= requiredScore) {
+                score -= requiredScore;
+                await earnings.update({ tap_points: score, miner_level: nextMinerLevel });
+                return res.status(200).json({
+                    statusCode: 200,
+                    status: 'success',
+                    miner_level: nextMinerLevel,
+                    score,
+                    message: 'Successfully upgraded'
+                });
+            } else {
+                return next(new Error(`Insufficient balance for ${userId} to upgrade from ${minerLevel} to ${nextMinerLevel}`));
+            }
+        } else {
+            return next(new Error(`User exceeds upgrade level ${userId}`));
+        }
+    } catch (error) {
+        return next(error);
     }
 }
 
+// Claim endpoint
 async function claim(req, res, next) {
-    var userid = req.user.id;
+    try {
+        const userId = req.user.id;
+        const earnings = await Earnings.findOne({ where: { userid: userId } });
 
-    var earnings = await Earnings.findOne({
-        where: {
-            userid: userid,
-        },
-    });
+        if (!earnings) {
+            return next(new Error(`No earnings record found for ${userId}`));
+        }
 
-    if (earnings !== null) {
-        let miner_level = !isNaN(parseInt(earnings.miner_level)) ?
-            parseInt(earnings.miner_level) :
-            0;
-        let last_mine_date = earnings.last_mine_date;
-        last_mine_date = last_mine_date !== null ? last_mine_date : null;
-        let last_mine_batch =
-            last_mine_date !== null ? findBatch(last_mine_date) : 0;
-        let currrent_batch = findBatch();
+        let minerLevel = parseInt(earnings.miner_level, 10) || 0;
+        let lastMineDate = earnings.last_mine_date ? moment.utc(earnings.last_mine_date) : null;
+        const currentBatch = findBatch();
+        let claim = false;
 
-        var claim = false;
-        if (miner_level > 0) {
-            if (last_mine_date === null) {
+        if (minerLevel > 0) {
+            if (!lastMineDate) {
                 claim = true;
-            } else if (last_mine_date !== null) {
-                let last_date = moment.utc(last_mine_date).format("YYYY-MM-DD");
-                //TODO: need to change this function to moment
-                let current_date = getCurrentDateFormatted();
-                if (current_date > last_date) {
-                    claim = true;
-                } else if (
-                    current_date == last_date &&
-                    last_mine_batch < currrent_batch
-                ) {
+            } else {
+                const lastDate = lastMineDate.format('YYYY-MM-DD');
+                const currentDate = getCurrentDateFormatted();
+                if (currentDate > lastDate || (currentDate === lastDate && findBatch(lastMineDate) < currentBatch)) {
                     claim = true;
                 }
             }
+
+            if (claim) {
+                let score = parseInt(earnings.tap_points, 10) || 0;
+                const [claimScore] = getClaimScore(minerLevel);
+                score += claimScore;
+                lastMineDate = moment.utc().toDate();
+
+                await earnings.update({ tap_points: score, last_mine_date: lastMineDate });
+                return res.status(200).json({
+                    statusCode: 200,
+                    status: 'success',
+                    last_mine_date: lastMineDate,
+                    score,
+                    message: 'Successfully claimed'
+                });
+            } else {
+                return next(new Error(`Invalid claim request for ${userId}`));
+            }
         }
 
-        if (claim) {
-            let score = !isNaN(parseInt(earnings.tap_points)) ?
-                parseInt(earnings.tap_points) :
-                0;
-
-            const [claim_score, clain_score_text] = getClaimScore(miner_level);
-            score += claim_score;
-            last_mine_date = new Date();
-            await earnings.update({
-                tap_points: score,
-                last_mine_date: last_mine_date,
-            });
-            return res.status(200).json({
-                statusCode: 200,
-                status: "success",
-                last_mine_date: last_mine_date,
-                score: score,
-                message: "Successfully claimed",
-            });
-        } else {
-            return next(`Ivalid claim request for ${userid}`);
-        }
+    } catch (error) {
+        return next(error);
     }
-
-    return next(`No earnings record found for ${userid}`);
 }
 
 module.exports = {
     claim,
-    upgrade,
+    upgrade
 };

@@ -222,7 +222,7 @@ async function checkin(req, res, next) {
         const [updated] = await Earnings.update(earnUpdate, { where: { userid: tgUser.id } });
 
         if (updated > 0) {
-            console.log("dxgdsgddg" + checkInData);
+            //console.log("dxgdsgddg" + checkInData);
             return res.status(200).json({ message: 'Success', data: checkInData });
         } else {
             return res.status(422).json({ error: 'Unprocessable Entity', message: 'Check-in not updated' });

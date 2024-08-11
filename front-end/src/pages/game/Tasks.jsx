@@ -78,16 +78,19 @@ function Tasks() {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data.message === 'Success' && res.data.checkInData.dailycheckin) {
+        setCheckIn(true);
         setIsCheckin(true)
         handleSuccess(res.data.checkInData.rewardPoints);
       } else {
         alert("Check-in failed");
+        setCheckIn(false);
         setIsCheckin(false);
         navigate("/earn");
       }
     } catch (error) {
       alert("Error during check-in");
       console.error("Error checking in:", error);
+      setCheckIn(false);
       setIsCheckin(false);
       navigate("/earn");
     }
@@ -120,11 +123,13 @@ function Tasks() {
         setOpen(true);
         setTimeout(() => setOpen(false), 3000);
       } else {
+        setCheckIn(false);
         setIsCheckin(false);
         navigate("/earn");
       }
     } catch (error) {
       console.error("Error claiming reward:", error);
+      setCheckIn(false);
       setIsCheckin(false);
       navigate("/earn");
     }
@@ -155,6 +160,29 @@ function Tasks() {
               Claimed Successfully
             </h1>
           </Drawer>
+
+          {checkedIn ? (
+            <FriendsListItem
+              key="dailyCheckin"
+              profile={logo}
+              name={`Day ${checkinDetails.rewardDay}`}
+              level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay!== ""? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
+              icon={logo}
+              displayType="checkin"
+              buttonDisabled={true} // Disable button if check-in is true
+            />
+          ) : (
+            <FriendsListItem
+              key="dailyCheckin"
+              profile={logo}
+              name="Daily Check-in"
+              level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay!== ""? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
+              icon={logo}
+              displayType="checkin"
+              buttonDisabled={!isCheckin} // Disable button if check-in is true
+              onButtonClick={() => CheckIn()}
+            />
+          )}
 
           {/* Daily Check-in Task */}
           <FriendsListItem

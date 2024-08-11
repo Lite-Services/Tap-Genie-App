@@ -46,8 +46,8 @@ function Leaderboard() {
       const userDetails = res?.value || null;
   
       // Use console.log for debugging instead of alert
-      console.log("Top Players:", userDetails.topplayers);
-      console.log("User Details:", userDetails);
+      alert("Top Players:", userDetails.topplayers);
+      alert("User Details:", userDetails);
   
       if (userDetails && res.isthere === true) {
         setTopPlayers(userDetails.topplayers);

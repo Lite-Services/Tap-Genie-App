@@ -60,6 +60,7 @@ function Tasks() {
       const tgData = getTGUser();
       getUserData(tgData);
       effectRan.current = true;
+      alert(isCheckin);
     }
   }, []);
 

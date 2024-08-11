@@ -45,6 +45,8 @@ function Tasks() {
         setTaskList(res.data.tasklist || []);
         setCheckinDetails(res.data.checkin || {});
         //setIsCheckin(res.data.checkin?.dailycheckin);
+        alert(res.data.checkin);
+
         setIsCheckin(JSON.parse(localStorage.getItem("isCheckin")) || res.data.checkin?.dailycheckin || false);
 
       } else {
@@ -62,7 +64,6 @@ function Tasks() {
       const tgData = getTGUser();
       getUserData(tgData);
       effectRan.current = true;
-      alert(isCheckin);
     }
   }, []);
 

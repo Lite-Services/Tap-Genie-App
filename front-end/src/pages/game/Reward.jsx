@@ -203,9 +203,9 @@ function RoboMine() {
         })
         .catch((err) => {
           //TODO need to handle err properly
-          alert("Something went wrong!");
+          alert(err);
           if (err.response.status === 401) {
-            return navigate("/game");
+            return navigate("/");
           }
         });
   }

@@ -45,7 +45,7 @@ function Tasks() {
         setTaskList(res.data.tasklist || []);
         setCheckinDetails(res.data.checkin || {});
         //setIsCheckin(res.data.checkin?.dailycheckin);
-        alert(res.data.checkin);
+        //(res.data.checkin);
 
         setIsCheckin(JSON.parse(localStorage.getItem("isCheckin")) || res.data.checkin?.dailycheckin || false);
 
@@ -73,7 +73,7 @@ function Tasks() {
     setIsCheckin(true);
     setOpen(true);
     setTimeout(() => setOpen(false), 3000);
-    alert(isCheckin);
+    //alert(isCheckin);
     setIsCheckin(true);
 
   };
@@ -88,7 +88,7 @@ function Tasks() {
       });
 
       if (res.data.message === 'Success' && res.data.data.dailycheckin) {
-        alert(res.data.data.rewardPoints);
+        //alert(res.data.data.rewardPoints);
         handleSuccess(res.data.data.rewardPoints || 5000);
       } else {
         alert("Check-in failed");
@@ -153,9 +153,7 @@ function Tasks() {
       return value;
     }
   };
-  useEffect(() => {
-   alert
-  }, []);
+ 
 
   return (
     <GameLayout>

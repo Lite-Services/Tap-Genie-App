@@ -10,12 +10,18 @@ const getSecondsOfDayUTC = (date = new Date()) => {
 };
 
 const findBatch = (date = new Date()) => {
+    // Convert date to a native Date object if it's a Moment.js object
+    if (moment.isMoment(date)) {
+        date = date.toDate();
+    }
+
     const totalSecondsInDay = 24 * 3600;
     const numberOfBatches = 8;
     const secondsPerBatch = totalSecondsInDay / numberOfBatches;
     const secondsOfDay = getSecondsOfDayUTC(date);
     return Math.floor(secondsOfDay / secondsPerBatch) + 1;
 };
+
 
 const getCurrentDateFormatted = () => {
     return moment.utc().format('YYYY-MM-DD');
@@ -99,7 +105,7 @@ async function upgrade(req, res, next) {
 
 
 // Claim endpoint
-async function claim(req, res, next) {
+const claim = async (req, res, next) => {
     try {
         const userId = req.user.id;
         const earnings = await Earnings.findOne({ where: { userid: userId } });
@@ -146,7 +152,8 @@ async function claim(req, res, next) {
     } catch (error) {
         return next(error);
     }
-}
+};
+
 
 module.exports = {
     claim,

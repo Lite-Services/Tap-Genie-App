@@ -49,6 +49,7 @@ function Tasks() {
         setCheckinDetails(res.data.checkin || {});
         
         const lastCheckInDate = res.data.checkin?.lastCheckInDate;
+        alert(lastCheckInDate);
         const today = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
         
         // Check if the last check-in date is today
@@ -91,8 +92,8 @@ function Tasks() {
       const res = await axios.post(CHECKIN_URL, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      alert(res.data.data.lastCheckInDate);
-      alert(res.data.message);
+      //alert(res.data.data.lastCheckInDate);
+      //alert(res.data.message);
 
       if (res.data.message === 'Success' && res.data.data.lastCheckInDate === new Date().toISOString().split('T')[0]) {
 

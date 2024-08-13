@@ -68,6 +68,7 @@ function Tasks() {
     if (!effectRan.current) {
       const tgData = getTGUser();
       getUserData(tgData);
+      alert(isCheckin);
       effectRan.current = true;
     }
   }, []);
@@ -81,6 +82,7 @@ function Tasks() {
   };
 
   const CheckIn = async () => {
+    alert(isCheckin);
     setIsCheckin(true);
     localStorage.setItem("isCheckin", JSON.stringify(true)); // Persist check-in status
   

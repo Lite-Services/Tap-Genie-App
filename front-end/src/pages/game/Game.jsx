@@ -11,14 +11,14 @@ function Game() {
   const navigate = useNavigate();
   const location = useLocation();
   const query_params = new URLSearchParams(location.search);
-  const referral_by = query_params.get("start");
+  const referral_by = query_params.get("tgWebAppStartParam");
   const [error, setError] = useState(false);
   const [isTg, setIsTg] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
-
+    alert(referral_by);
     const authenticateUser = async () => {
       try {
         const tg_user = getTGUser();

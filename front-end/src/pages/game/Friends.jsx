@@ -49,7 +49,7 @@ const Friends = () => {
         const refCode = userDetails?.refCode || '';
         if (refCode) {
           setRefcode(refCode);
-          setRefLink(`${GAME_TG_URL}?start=${refCode}`);
+          setRefLink(`${GAME_TG_URL}?startapp=${refCode}`);
         }
       } else {
         alert("no user details");

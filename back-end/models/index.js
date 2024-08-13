@@ -5,7 +5,9 @@ const CheckIns = require('./Checkin');
 // Define associations
 TGUser.hasOne(Earnings, { foreignKey: 'userid', sourceKey: 'userid' });
 Earnings.belongsTo(TGUser, { foreignKey: 'userid', targetKey: 'userid' });
-CheckIns.belongsTo(TGUser, { foreignKey: 'userid', targetKey: 'userId'});
+
+TGUser.hasOne(CheckIns, { foreignKey: 'userId', sourceKey: 'userid' });
+CheckIns.belongsTo(TGUser, { foreignKey: 'userId', targetKey: 'userid'});
 
 module.exports = {
     TGUser,

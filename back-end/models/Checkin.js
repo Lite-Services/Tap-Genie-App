@@ -31,7 +31,7 @@ const CheckIns = sequelize.define(
             defaultValue: 0,
         },
     }, {
-        tableName: "checkins",
+        tableName: "CheckIns",
         timestamps: false,
         indexes: [{
             fields: ["userId"], // Corrected from "userid" to "userId"

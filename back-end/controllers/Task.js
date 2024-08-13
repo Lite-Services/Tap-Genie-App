@@ -267,12 +267,12 @@ async function checkin(req, res, next) {
             tap_score: parseInt(earnDetails.tap_score, 10) + rewardPoints,
             recent_login: today
         };
-
+console.log(earnUpdate);
         const [updated] = await Earnings.update(earnUpdate, { where: { userid: userId }, transaction });
 
         if (updated > 0) {
             await transaction.commit();
-            console.log(`User ${userId} has checked in and earned ${rewardPoints} points. Streak: ${streak}`);
+            console.log(`User ${userId} has checked in and earned ${rewardPoints} points. Streak: ${streak}`, );
             return res.status(200).json({ message: 'Success', data: { rewardPoints, streak, lastCheckInDate: today.toISOString() } });
         } else {
             await transaction.rollback();

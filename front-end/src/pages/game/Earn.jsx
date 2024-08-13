@@ -101,167 +101,44 @@ function Earn() {
     };
   }, []);
 
-  useEffect(() => {
-    const fetchUser = async () => {
+ useEffect(() => {
+  const fetchUser = async () => {
+    try {
       const token = getAuth();
       const tgUser = getTGUser();
 
-      const response = await axios.get(`https://taptap-production.up.railway.app/api/earn/getscore`,{
+      const response = await axios.get(`https://taptap-production.up.railway.app/api/earn/getscore`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      console.log("response==>",response)
-
-      const res = response.data;
-      const resdata = res.data;
+      const resdata = response.data?.data;
 
       if (!resdata) {
-        // navigate("/game");
-        return;
-      }else{
-
-        
-
-        setIsLoading(false)
+        return; // Handle missing data
       }
 
-      const userData = resdata;
-      setUser(userData);
+      setUser(resdata);
+      setGamelevel(resdata.game_level);
 
-      setGamelevel(userData.game_level);
-      //
-
-      // console.log("ds",userData)
-      // if(userData.points == 0){
-
-      //   localStorage.setItem("energy",2000);
-      //   localStorage.setItem("score",0);
-      //   localStorage.setItem("lastSyncTime",null);
-      //   localStorage.setItem("restoreTime",null);
-
-      // }
-
-      
-
-
+      // Handle stored values
       const storedEnergy = localStorage.getItem("energy");
-      var storedPoints = localStorage.getItem("score");
-      const lastSyncTime = localStorage.getItem("lastSyncTime");
+      let storedPoints = localStorage.getItem("score");
 
-      console.log("storedPoints==>",storedPoints)
-
-     
-      if(storedPoints==0){
-        localStorage.setItem("score", userData.tap_score)
-        storedPoints = userData.tap_score
-         
+      if (storedPoints === '0') {
+        localStorage.setItem("score", resdata.tap_score);
+        storedPoints = resdata.tap_score;
       }
 
+      // Further processing...
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      // Handle error accordingly
+    }
+  };
 
+  fetchUser();
+}, [navigate]); // Check if you need `user` as dependency or not
 
-
-      if (storedEnergy && storedPoints) {
-        const now = Date.now();
-        if (!lastSyncTime || (lastSyncTime && now - lastSyncTime > 2000)) {
-          let tempLocalEn = localStorage.getItem("energy");
-          let tempLocalPO = localStorage.getItem("score");
-          await syncWithServer(tempLocalEn, tempLocalPO, userData.energy_restore_time)
-          .then(() => {
-                      setLocalEnergy(tempLocalEn);
-                      setLocalPoints(tempLocalPO);
-                    });
-        } else {
-          const energy = storedEnergy;
-          const points = storedPoints;
-          if (energy !== null && points !== null) {
-            setLocalEnergy(energy <= 0 ? defaultEnergyLevel : energy);
-            setLocalPoints(points);
-          } else {
-            setLocalEnergy(defaultEnergyLevel);
-            setLocalPoints(0);
-          }
-        }
-      } else {
-        const energy = userData.energy_remaning;
-        const points = userData.tap_score;
-        if (energy !== null && points !== null) {
-          setLocalEnergy(energy <= 0 ? defaultEnergyLevel : energy);
-          setLocalPoints(points);
-        } else {
-          setLocalEnergy(defaultEnergyLevel);
-          setLocalPoints(0);
-        }
-      }
-
-      const storedRestoreTime = localStorage.getItem("restoreTime");
-      
-
-      if (storedRestoreTime && storedRestoreTime !== null) {
-        const result = checkTime(storedRestoreTime);
-        console.log("1")
-        if (result !== null && result !== '') {
-          console.log("2")
-          setRestoreTime(result);
-          const currentTime = moment.utc().format("YYYY-MM-DD HH:mm:ss");
-          const duration = moment.duration(moment( localStorage.getItem("restoreTime")).diff(currentTime));
-          setElapsedSeconds(duration.asSeconds());
-          if(storedEnergy>0 ){
-            setLocalEnergy(storedEnergy);
-          }else{
-            setLocalEnergy(0);
-          }
-          
-        //  localStorage.getItem("restoreTime");
-        console.log("result", localStorage.getItem("restoreTime"))
-         setRestoreTime( localStorage.getItem("restoreTime"));
-        } else {
-          console.log("3")
-          setRestoreTime('');
-          setLocalEnergy(storedEnergy !== null ? storedEnergy : defaultEnergyLevel);
-        }
-      } else if (userData.energy_restore_time && userData.energy_restore_time !== null) {
-        console.log("4")
-        const result = checkTime(userData.energy_restore_time);
-        if (result !== null && result !== '') {
-          setRestoreTime(result);
-          console.log("5")
-          if(userData.energy_remaning == 0){
-            console.log("from db 5")
-            const currentTime = moment.utc().format("YYYY-MM-DD HH:mm:ss");
-            
-            console.log("userData.restore_time",userData.energy_restore_time)
-
-            const temp = moment(userData.energy_restore_time).format("YYYY-MM-DD HH:mm:ss");
-            console.log("temp",temp)
-
-            const duration = moment.duration(moment(currentTime).diff(moment(temp))).asSeconds();
-            setElapsedSeconds(duration);
-            setLocalEnergy(userData.energy_remaning);
-            setRestoreTime(userData.energy_restore_time);
-
-          }else{
-
-            console.log("from db 5 relse")
-            setLocalEnergy(userData.energy_remaning);
-            setElapsedSeconds('')
-            setRestoreTime(userData.energy_restore_time);
-
-          }
-         
-        } else {
-          console.log("6")
-          setRestoreTime('');
-          setLocalEnergy(storedEnergy !== null ? storedEnergy : userData.energy_remaning || defaultEnergyLevel);
-        }
-      } else {
-        console.log("7")
-        setRestoreTime('');
-        setElapsedSeconds(null);
-        setLocalEnergy(storedEnergy !== null ? storedEnergy : defaultEnergyLevel);
-      }
-    };
-    fetchUser();
-  }, [!user, navigate]);
 
   const syncWithServer = async (energy, points, restore_time) => {
     const token = getAuth();

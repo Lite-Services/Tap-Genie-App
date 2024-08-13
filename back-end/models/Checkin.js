@@ -15,7 +15,7 @@ const CheckIns = sequelize.define(
             allowNull: false,
             references: {
                 model: "tg_users",
-                key: "userid",
+                key: "id", // Adjusted if 'id' is the primary key in tg_users
             },
         },
         checkInDate: {
@@ -31,17 +31,11 @@ const CheckIns = sequelize.define(
             defaultValue: 0,
         },
     }, {
-        tableName: "CheckIns",
+        tableName: "checkins", // Ensure this matches your actual table name
         timestamps: false,
         indexes: [{
-            fields: ["userId"], // Corrected from "userid" to "userId"
+            fields: ["userId"],
         }],
-        hooks: {
-            beforeUpdate: (checkIn, options) => {
-                // Ensure modifyDate is a valid field or remove this hook if not needed
-                checkIn.modifyDate = new Date(); // Corrected the typo
-            },
-        },
     }
 );
 

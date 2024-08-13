@@ -76,13 +76,15 @@ function Tasks() {
     const pointsInLocalStorage = localStorage.getItem("score") || 0;
     localStorage.setItem("score", parseInt(pointsInLocalStorage) + rewardPoints);
     setIsCheckin(true);
+    localStorage.setItem("isCheckin", JSON.stringify(true)); // Update persisted status
+
     setOpen(true);
     setTimeout(() => setOpen(false), 3000);
   };
 
   const CheckIn = async () => {
-    setIsCheckin(true);
-    localStorage.setItem("isCheckin", JSON.stringify(true)); // Persist check-in status
+    //setIsCheckin(true);
+    //localStorage.setItem("isCheckin", JSON.stringify(true)); // Persist check-in status
   
     try {
       const token = getAuth();
@@ -106,6 +108,7 @@ function Tasks() {
       navigate("/earn");
     }
   };
+  
 
   const Claim = async (taskId, taskUrl, taskPoints) => {
     try {
@@ -170,15 +173,15 @@ function Tasks() {
 
           {/* Daily Check-in Task */}
           <FriendsListItem
-            key={1}
-            profile={logo}
-            name={`Day ${checkinDetails.rewardDay}`}
-            level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
-            icon={logo}
-            displayType="checkin"
-            buttonDisabled={isCheckin}
-            onButtonClick={isCheckin ? undefined : () => CheckIn()}
-          />
+  key={1}
+  profile={logo}
+  name={`Day ${checkinDetails.rewardDay}`}
+  level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
+  icon={logo}
+  displayType="checkin"
+  buttonDisabled={isCheckin}
+  onButtonClick={isCheckin ? undefined : () => CheckIn()}
+/>
 
           {/* Dynamic Task List */}
           {taskList.map((task) => (

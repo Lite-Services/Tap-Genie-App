@@ -95,7 +95,6 @@ function Leaderboard() {
 
   return (
     <>
-    <GameLayout>
       <LoadingScreen isloaded={isLoading} reURL={''} />
   
       {!isLoading && (
@@ -148,7 +147,6 @@ function Leaderboard() {
           )}
         </div>
       )}
-      </GameLayout>
     </>
   );
   

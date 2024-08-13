@@ -267,7 +267,6 @@ function RoboMine() {
   });
 
   return (
-    <GameLayout>
       <TGAuth>
         <Drawer open={open} setOpen={setOpen}>
           <div className="flex flex-col items-center justify-center px-4 gap-2">
@@ -400,7 +399,6 @@ function RoboMine() {
           </div>
         </div>
       </TGAuth>
-      </GameLayout>
   );
 }
 

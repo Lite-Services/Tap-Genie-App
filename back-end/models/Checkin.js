@@ -15,7 +15,7 @@ const CheckIns = sequelize.define(
             allowNull: false,
             references: {
                 model: "tg_users",
-                key: "id", // Adjusted if 'id' is the primary key in tg_users
+                key: "userid", // Adjusted if 'id' is the primary key in tg_users
             },
         },
         checkInDate: {

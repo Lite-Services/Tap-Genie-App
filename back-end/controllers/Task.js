@@ -68,45 +68,69 @@ function getCheckinDetails(earnDetails) {
 
 
 async function list(req, res, next) {
-
     try {
-
         const tgUser = req.user;
 
-        if (tgUser == null && tgUser.id == null) {
+        if (!tgUser || !tgUser.id) {
             return res.status(401).json({ error: 'Unauthorized', message: 'Authentication required' });
         }
 
         const { id: teleid } = tgUser;
+
+        // Fetch earnings details
         const earnDetails = await Earnings.findOne({
             where: {
                 userid: teleid,
             },
         });
+
         if (!earnDetails) {
             return res.status(401).json({ error: 'Unauthorized', message: 'Authentication required' });
         }
-        const checkindetails = getCheckinDetails(earnDetails)
-        const doneTaskIds = earnDetails.task ? earnDetails.task.split('|').map(id => parseInt(id)) : [];
-        const whereClause = {
-            status: "ACTIVE"
-        };
 
+        // Fetch the latest check-in details
+        const checkInData = await CheckIns.findOne({
+            where: { userId: teleid },
+            order: [['checkInDate', 'DESC']],
+        });
+
+        // Determine the last check-in date
+        const today = moment().utc().startOf('day');
+        const lastCheckInDate = checkInData ? moment(checkInData.checkInDate).utc().startOf('day') : null;
+
+        // Calculate streak and reward points based on last check-in
+        let rewardPoints = 0;
+        let streak = 0;
+        const daysDifference = lastCheckInDate ? today.diff(lastCheckInDate, 'days') : null;
+
+        if (!lastCheckInDate || daysDifference > 1) {
+            rewardPoints = 5000;
+            streak = 1;
+        } else if (daysDifference === 1) {
+            streak = checkInData.streak + 1;
+            rewardPoints = streak * 5000;
+        } else {
+            rewardPoints = 0;
+            streak = checkInData.streak;
+        }
+
+        // Extract done task IDs
+        const doneTaskIds = earnDetails.task ? earnDetails.task.split('|').map(id => parseInt(id)) : [];
+
+        // Fetch tasks
+        const whereClause = { status: "ACTIVE" };
         const tasks = await Tasks.findAll({
             where: whereClause,
-            order: [
-                ["created_date", "DESC"]
-            ],
+            order: [["created_date", "DESC"]],
             limit: 10,
             offset: 0,
         });
 
-
-
-        if (tasks == null || tasks.length === 0) {
+        if (!tasks || tasks.length === 0) {
             return res.status(404).json({ message: 'No task found', data: [] });
         }
 
+        // Map tasks to the required format
         const taskList = tasks.map((task) => ({
             id: task.id,
             title: task.title,
@@ -116,18 +140,28 @@ async function list(req, res, next) {
             isClaimed: doneTaskIds.includes(task.id) ? "Y" : "N"
         }));
 
-        if (checkindetails != null && taskList != null) {
-            console.log(taskList, checkindetails);
-            return res.status(200).json({ message: 'Success', data: { tasklist: taskList, checkin: checkindetails } });
-        } else {
-            return res.status(404).json({ message: 'No task found', data: [] });
-        }
+        // Prepare final response data
+        const responseData = {
+            tasklist: taskList,
+            checkin: {
+                current_streak: streak,
+                rewardPoints,
+                rewardDay: lastCheckInDate ? streak : 1,
+                dailycheckin: !lastCheckInDate || daysDifference > 1,
+                lastCheckInDate: lastCheckInDate ? lastCheckInDate.format('YYYY-MM-DD') : null,
+                today: today.format('YYYY-MM-DD')
+            }
+        };
+
+        console.log(taskList, responseData.checkin);
+        return res.status(200).json({ message: 'Success', data: responseData });
 
     } catch (error) {
         console.error("Error fetching task list:", error);
-        return next('An error occurred while geting task list ');
+        return next('An error occurred while getting the task list');
     }
 }
+
 
 async function claim(req, res, next) {
     try {

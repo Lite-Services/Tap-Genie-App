@@ -91,8 +91,10 @@ function Tasks() {
       const res = await axios.post(CHECKIN_URL, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
-  
+      alert(res.data.data.lastCheckInDate);
+
       if (res.data.message === 'Success' && res.data.data.lastCheckInDate === new Date().toISOString().split('T')[0]) {
+
         handleSuccess(res.data.data.rewardPoints || 5000);
       } else {
         alert("Check-in failed");

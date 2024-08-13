@@ -10,6 +10,10 @@ import { getAuth } from "../../utlis/localstorage";
 import LoadingScreen from "../../components/taptap/LoadingScreen";
 import { motion } from "framer-motion";
 
+const TASK_LIST_URL = "https://taptap-production.up.railway.app/api/task/list";
+const CHECKIN_URL = "https://taptap-production.up.railway.app/api/task/checkin";
+const CLAIM_URL = "https://taptap-production.up.railway.app/api/task/claim";
+
 function Tasks() {
   const [isCheckin, setIsCheckin] = useState(false);
   const [checkinDetails, setCheckinDetails] = useState({});
@@ -38,17 +42,13 @@ function Tasks() {
     if (!tgData) return;
 
     try {
-      const res = await postAjaxCall("https://taptap-production.up.railway.app/api/task/list", { tid: tgData.id });
+      const res = await postAjaxCall(TASK_LIST_URL, { tid: tgData.id });
       console.log("res=>", res);
 
       if (res.message === 'Success') {
         setTaskList(res.data.tasklist || []);
         setCheckinDetails(res.data.checkin || {});
-        //setIsCheckin(res.data.checkin?.dailycheckin);
-        //(res.data.checkin);
-
         setIsCheckin(JSON.parse(localStorage.getItem("isCheckin")) || res.data.checkin?.dailycheckin || false);
-
       } else {
         console.error("Error: Unexpected response message");
       }
@@ -73,9 +73,6 @@ function Tasks() {
     setIsCheckin(true);
     setOpen(true);
     setTimeout(() => setOpen(false), 3000);
-    //alert(isCheckin);
-    setIsCheckin(true);
-
   };
 
   const CheckIn = async () => {
@@ -83,12 +80,11 @@ function Tasks() {
     localStorage.setItem("isCheckin", JSON.stringify(true)); // Persist check-in status
     try {
       const token = getAuth();
-      const res = await axios.post("https://taptap-production.up.railway.app/api/task/checkin", {}, {
+      const res = await axios.post(CHECKIN_URL, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (res.data.message === 'Success' && res.data.data.dailycheckin) {
-        //alert(res.data.data.rewardPoints);
         handleSuccess(res.data.data.rewardPoints || 5000);
       } else {
         alert("Check-in failed");
@@ -108,7 +104,7 @@ function Tasks() {
   const Claim = async (taskId, taskUrl, taskPoints) => {
     try {
       const token = getAuth();
-      const res = await axios.post("https://taptap-production.up.railway.app/api/task/claim", {
+      const res = await axios.post(CLAIM_URL, {
         taskID: taskId,
       }, {
         headers: { Authorization: `Bearer ${token}` },
@@ -153,7 +149,6 @@ function Tasks() {
       return value;
     }
   };
- 
 
   return (
     <GameLayout>
@@ -168,43 +163,30 @@ function Tasks() {
           </Drawer>
 
           {/* Daily Check-in Task */}
-          {isCheckin ? (
-            <FriendsListItem
-              key={1}
-              profile={logo}
-              name={`Day ${checkinDetails.rewardDay}`}
-              level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay!== ""? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
-              icon={logo}
-              displayType="checkin"
-              buttonDisabled={true}
-            />
-          ) : (
-            <FriendsListItem
-              key={1}
-              profile={logo}
-              name={`Day ${checkinDetails.rewardDay}`}
-              level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay!== ""? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
-              icon={logo}
-              displayType="checkin"
-              buttonDisabled={isCheckin}
-              onButtonClick={() => CheckIn()}
-            />
-          )}
-            
-          {/* Dynamic Task List */}
-            {taskList.map((task) => (
-              <FriendsListItem
-                key={task.id}
-                profile={logo}
-                name={task.title}
-                level={`+${task.points}`}
-                icon={logo}
-                displayType="checkin"
-                buttonDisabled={task.isClaimed === 'Y'}
-                onButtonClick={task.isClaimed === 'N' ? () => Claim(task.id, task.url, task.points) : undefined}
-                />
-            ))}
+          <FriendsListItem
+            key={1}
+            profile={logo}
+            name={`Day ${checkinDetails.rewardDay}`}
+            level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
+            icon={logo}
+            displayType="checkin"
+            buttonDisabled={isCheckin}
+            onButtonClick={isCheckin ? undefined : () => CheckIn()}
+          />
 
+          {/* Dynamic Task List */}
+          {taskList.map((task) => (
+            <FriendsListItem
+              key={task.id}
+              profile={logo}
+              name={task.title}
+              level={`+${task.points}`}
+              icon={logo}
+              displayType="checkin"
+              buttonDisabled={task.isClaimed === 'Y'}
+              onButtonClick={task.isClaimed === 'N' ? () => Claim(task.id, task.url, task.points) : undefined}
+            />
+          ))}
         </>
       )}
     </GameLayout>

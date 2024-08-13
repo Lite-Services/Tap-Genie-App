@@ -55,6 +55,10 @@ const Earnings = sequelize.define(
             type: DataTypes.INTEGER,
             defaultValue: 2000,
         },
+        last_checkin_date: {
+            type: DataTypes.DATE,
+            defaultValue: null,
+        },
         last_login_at: {
             type: DataTypes.DATE,
             defaultValue: null,

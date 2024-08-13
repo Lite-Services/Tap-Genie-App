@@ -5,6 +5,8 @@ const Earnings = require("../models/Earnings");
 const TGUser = require("../models/TGUser");
 const Tasks = require("../models/Tasks");
 const moment = require('moment');
+const CheckIns = require("../models/Checkin");
+
 
 
 function getCheckinDetails(earnDetails) {
@@ -193,41 +195,94 @@ async function claim(req, res, next) {
 }
 
 async function checkin(req, res, next) {
+    const transaction = await sequelize.transaction();
     try {
         const tgUser = req.user;
 
-        if (!tgUser || !tgUser.id) {
+        if (!tgUser?.id) {
             return res.status(401).json({ error: 'Unauthorized', message: 'Authentication required' });
         }
 
-        const earnDetails = await Earnings.findOne({ where: { userid: tgUser.id } });
+        const userId = tgUser.id;
+        const today = moment().utc().startOf('day').toDate();
+
+        // Check if the user has already checked in today
+        const existingCheckIn = await CheckIns.findOne({
+            where: { userId, checkInDate: today },
+            transaction
+        });
+
+        if (existingCheckIn) {
+            await transaction.rollback();
+            return res.status(409).json({ error: 'Conflict', message: 'Already checked in today' });
+        }
+
+        // Fetch user earnings details
+        const earnDetails = await Earnings.findOne({
+            where: { userid: userId },
+            transaction
+        });
 
         if (!earnDetails) {
+            await transaction.rollback();
             return res.status(401).json({ error: 'Unauthorized', message: 'User earnings details not found' });
         }
 
-        const checkInData = getCheckinDetails(earnDetails);
+        // Determine check-in details
+        const lastCheckIn = await CheckIns.findOne({
+            where: { userId },
+            order: [['checkInDate', 'DESC']],
+            transaction
+        });
 
-        if (!checkInData.dailycheckin) {
-            return res.status(409).json({ error: 'Conflict', message: 'Not a valid check-in' });
+        const lastCheckInDate = lastCheckIn ? moment(lastCheckIn.checkInDate).utc().startOf('day') : null;
+        const daysDifference = lastCheckInDate ? today.diff(lastCheckInDate, 'days') : null;
+
+        let rewardPoints = 0;
+        let streak = 0;
+        let dailycheckin = false;
+
+        if (!lastCheckInDate || daysDifference > 1) {
+            rewardPoints = 5000;
+            streak = 1;
+            dailycheckin = true;
+        } else if (daysDifference === 1) {
+            streak = lastCheckIn.streak + 1;
+            rewardPoints = streak * 5000;
+            dailycheckin = true;
+        } else {
+            rewardPoints = 0;
+            streak = lastCheckIn.streak;
+            dailycheckin = false;
         }
 
+        // Create new check-in record
+        await CheckIns.create({
+            userId,
+            checkInDate: today,
+            rewardPoints,
+            streak
+        }, { transaction });
+
+        // Update earnings
         const earnUpdate = {
-            current_streak: checkInData.current_streak,
-            checkin_score: checkInData.rewardPoints,
-            tap_score: parseInt(earnDetails.tap_score) + checkInData.rewardPoints,
-            recent_login: checkInData.today,
+            current_streak: streak,
+            checkin_score: rewardPoints,
+            tap_score: parseInt(earnDetails.tap_score, 10) + rewardPoints,
+            recent_login: today
         };
 
-        const [updated] = await Earnings.update(earnUpdate, { where: { userid: tgUser.id } });
+        const [updated] = await Earnings.update(earnUpdate, { where: { userid: userId }, transaction });
 
         if (updated > 0) {
-            //console.log("dxgdsgddg" + checkInData);
-            return res.status(200).json({ message: 'Success', data: checkInData });
+            await transaction.commit();
+            return res.status(200).json({ message: 'Success', data: { rewardPoints, streak, dailycheckin } });
         } else {
-            return res.status(422).json({ error: 'Unprocessable Entity', message: 'Check-in not updated' });
+            await transaction.rollback();
+            return res.status(422).json({ error: 'Unprocessable Entity', message: 'Failed to update earnings' });
         }
     } catch (error) {
+        await transaction.rollback();
         console.error("Error during daily check-in:", error);
         next("An error occurred during daily check-in");
     }

@@ -189,7 +189,7 @@ function Tasks() {
               key={task.id}
               profile={logo}
               name={task.title}
-              level={`+${task.points}`}
+              level={`+ ${formatNumber(task.points)}`}
               icon={logo}
               displayType="checkin"
               buttonDisabled={task.isClaimed === 'Y'}

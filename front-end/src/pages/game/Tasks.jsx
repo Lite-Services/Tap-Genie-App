@@ -40,15 +40,19 @@ function Tasks() {
 
   const getUserData = async (tgData) => {
     if (!tgData) return;
-
+  
     try {
       const res = await postAjaxCall(TASK_LIST_URL, { tid: tgData.id });
       console.log("res=>", res);
-
+  
       if (res.message === 'Success') {
         setTaskList(res.data.tasklist || []);
         setCheckinDetails(res.data.checkin || {});
-        setIsCheckin(JSON.parse(localStorage.getItem("isCheckin")) || res.data.checkin?.dailycheckin || false);
+        
+        // Sync local storage with server response
+        const serverCheckinStatus = res.data.checkin?.dailycheckin || false;
+        setIsCheckin(JSON.parse(localStorage.getItem("isCheckin")) || serverCheckinStatus);
+  
       } else {
         console.error("Error: Unexpected response message");
       }
@@ -58,6 +62,7 @@ function Tasks() {
       setIsLoading(false);
     }
   };
+  
 
   useEffect(() => {
     if (!effectRan.current) {
@@ -78,12 +83,13 @@ function Tasks() {
   const CheckIn = async () => {
     setIsCheckin(true);
     localStorage.setItem("isCheckin", JSON.stringify(true)); // Persist check-in status
+  
     try {
       const token = getAuth();
       const res = await axios.post(CHECKIN_URL, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
+  
       if (res.data.message === 'Success' && res.data.data.dailycheckin) {
         handleSuccess(res.data.data.rewardPoints || 5000);
       } else {
@@ -100,6 +106,7 @@ function Tasks() {
       navigate("/earn");
     }
   };
+  
 
   const Claim = async (taskId, taskUrl, taskPoints) => {
     try {

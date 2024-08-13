@@ -1,4 +1,6 @@
 import axios from "axios";
+import GameLayout from "../layout/GameLayout";
+
 import { motion } from "framer-motion";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -93,6 +95,7 @@ function Leaderboard() {
 
   return (
     <>
+    <GameLayout>
       <LoadingScreen isloaded={isLoading} reURL={''} />
   
       {!isLoading && (
@@ -145,6 +148,7 @@ function Leaderboard() {
           )}
         </div>
       )}
+      </GameLayout>
     </>
   );
   

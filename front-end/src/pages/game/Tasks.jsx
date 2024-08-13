@@ -49,7 +49,7 @@ function Tasks() {
         setCheckinDetails(res.data.checkin || {});
         
         const lastCheckInDate = res.data.checkin?.lastCheckInDate;
-        alert(lastCheckInDate);
+        //alert(lastCheckInDate);
         const today = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
         
         // Check if the last check-in date is today

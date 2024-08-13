@@ -1,5 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
+import GameLayout from "../layout/GameLayout";
 import {motion} from "framer-motion";
 import axios from "axios";
 import moment from "moment";
@@ -266,6 +267,7 @@ function RoboMine() {
   });
 
   return (
+    <GameLayout>
       <TGAuth>
         <Drawer open={open} setOpen={setOpen}>
           <div className="flex flex-col items-center justify-center px-4 gap-2">
@@ -398,6 +400,7 @@ function RoboMine() {
           </div>
         </div>
       </TGAuth>
+      </GameLayout>
   );
 }
 

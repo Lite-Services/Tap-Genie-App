@@ -264,7 +264,7 @@ async function checkin(req, res, next) {
         const earnUpdate = {
             current_streak: streak,
             checkin_score: rewardPoints,
-            tap_score: parseInt(earnDetails.tap_score, 10) + rewardPoints,
+            tap_score: parseInt(earnDetails.tap_score) + parseInt(rewardPoints),
             recent_login: today
         };
 console.log(earnUpdate);

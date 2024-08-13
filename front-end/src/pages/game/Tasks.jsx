@@ -92,6 +92,7 @@ function Tasks() {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert(res.data.data.lastCheckInDate);
+      alert(res.data.message);
 
       if (res.data.message === 'Success' && res.data.data.lastCheckInDate === new Date().toISOString().split('T')[0]) {
 

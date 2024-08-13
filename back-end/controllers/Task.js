@@ -267,8 +267,11 @@ async function checkin(req, res, next) {
             tap_score: parseInt(earnDetails.tap_score) + parseInt(rewardPoints),
             recent_login: today
         };
-
         
+
+        console.log('EarnDetails before update:', earnDetails);
+console.log('EarnUpdate object:', earnUpdate);
+
 
         const [updated] = await Earnings.update(earnUpdate, {
             where: {
@@ -286,8 +289,8 @@ async function checkin(req, res, next) {
         }
     } catch (error) {
         await transaction.rollback();
-        console.error("Error during daily check-in:", error);
-        next("An error occurred during daily check-in");
+        console.error("Error during daily check-in:", error.message, error.stack);
+    next("An error occurred during daily check-in");
     }
 }
 

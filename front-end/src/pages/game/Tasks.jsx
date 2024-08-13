@@ -8,7 +8,6 @@ import logo from "../../assets/img/coin.png";
 import { getTGUser } from "../../utlis/tg";
 import { getAuth } from "../../utlis/localstorage";
 import LoadingScreen from "../../components/taptap/LoadingScreen";
-import { motion } from "framer-motion";
 
 const TASK_LIST_URL = "https://taptap-production.up.railway.app/api/task/list";
 const CHECKIN_URL = "https://taptap-production.up.railway.app/api/task/checkin";
@@ -49,10 +48,12 @@ function Tasks() {
         setTaskList(res.data.tasklist || []);
         setCheckinDetails(res.data.checkin || {});
         
-        // Sync local storage with server response
-        const serverCheckinStatus = res.data.checkin?.dailycheckin || false;
-        setIsCheckin(JSON.parse(localStorage.getItem("isCheckin")) || serverCheckinStatus);
-  
+        const lastCheckInDate = res.data.checkin?.lastCheckInDate;
+        const today = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+        
+        // Check if the last check-in date is today
+        setIsCheckin(lastCheckInDate === today);
+
       } else {
         console.error("Error: Unexpected response message");
       }
@@ -62,13 +63,11 @@ function Tasks() {
       setIsLoading(false);
     }
   };
-  
 
   useEffect(() => {
     if (!effectRan.current) {
       const tgData = getTGUser();
       getUserData(tgData);
-      alert(isCheckin);
       effectRan.current = true;
     }
   }, []);
@@ -82,7 +81,6 @@ function Tasks() {
   };
 
   const CheckIn = async () => {
-    alert(isCheckin);
     setIsCheckin(true);
     localStorage.setItem("isCheckin", JSON.stringify(true)); // Persist check-in status
   
@@ -92,7 +90,7 @@ function Tasks() {
         headers: { Authorization: `Bearer ${token}` },
       });
   
-      if (res.data.message === 'Success' && res.data.data.dailycheckin) {
+      if (res.data.message === 'Success' && res.data.data.lastCheckInDate === new Date().toISOString().split('T')[0]) {
         handleSuccess(res.data.data.rewardPoints || 5000);
       } else {
         alert("Check-in failed");
@@ -108,7 +106,6 @@ function Tasks() {
       navigate("/earn");
     }
   };
-  
 
   const Claim = async (taskId, taskUrl, taskPoints) => {
     try {
@@ -175,15 +172,13 @@ function Tasks() {
           <FriendsListItem
             key={1}
             profile={logo}
-            name={isCheckin}
+            name={`Day ${checkinDetails.rewardDay}`}
             level={`+ ${formatNumber(checkinDetails.rewardPoints) !== "0" ? formatNumber(checkinDetails.rewardPoints) : formatNumber(checkinDetails.rewardDay !== "" ? parseInt(checkinDetails.rewardDay) * 5000 : 5000)}`}
             icon={logo}
             displayType="checkin"
-            buttonDisabled={!isCheckin}
+            buttonDisabled={isCheckin}
             onButtonClick={isCheckin ? undefined : () => CheckIn()}
           />
-
-
 
           {/* Dynamic Task List */}
           {taskList.map((task) => (

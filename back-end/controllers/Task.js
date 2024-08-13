@@ -214,7 +214,7 @@ async function checkin(req, res, next) {
 
         if (existingCheckIn) {
             await transaction.rollback();
-            return res.status(409).json({ error: 'Conflict', message: 'Already checked in today' });
+            return res.status(409).json({ error: 'Conflict', message: 'Already checked in today', data: { lastCheckInDate: today.toISOString() } });
         }
 
         // Fetch user earnings details
@@ -240,20 +240,16 @@ async function checkin(req, res, next) {
 
         let rewardPoints = 0;
         let streak = 0;
-        let dailycheckin = false;
 
         if (!lastCheckInDate || daysDifference > 1) {
             rewardPoints = 5000;
             streak = 1;
-            dailycheckin = true;
         } else if (daysDifference === 1) {
             streak = lastCheckIn.streak + 1;
             rewardPoints = streak * 5000;
-            dailycheckin = true;
         } else {
             rewardPoints = 0;
             streak = lastCheckIn.streak;
-            dailycheckin = false;
         }
 
         // Create new check-in record
@@ -276,7 +272,8 @@ async function checkin(req, res, next) {
 
         if (updated > 0) {
             await transaction.commit();
-            return res.status(200).json({ message: 'Success', data: { rewardPoints, streak, dailycheckin } });
+            console.log(`User ${userId} has checked in and earned ${rewardPoints} points. Streak: ${streak}`);
+            return res.status(200).json({ message: 'Success', data: { rewardPoints, streak, lastCheckInDate: today.toISOString() } });
         } else {
             await transaction.rollback();
             return res.status(422).json({ error: 'Unprocessable Entity', message: 'Failed to update earnings' });

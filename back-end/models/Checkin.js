@@ -31,7 +31,7 @@ const CheckIns = sequelize.define(
             defaultValue: 0,
         },
     }, {
-        tableName: "checkins", // Ensure this matches your actual table name
+        tableName: "CheckIns", // Ensure this matches your actual table name
         timestamps: false,
         indexes: [{
             fields: ["userId"],

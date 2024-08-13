@@ -20,7 +20,7 @@ function Game() {
 
   useEffect(() => {
     let isMounted = true;
-    alert(referral_by);
+    //alert(referral_by);
     const authenticateUser = async () => {
       try {
         const tg_user = getTGUser();

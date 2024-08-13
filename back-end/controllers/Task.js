@@ -267,8 +267,14 @@ async function checkin(req, res, next) {
             tap_score: parseInt(earnDetails.tap_score) + parseInt(rewardPoints),
             recent_login: today
         };
-console.log(earnUpdate);
-        const [updated] = await Earnings.update(earnUpdate, { where: { userid: userId }, transaction });
+
+        
+
+        const [updated] = await Earnings.update(earnUpdate, {
+            where: {
+                userid: tgUser.id,
+            }, transaction
+        });
 
         if (updated > 0) {
             await transaction.commit();

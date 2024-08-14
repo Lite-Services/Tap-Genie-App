@@ -111,7 +111,7 @@ async function claim(req, res, next) {
 
         const earnUpdate = {
             referral_score: parseInt(earnDetails.referral_score) + referral_score,
-            tap_score: parseInt(earnDetails.tap_score) + referral_score
+            tap_score: parseInt(earnDetails.tap_score) + parseInt(referral_score)
         };
 
         const [updated] = await Earnings.update(earnUpdate, {

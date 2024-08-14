@@ -103,7 +103,7 @@ const Friends = () => {
   const Claim = async (friendId) => {
     try {
       const tgData = getTGUser();
-      const res = await postAjaxCall('https://taptap-production.up.railway.app/api/game/refclaim', { friendID: friendId, refCode: refcode });
+      const res = await postAjaxCall('https://taptap-production.up.railway.app/api/referral/claim', { friendID: friendId, refCode: refcode });
 
       if (res && res.icalimed) {
         setFriends(prevFriends =>

@@ -102,22 +102,18 @@ const Friends = () => {
 
   const Claim = async (friendId) => {
     try {
-      const tgData = getTGUser(); // Ensure this is used if necessary
       const token = getAuth();
-      const refcode = getRefCode(); // Ensure refcode is defined
-  
-      const res = await axios.post('https://taptap-production.up.railway.app/api/referral/claim', 
-        { friendID: friendId, refCode: refcode }, 
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-  
-      if (res && res.data.isClaimed) { // Check the correct response field
+
+      const res = await axios.post('https://taptap-production.up.railway.app/api/referral/claim', { friendID: friendId, refCode: refcode }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res && res.icalimed) {
         setFriends(prevFriends =>
           prevFriends.map(friend =>
             friend.id === friendId ? { ...friend, isClaimed: "Y" } : friend
           )
         );
-        setCusText(`Claimed your ${res.data.refpoint} coins. Well done, keep going.`);
+        setCusText(`Claimed your ${res.refpoint} coins, well done keep going.`);
         setOpen(true);
       } else {
         setOpen(false);
@@ -125,11 +121,8 @@ const Friends = () => {
       }
     } catch (error) {
       console.error("Error claiming reward:", error);
-      setCusText("An error occurred while claiming your reward. Please try again.");
-      setOpen(true);
     }
   };
-  
 
   return (
     <GameLayout>

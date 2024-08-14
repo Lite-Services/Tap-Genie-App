@@ -225,8 +225,8 @@ const Friends = () => {
               icon={coinIcon}
               profile={coinIcon}
               displayType="friend"
-              buttonDisabled={frd.Claimed === "Y"}
-              onButtonClick={frd.Claimed === 'N' ? () => Claim(frd.id) : undefined}
+              buttonDisabled={frd.claimed === "Y"}
+              onButtonClick={frd.claimed === 'N' ? () => Claim(frd.id) : undefined}
             />
           ))
         ) : (

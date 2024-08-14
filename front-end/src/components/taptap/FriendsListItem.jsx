@@ -30,7 +30,7 @@ const FriendsListItem = ({
       {displayType === "leader" && (
         <div className="flex-col flex items-center justify-center min-w-10"></div>
       )}
-      {displayType === "friend" && !buttonDisabled && (
+      {displayType === "friend" && !buttonDisabled ? (
         <motion.button
           onClick={onButtonClick}
           whileTap={{ scale: 0.95 }}
@@ -43,6 +43,8 @@ const FriendsListItem = ({
         >
           Claim
         </motion.button>
+      ) :(
+        <span className="text-white">Claimed</span>
       )}
       {displayType === "checkin" && (
         !buttonDisabled ? (

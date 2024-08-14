@@ -238,11 +238,11 @@ async function checkin(req, res, next) {
         }
 
         const userId = tgUser.id;
-        const today = moment().utc().startOf('day').toDate();
+        const today = moment().utc().startOf('day'); // Use Moment.js to create today
 
         // Check if the user has already checked in today
         const existingCheckIn = await CheckIns.findOne({
-            where: { userId, checkInDate: today },
+            where: { userId, checkInDate: today.toDate() }, // Convert to native Date for the query
             transaction
         });
 
@@ -270,7 +270,7 @@ async function checkin(req, res, next) {
         });
 
         const lastCheckInDate = lastCheckIn ? moment(lastCheckIn.checkInDate).utc().startOf('day') : null;
-        const daysDifference = lastCheckInDate ? today.diff(lastCheckInDate, 'days') : null;
+        const daysDifference = lastCheckInDate ? today.diff(lastCheckInDate, 'days') : null; // Use Moment.js diff method
 
         let rewardPoints = 0;
         let streak = 0;
@@ -289,7 +289,7 @@ async function checkin(req, res, next) {
         // Create new check-in record
         await CheckIns.create({
             userId,
-            checkInDate: today,
+            checkInDate: today.toDate(), // Convert to native Date for storage
             rewardPoints,
             streak
         }, { transaction });
@@ -299,23 +299,22 @@ async function checkin(req, res, next) {
             current_streak: streak,
             checkin_score: rewardPoints,
             tap_score: parseInt(earnDetails.tap_score) + parseInt(rewardPoints),
-            recent_login: today
+            recent_login: today.toDate() // Convert to native Date for storage
         };
         
-
         console.log('EarnDetails before update:', earnDetails);
-console.log('EarnUpdate object:', earnUpdate);
-
+        console.log('EarnUpdate object:', earnUpdate);
 
         const [updated] = await Earnings.update(earnUpdate, {
             where: {
                 userid: tgUser.id,
-            }, transaction
+            },
+            transaction
         });
 
         if (updated > 0) {
             await transaction.commit();
-            console.log(`User ${userId} has checked in and earned ${rewardPoints} points. Streak: ${streak}`, );
+            console.log(`User ${userId} has checked in and earned ${rewardPoints} points. Streak: ${streak}`);
             return res.status(200).json({ message: 'Success', data: { rewardPoints, streak, lastCheckInDate: today.toISOString() } });
         } else {
             await transaction.rollback();
@@ -324,9 +323,10 @@ console.log('EarnUpdate object:', earnUpdate);
     } catch (error) {
         await transaction.rollback();
         console.error("Error during daily check-in:", error.message, error.stack);
-    next("An error occurred during daily check-in");
+        next("An error occurred during daily check-in");
     }
 }
+
 
 
 

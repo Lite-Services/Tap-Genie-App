@@ -30,22 +30,27 @@ const FriendsListItem = ({
       {displayType === "leader" && (
         <div className="flex-col flex items-center justify-center min-w-10"></div>
       )}
-      {displayType === "friend" && !buttonDisabled ? (
-        <motion.button
-          onClick={onButtonClick}
-          whileTap={{ scale: 0.95 }}
-          whileHover={{ 
-            boxShadow: "0px 0px 8px rgb(0, 0, 0)",
-            backgroundColor: "rgba(11, 11, 11, 0.5)",
-            backdropFilter: "blur(8px)",
-          }}
-          className={`ml-2 p-4 text-sm rounded-lg shadow-md transition duration-300 bg-[#0b0b0b] text-white hover:bg-[#0b0b0b5e] hover:backdrop-blur-md active:grayscale`}
-        >
-          Claim
-        </motion.button>
-      ) :(
-        <span className="text-white">Claimed</span>
-      )}
+      {displayType === "friend" && (
+        !buttonDisabled ? (
+            <motion.button
+              onClick={onButtonClick}
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ 
+                boxShadow: "0px 0px 8px rgb(0, 0, 0)",
+                backgroundColor: "rgba(11, 11, 11, 0.5)",
+                backdropFilter: "blur(8px)",
+              }}
+              className={`ml-2 p-4 text-sm rounded-lg shadow-md transition duration-300 bg-[#0b0b0b] text-white hover:bg-[#0b0b0b5e] hover:backdrop-blur-md active:grayscale`}
+            >
+              Claim
+            </motion.button>
+           
+          
+        ) : (
+          <span className="text-white">Claimed</span>
+        )
+
+       )}
       {displayType === "checkin" && (
         !buttonDisabled ? (
           <motion.button

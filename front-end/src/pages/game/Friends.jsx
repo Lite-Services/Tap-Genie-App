@@ -103,7 +103,6 @@ const Friends = () => {
   const Claim = async (friendId) => {
     try {
       const token = getAuth();
-      const refcode = getRefCode(); // Ensure refcode is defined
   
       // Perform the API call
       const res = await axios.post('https://taptap-production.up.railway.app/api/referral/claim', 

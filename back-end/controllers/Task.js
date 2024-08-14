@@ -172,43 +172,45 @@ async function claim(req, res, next) {
             return res.status(401).json({ error: 'Unauthorized', message: 'Authentication required' });
         }
 
+        // Fetch task details
         const tasksDetails = await Tasks.findOne({
             where: {
-                [Op.and]: [
-                    { id: taskID },
-                    { status: "ACTIVE" }
-                ],
+                id: taskID,
+                status: "ACTIVE"
             },
         });
 
-        if (!tasksDetails && tasksDetails == null) {
-            return res.status(422).json({ error: 'Unprocessable Entity', message: 'Validation failed for the input data' });
+        if (!tasksDetails) {
+            return res.status(422).json({ error: 'Unprocessable Entity', message: 'Invalid task or task is inactive' });
         }
 
-        const taskPoint = tasksDetails.claim_score
-        const taskId = tasksDetails.id
-        console.log(taskPoint, taskId);
+        const taskPoint = tasksDetails.claim_score;
+        const taskId = tasksDetails.id;
+
+        // Fetch earnings details
         const earnDetails = await Earnings.findOne({
             where: {
                 userid: tgUser.id,
             },
         });
 
-        if (!earnDetails && earnDetails == null) {
-            return res.status(422).json({ error: 'Unprocessable Entity', message: 'Validation failed for the input data' });
+        if (!earnDetails) {
+            return res.status(422).json({ error: 'Unprocessable Entity', message: 'Earnings record not found' });
         }
 
-        const doneTaskIds = earnDetails.task ? earnDetails.task.split('|').map(id => id) : [];
+        // Check if the task has already been claimed
+        const doneTaskIds = earnDetails.task ? earnDetails.task.split('|').filter(id => id) : [];
 
         if (doneTaskIds.includes(taskId)) {
-            return res.status(422).json({ error: 'Unprocessable Entity', message: 'Invaild taks' });
+            return res.status(422).json({ error: 'Unprocessable Entity', message: 'Task already claimed' });
         }
 
+        // Update earnings
         const earnUpdate = {
-            task: `${taskId}|`,
+            task: `${earnDetails.task ? earnDetails.task + '|' : ''}${taskId}`,
             task_score: parseInt(earnDetails.task_score) + parseInt(taskPoint),
             tap_score: parseInt(earnDetails.tap_score) + parseInt(taskPoint)
-        }
+        };
 
         const [updated] = await Earnings.update(earnUpdate, {
             where: {
@@ -219,14 +221,14 @@ async function claim(req, res, next) {
         if (updated > 0) {
             return res.status(200).json({ message: 'Success', data: { taskid: taskId, taskscore: taskPoint } });
         } else {
-            return res.status(409).json({ error: 'Conflict', message: 'Taks claim failed ', data: { taskid: taskId } });
+            return res.status(409).json({ error: 'Conflict', message: 'Task claim failed', data: { taskid: taskId } });
         }
     } catch (error) {
-        console.error("Error calim Task score:", error);
-        next("An error occurred on calim Task score")
+        console.error("Error claiming task score:", error);
+        next("An error occurred while claiming the task score");
     }
-
 }
+
 
 async function checkin(req, res, next) {
     const transaction = await sequelize.transaction();

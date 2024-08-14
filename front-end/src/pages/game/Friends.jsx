@@ -113,7 +113,7 @@ const Friends = () => {
             friend.id === friendId ? { ...friend, isClaimed: "Y" } : friend
           )
         );
-        //alert(res.clai)
+        alert(res.data.claimedPoint)
         const pointsInLocalStorage = localStorage.getItem("score") || 0;
         localStorage.setItem("score", parseInt(pointsInLocalStorage) + res.claimedPoint);
         setCusText(`Claimed your ${res.data.claimedPoint} coins, well done keep going.`);

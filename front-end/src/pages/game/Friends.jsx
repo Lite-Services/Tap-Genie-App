@@ -114,7 +114,7 @@ const Friends = () => {
       console.log('API response:', res);
   
       if (res && res.data) {
-        const claimedPoint = res.data.claimedPoint;
+        const claimedPoint = res.data.data.claimedPoint;
         alert(claimedPoint);
         if (claimedPoint !== undefined) {
           setFriends(prevFriends =>
@@ -123,7 +123,6 @@ const Friends = () => {
             )
           );
   
-          alert(claimedPoint);
   
           // Update local storage
           const pointsInLocalStorage = parseInt(localStorage.getItem("score")) || 0;

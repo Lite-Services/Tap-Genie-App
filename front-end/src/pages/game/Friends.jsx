@@ -107,7 +107,7 @@ const Friends = () => {
       const res = await axios.post('https://taptap-production.up.railway.app/api/referral/claim', { friendID: friendId, refCode: refcode }, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (res && res.icalimed) {
+      if (res) {
         setFriends(prevFriends =>
           prevFriends.map(friend =>
             friend.id === friendId ? { ...friend, isClaimed: "Y" } : friend

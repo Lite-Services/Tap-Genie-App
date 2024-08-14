@@ -107,7 +107,7 @@ async function claim(req, res, next) {
             return res.status(404).json({ error: 'Not Found', message: 'User not found or not eligible for claim' });
         }
 
-        const referral_score = userDetails.tg_premium_user === "Y" ? parseInt(2500) : parseInt(5000);
+        const referral_score = userDetails.tg_premium_user === "Y" ? parseInt(5000) : parseInt(2500);
 
         const earnUpdate = {
             referral_score: parseInt(earnDetails.referral_score) + referral_score,

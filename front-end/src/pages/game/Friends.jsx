@@ -116,7 +116,7 @@ const Friends = () => {
         //alert(res.clai)
         const pointsInLocalStorage = localStorage.getItem("score") || 0;
         localStorage.setItem("score", parseInt(pointsInLocalStorage) + res.claimedPoint);
-        setCusText(`Claimed your ${res.claimedPoint} coins, well done keep going.`);
+        setCusText(`Claimed your ${res.data.claimedPoint} coins, well done keep going.`);
         setOpen(true);
       } else {
         setOpen(false);

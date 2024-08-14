@@ -132,6 +132,7 @@ async function claim(req, res, next) {
             });
 
             if (isClaim > 0) {
+                console.log(referral_score);
                 return res.status(200).json({ message: 'Success', data: { friendid: friendID, claimedPoint: referral_score } });
             } else {
                 return res.status(409).json({ error: 'Conflict', message: 'Referral claim failed' });

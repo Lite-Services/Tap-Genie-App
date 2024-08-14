@@ -103,8 +103,11 @@ const Friends = () => {
   const Claim = async (friendId) => {
     try {
       const tgData = getTGUser();
-      const res = await postAjaxCall('https://taptap-production.up.railway.app/api/referral/claim', { friendID: friendId, refCode: refcode });
+      const token = getAuth();
 
+      const res = await axios.post('https://taptap-production.up.railway.app/api/referral/claim', { friendID: friendId, refCode: refcode }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (res && res.icalimed) {
         setFriends(prevFriends =>
           prevFriends.map(friend =>

@@ -139,11 +139,10 @@ function Tasks() {
 
         if (taskUrl) {
           window.Telegram.WebApp.openLink(taskUrl);
-          const pointsInLocalStorage = localStorage.getItem("score") || 0;
-        localStorage.setItem("score", parseInt(pointsInLocalStorage) + taskPoints);
         }
 
-        
+        const pointsInLocalStorage = localStorage.getItem("score") || 0;
+        localStorage.setItem("score", parseInt(pointsInLocalStorage) + taskPoints);
         setTimeout(() => setOpen(true), 10000);
         setTimeout(() => setOpen(false), 3000);
       } else {

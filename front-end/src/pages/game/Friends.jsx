@@ -103,29 +103,54 @@ const Friends = () => {
   const Claim = async (friendId) => {
     try {
       const token = getAuth();
-
-      const res = await axios.post('https://taptap-production.up.railway.app/api/referral/claim', { friendID: friendId, refCode: refcode }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res) {
-        setFriends(prevFriends =>
-          prevFriends.map(friend =>
-            friend.id === friendId ? { ...friend, isClaimed: "Y" } : friend
-          )
-        );
-        alert(res.data.claimedPoint)
-        const pointsInLocalStorage = localStorage.getItem("score") || 0;
-        localStorage.setItem("score", parseInt(pointsInLocalStorage) + res.claimedPoint);
-        setCusText(`Claimed your ${res.data.claimedPoint} coins, well done keep going.`);
-        setOpen(true);
+      const refcode = getRefCode(); // Ensure refcode is defined
+  
+      // Perform the API call
+      const res = await axios.post('https://taptap-production.up.railway.app/api/referral/claim', 
+        { friendID: friendId, refCode: refcode }, 
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      // Log the response to check its structure
+      console.log('API response:', res);
+  
+      if (res && res.data) {
+        const claimedPoint = res.data.claimedPoint;
+        alert(claimedPoint);
+        if (claimedPoint !== undefined) {
+          setFriends(prevFriends =>
+            prevFriends.map(friend =>
+              friend.id === friendId ? { ...friend, isClaimed: "Y" } : friend
+            )
+          );
+  
+          alert(claimedPoint);
+  
+          // Update local storage
+          const pointsInLocalStorage = parseInt(localStorage.getItem("score")) || 0;
+          localStorage.setItem("score", pointsInLocalStorage + claimedPoint);
+  
+          setCusText(`Claimed your ${claimedPoint} coins, well done, keep going.`);
+          setOpen(true);
+        } else {
+          // Handle cases where claimedPoint is not available
+          console.error('Claimed point is not available in response:', res.data);
+          setOpen(false);
+          navigate("/friends");
+        }
       } else {
+        // Handle cases where res or res.data is undefined
+        console.error('Invalid response:', res);
         setOpen(false);
         navigate("/friends");
       }
     } catch (error) {
       console.error("Error claiming reward:", error);
+      setCusText("An error occurred while claiming your reward. Please try again.");
+      setOpen(true);
     }
   };
+  
 
   return (
     <GameLayout>

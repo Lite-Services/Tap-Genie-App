@@ -107,7 +107,7 @@ function Tasks() {
         navigate("/earn");
       }
     } catch (error) {
-      alert("Error during check-in");
+      alert(error);
       console.error("Error checking in:", error);
       setIsCheckin(false);
       localStorage.setItem("isCheckin", JSON.stringify(false)); // Update persisted status

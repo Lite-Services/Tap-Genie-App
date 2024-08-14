@@ -115,7 +115,7 @@ const Friends = () => {
   
       if (res && res.data) {
         const claimedPoint = res.data.data.claimedPoint;
-        alert(claimedPoint);
+        //alert(claimedPoint);
         if (claimedPoint !== undefined) {
           setFriends(prevFriends =>
             prevFriends.map(friend =>
@@ -226,7 +226,7 @@ const Friends = () => {
               profile={coinIcon}
               displayType="friend"
               buttonDisabled={frd.Claimed === "Y"}
-              onButtonClick={() => Claim(frd.id)}
+              onButtonClick={frd.Claimed === 'N' ? () => Claim(frd.id) : undefined}
             />
           ))
         ) : (

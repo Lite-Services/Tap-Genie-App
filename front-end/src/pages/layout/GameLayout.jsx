@@ -50,7 +50,7 @@ function GameLayout({ children }) {
                 </span>
               </div>
               <div className="menu flex flex-row items-center justify-center gap-4">
-                {wallet ? (
+             {/*}   {wallet ? (
                   <button
                     onClick={open}
                     className="text-white px-4 font-sfSemi rounded-xl bg-[#0B2113] h-12"
@@ -77,7 +77,7 @@ function GameLayout({ children }) {
                     </svg>
                   </button>
                 )}
-
+      */}
                 <Link to="/leaderboard" className="">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

@@ -44,11 +44,11 @@ const getRequiredScore = (minerLevel) => {
 
 const getClaimScore = (minerLevel) => {
     const scoreMap = {
-        1: [10000, '10k'],
-        2: [50000, '50k'],
-        3: [75000, '75k'],
-        4: [100000, '100k'],
-        5: [150000, '150k']
+        1: [5000, '5k'],
+        2: [10000, '10k'],
+        3: [20000, '20k'],
+        4: [30000, '30k'],
+        5: [40000, '40k']
     };
     const [score, scoreText] = scoreMap[minerLevel] || [0, 'unknown'];
     if (score === 0) {

@@ -29,7 +29,7 @@ function getCheckinDetails(earnDetails) {
 
     if (lastLoginDate === null || daysDifference > 3) {
         // First login or login after more than 3 days
-        rewardPoints = 5000;
+        rewardPoints = 500;
         rewardDay = 1;
         earnDetails.current_streak = 1;
         dailycheckin = true;
@@ -44,12 +44,12 @@ function getCheckinDetails(earnDetails) {
         // Consecutive login
         earnDetails.current_streak += 1;
         rewardDay = earnDetails.current_streak;
-        rewardPoints = earnDetails.current_streak * 5000;
+        rewardPoints = earnDetails.current_streak * 500;
         dailycheckin = true;
 
     } else if (daysDifference > 1 && daysDifference <= 3) {
         // Login after a short break (1-3 days)
-        rewardPoints = 5000;
+        rewardPoints = 500;
         rewardDay = 1;
         earnDetails.current_streak = 1;
         dailycheckin = true;
@@ -104,11 +104,11 @@ async function list(req, res, next) {
         const daysDifference = lastCheckInDate ? today.diff(lastCheckInDate, 'days') : null;
 
         if (!lastCheckInDate || daysDifference > 1) {
-            rewardPoints = 5000;
+            rewardPoints = 500;
             streak = 1;
         } else if (daysDifference === 1) {
             streak = checkInData.streak + 1;
-            rewardPoints = streak * 5000;
+            rewardPoints = streak * 500;
         } else {
             rewardPoints = 0;
             streak = checkInData.streak;
@@ -278,11 +278,11 @@ async function checkin(req, res, next) {
         let streak = 0;
 
         if (!lastCheckInDate || daysDifference > 1) {
-            rewardPoints = 5000;
+            rewardPoints = 500;
             streak = 1;
         } else if (daysDifference === 1) {
             streak = lastCheckIn.streak + 1;
-            rewardPoints = streak * 5000;
+            rewardPoints = streak * 500;
         } else {
             rewardPoints = 0;
             streak = lastCheckIn.streak;

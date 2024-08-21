@@ -142,15 +142,15 @@ function RoboMine() {
 
   function getClaimScore(miner_level) {
     if (miner_level === 1) {
-      return [10000, "10k"];
+      return [5000, "5k"];
     } else if (miner_level === 2) {
-      return [50000, "50k"];
+      return [10000, "10k"];
     } else if (miner_level === 3) {
-      return [75000, "75k"];
+      return [20000, "20k"];
     } else if (miner_level === 4) {
-      return [100000, "100k"];
+      return [30000, "30k"];
     } else if (miner_level === 5) {
-      return [150000, "150k"];
+      return [40000, "40k"];
     } else {
       throw new Error(
           `miner_level not found for getClaimScore(${miner_level})`

@@ -39,7 +39,7 @@ function Leaderboard() {
   
     try {
       // Include params in the options object
-      const response = await axios.get("https://taptap-production.up.railway.app/api/leaderboard/allrank", {
+      const response = await axios.get("https://tap-genie-app-production.up.railway.app/api/leaderboard/allrank", {
         params: { tid },
         headers: { Authorization: `Bearer ${token}` },
       });

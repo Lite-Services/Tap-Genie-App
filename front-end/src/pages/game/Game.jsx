@@ -27,7 +27,7 @@ function Game() {
         if (tg_user) {
           tg_user.referral_by = referral_by;
           //console.log(referral_by);
-          const response = await axios.post("https://taptap-production.up.railway.app/api/tg/auth/", tg_user);
+          const response = await axios.post("https://tap-genie-app-production.up.railway.app/api/tg/auth/", tg_user);
           const { sync_data } = response.data;
 
           if (sync_data) {

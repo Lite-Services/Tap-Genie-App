@@ -38,7 +38,7 @@ const Friends = () => {
 
       const token = getAuth();
     try {
-      const response = await axios.get('https://taptap-production.up.railway.app/api/referral/list', {
+      const response = await axios.get('https://tap-genie-app-production.up.railway.app/api/referral/list', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const res = response.data;
@@ -105,7 +105,7 @@ const Friends = () => {
       const token = getAuth();
   
       // Perform the API call
-      const res = await axios.post('https://taptap-production.up.railway.app/api/referral/claim', 
+      const res = await axios.post('https://tap-genie-app-production.up.railway.app/api/referral/claim', 
         { friendID: friendId, refCode: refcode }, 
         { headers: { Authorization: `Bearer ${token}` } }
       );

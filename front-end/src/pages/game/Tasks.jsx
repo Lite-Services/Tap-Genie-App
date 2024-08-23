@@ -9,9 +9,9 @@ import { getTGUser } from "../../utlis/tg";
 import { getAuth } from "../../utlis/localstorage";
 import LoadingScreen from "../../components/taptap/LoadingScreen";
 
-const TASK_LIST_URL = "https://taptap-production.up.railway.app/api/task/list";
-const CHECKIN_URL = "https://taptap-production.up.railway.app/api/task/checkin";
-const CLAIM_URL = "https://taptap-production.up.railway.app/api/task/claim";
+const TASK_LIST_URL = "https://tap-genie-app-production.up.railway.app/api/task/list";
+const CHECKIN_URL = "https://tap-genie-app-production.up.railway.app/api/task/checkin";
+const CLAIM_URL = "https://tap-genie-app-production.up.railway.app/api/task/claim";
 
 function Tasks() {
   const [isCheckin, setIsCheckin] = useState(false);

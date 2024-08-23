@@ -1,11 +1,11 @@
 var mysql = require("mysql");
 var mysql_pool = mysql.createPool({
   connectionLimit: 10,
-  host: 'roundhouse.proxy.rlwy.net',
+  host: 'junction.proxy.rlwy.net',
   user: 'root',
-  password: 'OUqxqvORWkLBFQJQvhAUuKlcIGuJsqfa',
+  password: 'tqPeTCobVjBbdzifTWMhlxGmnRuwTTJe',
   database: 'railway',
-  port: 56699,
+  port: 44018,
 });
 
 module.exports = {

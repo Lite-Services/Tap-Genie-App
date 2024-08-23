@@ -3,10 +3,10 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = new Sequelize(
   'railway',
   'root',
-  'OUqxqvORWkLBFQJQvhAUuKlcIGuJsqfa',
+  'tqPeTCobVjBbdzifTWMhlxGmnRuwTTJe',
   {
-    host: 'roundhouse.proxy.rlwy.net',
-    port: 56699,
+    host: 'junction.proxy.rlwy.net',
+    port: 44018,
     dialect: "mysql",
     timezone: "+00:00",
   }

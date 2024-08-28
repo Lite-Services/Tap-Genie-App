@@ -503,20 +503,21 @@ className={`coinsection w-full h-full bg-black flex flex-col items-center justif
 
 >
 <div className="topbar  w-[90%] py-2 absolute top-0 z-20">
-  <Link
+  {/* <Link
     to="/reward"
     className="miner flex flex-col items-center justify-center absolute my-2 ml-4"
   >
     <img src={robot[`${gamelevel}`] ? robot[`${gamelevel}`] : robot_1}
     alt="" className="w-8 h-8" />
     <h1 className="font-sfSemi text-sm text-white">{robotlevel[gamelevel]}</h1>
-  </Link>
+  </Link> */}
   <div className="flex flex-col items-center justify-center gap-2">
     <h1 className="font-sfSemi text-sm text-white">YOU'VE EARNED</h1>
     <h1 className="font-sfSemi text-2xl text-white flex flex-row gap-2 items-center justify-center">
+    <img src={LogoImg} className="w-8 h-8" />
       <AnimatedCounter from={parseInt(prePoint)} to={parseInt(localPoints)} />
       
-      <img src={LogoImg} className="w-8 h-8" />
+      
     </h1>
   </div>
 </div>

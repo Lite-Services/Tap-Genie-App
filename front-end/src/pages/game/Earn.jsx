@@ -564,7 +564,7 @@ className={`coinsection w-full h-full bg-black flex flex-col items-center justif
 <div className="rank flex flex-row gap-2 small:items-start items-center justify-center left-0 my-10 small:my-0">
   <div className="progressbar w-60 rounded-full relative h-3 bg-[#050F08]">
     <div
-      className="absolute h-full bg-gradient-to-r from-[#3396FF] to-[#6ABE6A] bottom-0 rounded-full"
+      className="absolute h-full bottom-0 rounded-full"
       style={{
         width: `${Math.min(Math.max((parseInt(localEnergy) / 2000) * 100, 0), 100)}%`,
       }}

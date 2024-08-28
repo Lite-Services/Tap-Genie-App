@@ -19,7 +19,7 @@ import AnimatedCounter from "../../components/taptap/AnimatedCounter";
 import PlayIcon from "../../assets/img/play-icon.svg";
 import coinBackgroundImg from "../../assets/img/coin-background.png";
 import heroBackgroundImg from "../../assets/img/background-hero.png";
-import LogoImg from "../../assets/img/coin.png";
+import LogoImg from "../../assets/img/coin.svg";
 import RobotImg from "../../assets/img/robot-1.png";
 import RobotImg4 from "../../assets/img/robot-4.png";
 import CoinImg from "../../assets/img/firstimg.png";
@@ -502,7 +502,7 @@ function Earn() {
 className={`coinsection w-full h-full bg-black flex flex-col items-center justify-center p-4 relative select-none mb-2 bg-center bg-no-repeat `}
 
 >
-<div className="topbar bg-black/35 backdrop-blur-sm border-[#3131316c] border-[1px] w-[90%] py-2 absolute top-0 z-20 rounded-3xl">
+<div className="topbar  w-[90%] py-2 absolute top-0 z-20">
   <Link
     to="/reward"
     className="miner flex flex-col items-center justify-center absolute my-2 ml-4"

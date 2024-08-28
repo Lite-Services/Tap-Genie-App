@@ -22,7 +22,7 @@ import heroBackgroundImg from "../../assets/img/background-hero.png";
 import LogoImg from "../../assets/img/coin.png";
 import RobotImg from "../../assets/img/robot-1.png";
 import RobotImg4 from "../../assets/img/robot-4.png";
-import CoinImg from "../../assets/img/coin.png";
+import CoinImg from "../../assets/img/firstimg.png";
 import BoltIcon from "../../assets/img/bolt-icon.svg";
 import tapaudio from "../../assets/sounds/mixkit-arcade-game-jump-coin-216.wav";
 

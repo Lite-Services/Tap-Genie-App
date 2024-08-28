@@ -1,8 +1,6 @@
 import Tabs from "../../components/taptap/Tabs";
 import TGAuth from "../../components/taptap/TGAuth";
-
 import { getTGUser } from "../../utlis/tg";
-
 import walletIcon from "../../assets/img/wallet-icon.svg";
 import leaderboard from "../../assets/img/leaderboard.svg";
 import coinIcon from "../../assets/img/coin.png";

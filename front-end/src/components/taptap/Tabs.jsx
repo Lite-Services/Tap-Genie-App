@@ -1,11 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-
 import TokenImg from "../../assets/img/coins.svg";
 import FriendImg from "../../assets/img/friends.svg";
 import GiftImg from "../../assets/img/gift.svg";
 import TaskImg from "../../assets/img/task.svg";
 import LeaderBoardImg from "../../assets/img/leaderboard.svg";
-
 import { useNavigate } from "react-router-dom";
 
 let tabs = [
@@ -13,12 +11,6 @@ let tabs = [
   { id: "Friends", label: "Friends", img: FriendImg, path: "/friends" },
   { id: "Reward", label: "Mine", img: GiftImg, path: "/reward" },
   { id: "Tasks", label: "Tasks", img: TaskImg, path: "/tasks" },
-  // {
-  //   id: "Leaderboard",
-  //   label: "Leaderboard",
-  //   img: LeaderBoardImg,
-  //   path: "/game/leaderboard",
-  // },
 ];
 
 export default function Tabs() {

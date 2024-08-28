@@ -522,7 +522,7 @@ className={`coinsection w-full h-full bg-black flex flex-col items-center justif
 </div>
 
 <div className="coin-display small:-mt-10">
-  {[...meteorStyles].map((style, idx) => (
+  {/* {[...meteorStyles].map((style, idx) => (
     <span
       key={idx}
       className={
@@ -532,7 +532,7 @@ className={`coinsection w-full h-full bg-black flex flex-col items-center justif
     >
       <div className="pointer-events-none absolute top-1/2 -z-10 h-[1px] w-[50px] -translate-y-1/2 bg-gradient-to-r from-[#3396FF] to-transparent" />
     </span>
-  ))}
+  ))} */}
   <div className="flex">
     <div className="relative flex">
       <motion.img

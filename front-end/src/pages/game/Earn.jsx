@@ -540,7 +540,7 @@ className={`coinsection w-full h-full bg-black flex flex-col items-center justif
         transition={{ duration: 0.1 }}
         src={CoinImg}
         alt="Coin"
-        className="img-fluid animate__animated animate__bounce small:w-52 small:h-52 h-50 w-50 z-10 rounded-full select-none"
+        className="img-fluid animate__animated animate__bounce small:w-52 small:h-52 h-45 w-45 z-10 rounded-full select-none"
         onTouchStart={handleTouchStart}
       />
       {localEnergy

@@ -512,13 +512,12 @@ className={`coinsection w-full h-full bg-black flex flex-col items-center justif
     <h1 className="font-sfSemi text-sm text-white">{robotlevel[gamelevel]}</h1>
   </Link> */}
   <div className="flex flex-col items-center justify-center gap-2">
-    <h1 className="font-sfSemi text-sm text-white">YOU'VE EARNED</h1>
+   
     <h1 className="font-sfSemi text-2xl text-white flex flex-row gap-2 items-center justify-center">
     <img src={LogoImg} className="w-8 h-8" />
-      <AnimatedCounter from={parseInt(prePoint)} to={parseInt(localPoints)} />
-      
-      
+      <AnimatedCounter from={parseInt(prePoint)} to={parseInt(localPoints)} /> 
     </h1>
+    <h1 className="font-sfSemi text-sm text-white"> Lamp of wisdom</h1>
   </div>
 </div>
 
@@ -541,7 +540,7 @@ className={`coinsection w-full h-full bg-black flex flex-col items-center justif
         transition={{ duration: 0.1 }}
         src={CoinImg}
         alt="Coin"
-        className="img-fluid animate__animated animate__bounce small:w-52 small:h-52 h-5 w-5 z-10 rounded-full select-none"
+        className="img-fluid animate__animated animate__bounce small:w-52 small:h-52 h-30 w-30 z-10 rounded-full select-none"
         onTouchStart={handleTouchStart}
       />
       {localEnergy
